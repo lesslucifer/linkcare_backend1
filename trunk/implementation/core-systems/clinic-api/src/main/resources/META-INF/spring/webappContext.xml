@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	
+	<import resource="classpath:META-INF/spring/bizlogicContext.xml" />	
+	<import resource="classpath:META-INF/spring/persistenceContext.xml" />
+    <import resource="classpath:META-INF/spring/locale.xml" />
+	
+	<bean id="configSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="config"/>
+	</bean>
+	
+	<!-- All properties files must be loaded at here -->
+	<bean id="allProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+            	<value>classpath:clinic-api-config.properties</value>
+                <value>classpath:META-INF/spring/clinic-api-ds.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- JTA data source definition -->
+    <bean id="clinicApiNonJtaDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close" lazy-init="true">
+		<property name="driverClass" value="${cliniccore.dataSource.driver}" />
+		<property name="jdbcUrl" value="${cliniccore.dataSource.url}" />
+		<property name="user" value="${cliniccore.dataSource.username}" />
+		<property name="password" value="${cliniccore.dataSource.password}" />
+		<property name="acquireIncrement" value="${cliniccore.c3p0.acquireIncrement}" />
+		<property name="initialPoolSize" value="${cliniccore.c3p0.initialPoolSize}" />
+		<property name="minPoolSize" value="${cliniccore.c3p0.minPoolSize}" />
+		<property name="maxPoolSize" value="${cliniccore.c3p0.maxPoolSize}" />
+		<property name="maxIdleTime" value="${cliniccore.c3p0.maxIdleTime}" />
+		<property name="checkoutTimeout" value="${cliniccore.c3p0.checkoutTimeout}" />
+		<property name="idleConnectionTestPeriod" value="${cliniccore.c3p0.idleConnectionTestPeriod}" />
+		<property name="preferredTestQuery" value="${cliniccore.c3p0.preferredTestQuery}" />
+		<property name="maxStatements" value="${cliniccore.c3p0.maxStatements}" />
+		<property name="maxStatementsPerConnection" value="${cliniccore.c3p0.maxStatementsPerConnection}" />
+		<property name="numHelperThreads" value="${cliniccore.c3p0.numHelperThreads}" />
+		<property name="acquireRetryAttempts" value="${cliniccore.c3p0.acquireRetryAttempts}" />
+		<property name="acquireRetryDelay" value="${cliniccore.c3p0.acquireRetryDelay}" />
+		<property name="breakAfterAcquireFailure" value="${cliniccore.c3p0.breakAfterAcquireFailure}" />
+		<property name="testConnectionOnCheckin" value="${cliniccore.c3p0.testConnectionOnCheckin}" /> 
+	</bean>
+	
+	<bean id="restApiConf" class="com.clinic.clinic.api.conf.RestApiConf">
+    	<property name="rootPathPublishResources" value="${rootPathPublishResources}" />
+    </bean>
+</beans>

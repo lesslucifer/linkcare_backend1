@@ -1,0 +1,228 @@
+//json lịch làm việc trong một tháng
+{
+  "status": true,
+    "data": [
+        {
+            "day": "2016-02-01",
+            "slots": []
+        },
+        {
+            "day": "2016-02-02",
+            "slots": [
+                {
+                    "slot": "04:00 AM",
+                    "availble": false
+                },
+                {
+                    "slot": "04:06 AM",
+                    "availble": false
+                },
+                {
+                    "slot": "04:12 AM",
+                    "availble": false
+                },
+                {
+                    "slot": "04:18 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "04:24 AM",
+                    "availble": false
+                },
+                {
+                    "slot": "04:30 AM",
+                    "availble": false
+                },
+                {
+                    "slot": "04:36 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "04:42 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "04:48 AM",
+                    "availble": false
+                },
+                {
+                    "slot": "04:54 AM",
+                    "availble": false
+                },
+                {
+                    "slot": "05:00 AM",
+                    "availble": false
+                },
+                {
+                    "slot": "07:00 AM",
+                    "availble": false
+                },
+                {
+                    "slot": "07:06 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:12 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:18 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:24 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:30 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:36 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:42 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:48 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:54 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "08:00 AM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:00 PM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:06 PM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:12 PM",
+                    "availble": true
+                },
+                {
+                    "slot": "07:18 PM",
+                    "availble": true
+                }
+            ]
+        },
+        {
+            "day": "2016-02-03",
+            "slots": []
+        },
+        {
+            "day": "2016-02-04",
+            "slots": []
+        },
+        {
+            "day": "2016-02-05",
+            "slots": []
+        },
+        {
+            "day": "2016-02-06",
+            "slots": []
+        },
+        {
+            "day": "2016-02-07",
+            "slots": []
+        },
+        {
+            "day": "2016-02-08",
+            "slots": []
+        },
+        {
+            "day": "2016-02-09",
+            "slots": []
+        },
+        {
+            "day": "2016-02-10",
+            "slots": []
+        },
+        {
+            "day": "2016-02-11",
+            "slots": []
+        },
+        {
+            "day": "2016-02-12",
+            "slots": []
+        },
+        {
+            "day": "2016-02-13",
+            "slots": []
+        },
+        {
+            "day": "2016-02-14",
+            "slots": []
+        },
+        {
+            "day": "2016-02-15",
+            "slots": []
+        },
+        {
+            "day": "2016-02-16",
+            "slots": []
+        },
+        {
+            "day": "2016-02-17",
+            "slots": []
+        },
+        {
+            "day": "2016-02-18",
+            "slots": []
+        },
+        {
+            "day": "2016-02-19",
+            "slots": []
+        },
+        {
+            "day": "2016-02-20",
+            "slots": []
+        },
+        {
+            "day": "2016-02-21",
+            "slots": []
+        },
+        {
+            "day": "2016-02-22",
+            "slots": []
+        },
+        {
+            "day": "2016-02-23",
+            "slots": []
+        },
+        {
+            "day": "2016-02-24",
+            "slots": []
+        },
+        {
+            "day": "2016-02-25",
+            "slots": []
+        },
+        {
+            "day": "2016-02-26",
+            "slots": []
+        },
+        {
+            "day": "2016-02-27",
+            "slots": []
+        },
+        {
+            "day": "2016-02-28",
+            "slots": []
+        },
+        {
+            "day": "2016-02-29",
+            "slots": []
+        }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "Appointment":{
+    "atHome":true,
+    "address":null,
+    "where":"Tại nhà riêng",
+    "cost":"$150 một lần khám tại nhà",
+    "date":"02 tháng hai 2016",
+    "idDoctor":null,
+    "nameDoctor":"Dr. To Huy1",
+    "time":"07:30 AM"
+    
+  }, 
+  "Patient":{
+    "address":"123A",
+    "age":"24",
+    "gender":"Nam",
+    "name":"huy",
+    "symptom":"abc"
+    
+  }
+}

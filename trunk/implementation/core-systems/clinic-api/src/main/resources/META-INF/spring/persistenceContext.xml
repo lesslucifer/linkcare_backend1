@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+  		http://www.springframework.org/schema/beans/spring-beans.xsd 
+  		http://www.springframework.org/schema/data/jpa 
+  		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+  		http://www.springframework.org/schema/context 
+  		http://www.springframework.org/schema/context/spring-context.xsd
+  		http://www.springframework.org/schema/tx 
+  		http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<description>Clinic API RESTful web services - persistence layer.</description>
+
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceXmlLocation" value="classpath:META-INF/spring/persistence.xml"/>
+        <property name="persistenceUnitName" value="clinicApiPersistenceUnit"/>
+        <property name="dataSource" ref="clinicApiNonJtaDataSource"/>
+        <property name="jpaVendorAdapter"> 
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"> 
+                <property name="databasePlatform" value="${cliniccore.jpa.hibernate.dialect.databasePlatform}"/> 
+                <property name="showSql" value="${cliniccore.jpa.hibernate.showSql}" />
+                <property name="generateDdl" value="${cliniccore.jpa.hibernate.generateDdl}" />
+                <property name="database" value="${cliniccore.jpa.hibernate.database}" />
+            </bean> 
+        </property>
+        <property name="jpaProperties">
+            <props>
+            	<prop key="hibernate.hbm2ddl.auto">${cliniccore.jpa.hibernate.hbm2ddl.auto}</prop>
+            	<prop key="hibernate.connection.autocommit">${cliniccore.jpa.hibernate.autocommit}</prop>
+            </props>
+        </property>
+        
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<property name="dataSource" ref="clinicApiNonJtaDataSource"/>
+	</bean>
+    
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<context:spring-configured/>
+	<context:component-scan base-package="com.clinic.clinic.api.persistence.repository" />
+	<context:annotation-config/>
+	
+</beans>

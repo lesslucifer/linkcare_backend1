@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+	<filter class="ch.qos.logback.access.filter.CountingFilter">
+		<name>countingFilter</name>
+	</filter>
+
+	<appender name="ACCESSFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/var/log/cliniccore/webapp-access.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/var/log/cliniccore/webapp-access.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>combined</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="REQRESPFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/var/log/cliniccore/webapp-req-resp.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/var/log/cliniccore/webapp-req-resp.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%n%fullRequest%n%fullResponse%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender-ref ref="ACCESSFILE" />
+	<appender-ref ref="REQRESPFILE" />
+</configuration>

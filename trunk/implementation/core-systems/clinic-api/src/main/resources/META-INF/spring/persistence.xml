@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence 
+	http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	
+	<persistence-unit name="clinicApiPersistenceUnit"
+		transaction-type="RESOURCE_LOCAL">
+		<class>com.clinic.clinic.api.persistence.entity.IdEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.NameCodeDescEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.NameDescEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.NameCodeEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.NameEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.TraceEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.MajorEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.PlaceEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.CountryEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.CategoryEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.AnnualEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.AddressEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.AccountEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.SubcategoryEntity</class>
+	</persistence-unit>
+</persistence>
