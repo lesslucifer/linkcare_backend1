@@ -24,7 +24,11 @@
 package com.clinic.clinic.api.persistence.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -309,5 +313,89 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
         }
         return retVal;
     }
+    
+    public boolean isAccountHasRight(final Integer accountId, final String right) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        
+        try {
+            final EntityManager entityManager = getEntityManager();
+            
+            Query query = null;
+            
+            final StringBuilder summaryQuerySql = new StringBuilder();
+            summaryQuerySql.append("SELECT 1 "
+                    + "FROM `account_role` a ");
+            summaryQuerySql.append("JOIN `role` role ON a.role_id = role.id ");
+            summaryQuerySql.append("JOIN `role_right` rr ON rr.role_id = role.id ");
+            summaryQuerySql.append("JOIN `clinic_right` r ON rr.clinic_right_id = r.id AND r.code = :right ");
+            
+            summaryQuerySql.append("WHERE a.account_id = :accountId");
+            query = entityManager.createNativeQuery(summaryQuerySql.toString());
+            
+            query.setParameter("accountId", accountId);
+            query.setParameter("right", right);
+            
+            @SuppressWarnings("unchecked")
+            List<Object[]> result = query.getResultList();
+            
+            if (result != null && !result.isEmpty()) {
+            	return true;
+            }
+            
+        } catch (Exception e) {
+            LOGGER.error("error", e);
+        } finally {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        
+		return false;
+    }
+    
+    @Override
+    public Set<String> checkAccountRights(final Integer accountId, final String[] rights) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        
+        try {
+            final EntityManager entityManager = getEntityManager();
+            
+            Query query = null;
+            
+            final StringBuilder summaryQuerySql = new StringBuilder();
+            summaryQuerySql.append("SELECT r.code "
+                    + "FROM `account_role` a ");
+            summaryQuerySql.append("JOIN `role` role ON a.role_id = role.id ");
+            summaryQuerySql.append("JOIN `role_right` rr ON rr.role_id = role.id ");
+            summaryQuerySql.append("JOIN `clinic_right` r ON rr.clinic_right_id = r.id AND r.code IN :rights ");
+            
+            summaryQuerySql.append("WHERE a.account_id = :accountId");
+            query = entityManager.createNativeQuery(summaryQuerySql.toString());
+            
+            query.setParameter("accountId", accountId);
+            query.setParameter("rights", rights);
+            
+            @SuppressWarnings("unchecked")
+            List<Object[]> result = query.getResultList();
+            
+            if (result == null || result.isEmpty()) {
+            	return Collections.emptySet();
+            }
 
+            return result.stream().map((o) -> ((String) o[0])).collect(Collectors.toSet());
+            
+        } catch (Exception e) {
+            LOGGER.error("error", e);
+        } finally {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+
+    	return Collections.emptySet();
+    }
 }

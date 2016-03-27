@@ -25,6 +25,7 @@ package com.clinic.clinic.api.ws.biz;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -166,18 +167,20 @@ public class AccountRestApi extends AbsRestApi {
         return retVal;
     }
     
-    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_ACCOUNT_FILTER, method = RequestMethod.POST, produces = {
+    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_ACCOUNT_LOGIN, method = RequestMethod.POST, produces = {
     "application/json" })
-    public AccountDto login(@RequestBody String loginName, String pass) {
+    public String login(@RequestBody Map<String, String> body) {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        AccountDto retVal = null;
+        String retVal = null;
         try {
+        	String loginName = body.get("loginName");
+        	String pass = body.get("password");
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Debug", StringUtil.getHashedText(pass));
             }
-            retVal = accountService.login(loginName, pass);
+            retVal = auth().login(loginName, pass);
         } catch (Exception e) {
             LOGGER.error("error", e);
         } finally {

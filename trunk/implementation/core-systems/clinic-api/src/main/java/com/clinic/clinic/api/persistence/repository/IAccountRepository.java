@@ -23,6 +23,8 @@
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.repository;
 
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -76,4 +78,6 @@ public interface IAccountRepository extends IRepository<AccountEntity, Integer> 
      */
     Page<AccountCustomDto> findAccountAndHome(final Pageable range,final AccountFilterDto accountfilterDto);
 
+    boolean isAccountHasRight(final Integer accountId, final String right);
+    Set<String> checkAccountRights(final Integer accountId, final String[] rights);
 }

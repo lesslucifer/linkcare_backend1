@@ -7,6 +7,7 @@
 	<persistence-unit name="clinicApiPersistenceUnit"
 		transaction-type="RESOURCE_LOCAL">
 		<class>com.clinic.clinic.api.persistence.entity.IdEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.DeleteableEntity</class>
 		<class>com.clinic.clinic.api.persistence.entity.NameCodeDescEntity</class>
 		<class>com.clinic.clinic.api.persistence.entity.NameDescEntity</class>
 		<class>com.clinic.clinic.api.persistence.entity.NameCodeEntity</class>
@@ -20,5 +21,8 @@
 		<class>com.clinic.clinic.api.persistence.entity.AddressEntity</class>
 		<class>com.clinic.clinic.api.persistence.entity.AccountEntity</class>
 		<class>com.clinic.clinic.api.persistence.entity.SubcategoryEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.AccountTimingsEntity</class>
+		<class>com.clinic.clinic.api.persistence.entity.Timings</class>
 	</persistence-unit>
 </persistence>

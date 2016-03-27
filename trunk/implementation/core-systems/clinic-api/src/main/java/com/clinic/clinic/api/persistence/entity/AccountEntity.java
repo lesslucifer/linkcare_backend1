@@ -22,7 +22,7 @@ public class AccountEntity extends TraceEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 3135124384140213026L;
-	@Column(name = "loginName", nullable = false, length = 45)
+	@Column(name = "login_name", nullable = false, length = 45)
 	private String loginName;
 	@Column(name="code", unique = true, nullable = false, length=45)
     private String code;

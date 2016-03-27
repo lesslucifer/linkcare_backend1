@@ -98,6 +98,10 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
      * @see SimpleJpaRepository
      */
     private SimpleJpaRepository<T, ID> repository;
+    
+    protected SimpleJpaRepository<T, ID> getJpaRepo() {
+    	return repository;
+    }
     /**
      * <p>Initialize.</p>
      */

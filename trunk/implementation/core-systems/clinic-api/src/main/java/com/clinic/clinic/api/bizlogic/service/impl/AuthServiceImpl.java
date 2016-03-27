@@ -23,7 +23,12 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service.impl;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,68 +68,6 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
     @Autowired
     private ISessionLogRepository sessionRepo;
     
-    private ITranslator<AccountDto, AccountEntity> accountTrans = new AccountTranslatorImpl();
-    
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.bizlogic.service.IAuthService#checkAuthenticated(java.lang.String, java.lang.String)
-     */
-    @Override
-    public AccountDto checkAuthenticated(final String sessionId,final String loginName) throws BizlogicException {
-        if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug(IConstants.BEGIN_METHOD);
-        }
-        AccountDto retValue = null;
-        try {
-            AccountEntity accountEnt = accountRepo.findFirstEntity(loginName, IDbConstants.FIELD_ACC_ACCOUNT_LOGIN_NAME, false);
-            List<SessionLogEntity> sessionEnts = sessionRepo.findByTwoFields(IDbConstants.FIELD_FK_ACCOUNT, accountEnt.getId(), IDbConstants.FIELD_SESSION_LOGOUT_TIME, null, false);
-            if (sessionEnts == null || sessionEnts.size() != 1) {
-                LOGGER.error("found NO or too MANY active sessions for {}", loginName);
-                throwBizlogicException("Session time out", loginName);
-            }
-            // check session id match
-            if (!sessionId.equals(sessionEnts.get(0).getSessionId())) {
-                LOGGER.error("found NO MATCH active session id for {}", loginName);
-                throwBizlogicException("Session not match", loginName);
-            }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(IConstants.END_METHOD_NORMAL);
-            }
-            retValue = accountTrans.getDto(accountEnt);
-        } catch (BizlogicException be) {
-            LOGGER.error("error", be);
-        } catch (Exception e) {
-            LOGGER.error("error", e);
-        } finally {
-            if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug(IConstants.END_METHOD);
-            }
-        }
-        return retValue;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.bizlogic.service.IAuthService#hasRight(java.lang.String, java.lang.String)
-     */
-    @Override
-    public ClinicRightDto hasRight(final String sessionId,final String loginName) {
-        if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug(IConstants.BEGIN_METHOD);
-        }
-        ClinicRightDto retValue = null;
-        try {
-            
-        } catch (BizlogicException be) { 
-            LOGGER.error("error", be);
-        } catch (Exception e) {
-            LOGGER.error("error", e);
-        }finally {
-            if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug(IConstants.END_METHOD);
-            }
-        }
-        return retValue;
-    }
-
     /* (non-Javadoc)
      * @see com.clinic.clinic.api.bizlogic.service.IAuthService#login(java.lang.String, java.lang.String)
      */
@@ -148,6 +91,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
                 sessionEnt.setAccount(accountEnt);
                 sessionEnt.setSessionId(retSession);
                 sessionEnt.setLoginTime(logInTime);
+                sessionEnt.setExpiredTime(logInTime + IConstants.SESSION_EXPIRES);
                 sessionEnt.setLogoutTime(null);
                 sessionRepo.save(sessionEnt);
             }
@@ -162,4 +106,123 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         }
         return retSession;
     }
+
+	@Override
+	public Integer authSession(String sessionId) throws BizlogicException {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        
+        try {
+        	Integer retValue = sessionRepo.getAccountIdForSession(sessionId);
+        	
+        	if (retValue == null) {
+        		throwBizlogicException("Invalid sessions", sessionId);
+        	}
+        	
+        	return retValue;
+        } catch (BizlogicException be) {
+        	throw be;
+        } catch (Exception e) {
+        	throwBizlogicException("Unkown error!", e.toString());
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        
+        return null;
+	}
+
+	@Override
+	public boolean authRight(Integer accountId, String right) throws BizlogicException {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        
+        try {
+        	boolean hasRight = accountRepo.isAccountHasRight(accountId, right);
+        	
+        	if (hasRight) {
+        		return true;
+        	}
+        } catch (BizlogicException be) {
+        	throw be;
+        } catch (Exception e) {
+        	throwBizlogicException("Unkown error!", e.toString());
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        
+        throwBizlogicException("Permission Denied", right);
+        return false;
+	}
+
+	@Override
+	public boolean authRights(Integer accountId, String... rights) throws BizlogicException {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        
+        try {
+        	Set<String> matchedRights = accountRepo.checkAccountRights(accountId, rights);
+        	
+        	if (matchedRights.size() == rights.length) {
+        		return true;
+        	}
+        	else {
+        		String[] lackedRights = Arrays.stream(rights).filter((r) -> !matchedRights.contains(r)).toArray(String[]::new);
+        		throwBizlogicException("Permission Denied", lackedRights);
+        		return false;
+        	}
+        	
+        } catch (BizlogicException be) {
+        	throw be;
+        } catch (Exception e) {
+        	throwBizlogicException("Unkown error!", e.toString());
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        
+        throwBizlogicException("Permission Denied", rights);
+        return false;
+	}
+
+	@Override
+	public Set<String> authRights(Integer accountId, String[] requiredRights, String[] optionalRights)
+			throws BizlogicException {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        
+    	String[] allRights = new String[requiredRights.length + optionalRights.length];
+    	System.arraycopy(requiredRights, 0, allRights, 0, requiredRights.length);
+    	System.arraycopy(optionalRights, 0, allRights, requiredRights.length, optionalRights.length);
+        
+        try {
+        	Set<String> matchedRights = accountRepo.checkAccountRights(accountId, allRights);
+        	String[] lackedRights = Arrays.stream(requiredRights).filter((r) -> !matchedRights.contains(r)).toArray(String[]::new);
+        	
+        	if (lackedRights.length > 0) {
+        		throwBizlogicException("Permission Denied", lackedRights);
+        	}
+
+    		return matchedRights;
+        } catch (BizlogicException be) {
+        	throw be;
+        } catch (Exception e) {
+        	throwBizlogicException("Unkown error!", e.toString());
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        
+        throwBizlogicException("Permission Denied", allRights);
+        return Collections.emptySet();
+	}
 }

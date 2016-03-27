@@ -41,14 +41,8 @@ import javax.persistence.MappedSuperclass;
  * @see {@link IdEntity}
  */
 @MappedSuperclass
-public abstract class TraceEntity extends IdEntity {
+public abstract class TraceEntity extends DeleteableEntity {
     private static final long serialVersionUID = 3953977144749349775L;
-   
-    /**
-     * The isDeleted flag is used to mark the record is deleted in system.
-     */
-    @Column(name="is_deleted")
-    private Boolean isDeleted = false;
     /**
      * The last updated time-stamp.
      */
@@ -78,23 +72,6 @@ public abstract class TraceEntity extends IdEntity {
         this.lastUpdated = System.currentTimeMillis();
         this.lastUpdatedBy = 0;
         this.createdBy = 0;
-    }
-    
-    /**
-     * <p>Returns current value of isDeleted attribute.</p>
-     *
-     * @return the isDeleted
-     */
-    public Boolean getIsDeleted() {
-        return isDeleted;
-    }
-    /**
-     * <p>Sets value of isDeleted attribute.</p>
-     *
-     * @param isDeleted the isDeleted to set
-     */
-    public void setIsDeleted(final Boolean isDeleted) {
-        this.isDeleted = isDeleted;
     }
     /**
      * <p>Returns current value of lastUpdated attribute.</p>

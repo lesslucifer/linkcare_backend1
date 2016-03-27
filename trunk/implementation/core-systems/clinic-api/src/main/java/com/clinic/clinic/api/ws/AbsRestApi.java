@@ -163,12 +163,8 @@ public abstract class AbsRestApi {
         }
         throw be;
     }
-    
-    protected AccountDto checkAuthenticated(final String sessionId, final String loginName) throws BizlogicException {
-        return authService.checkAuthenticated(sessionId, loginName);
-    }
-    
-    protected ClinicRightDto checkAuthorized(final String sessionId, final String rightCode) throws BizlogicException {
-        return authService.hasRight(sessionId, rightCode);
+
+    protected IAuthService auth() {
+    	return this.authService;
     }
 }

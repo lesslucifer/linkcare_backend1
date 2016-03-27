@@ -23,6 +23,8 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service;
 
+import java.util.Set;
+
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.ClinicRightDto;
 import com.clinic.clinic.common.exception.BizlogicException;
@@ -47,7 +49,7 @@ public interface IAuthService {
      *
      * @author Vuong Do
      */
-    AccountDto checkAuthenticated(String sessionId, String loginName) throws BizlogicException;
+    Integer authSession(String sessionId) throws BizlogicException;
 
     /**
      * <p>Description of this method.</p>
@@ -58,7 +60,9 @@ public interface IAuthService {
      *
      * @author Vuong Do
      */
-    ClinicRightDto hasRight(String sessionId, String loginName) throws BizlogicException;
+    boolean authRight(Integer accountId, String right) throws BizlogicException;
+    boolean authRights(Integer accountId, String... rights) throws BizlogicException;
+    Set<String> authRights(Integer accountId, String[] requiredRights, String[] optionalRights) throws BizlogicException;
     
     String login(final String loginName, final String password) throws BizlogicException;
 

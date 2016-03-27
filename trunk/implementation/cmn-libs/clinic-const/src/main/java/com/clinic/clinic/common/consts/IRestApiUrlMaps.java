@@ -29,4 +29,8 @@ public interface IRestApiUrlMaps {
     // ### Account
     static final String REST_API_BIZ_ACCOUNT_SUBCATEGORY = "/account/{subcategoryId}";
     static final String REST_API_BIZ_ACCOUNT_FILTER = "/account/filter";
+    static final String REST_API_BIZ_ACCOUNT_LOGIN = "/account/login";
+    
+    // ### Timings
+    static final String REST_API_BIZ_TIMINGS = "/timings";
 }

@@ -37,7 +37,12 @@ public interface IConstants {
     /**
      * default value of page size (number of row in a page).
      */
-    static int PAGE_SIZE_DEFAULT = 20;
+    static final int PAGE_SIZE_DEFAULT = 20;
+
+    /**
+     * session time in 30 minutes
+     */
+    static final long SESSION_EXPIRES = 30 * 60 * 1000;
 
     static final String SLASH = "/";
 

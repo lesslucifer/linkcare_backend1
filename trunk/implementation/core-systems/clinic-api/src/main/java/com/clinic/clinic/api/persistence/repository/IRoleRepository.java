@@ -35,5 +35,5 @@ import com.clinic.clinic.api.persistence.entity.RoleEntity;
  * @see TODO
  */
 public interface IRoleRepository extends IRepository<RoleEntity, Integer> {
-
+	
 }

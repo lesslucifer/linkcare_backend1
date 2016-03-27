@@ -29,9 +29,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
+import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.IdEntity;
 import com.clinic.clinic.api.translator.ITranslator;
 import com.clinic.clinic.common.dto.IdDto;
+import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.exception.BizlogicException;
 
 /**

@@ -57,6 +57,8 @@ public class SessionLogEntity extends TraceEntity{
     private Long loginTime;
     @Column(name = "logout_time")
     private Long logoutTime;
+    @Column(name = "expired_time")
+    private Long expiredTime;
     
     //fk: account and session_log table
     @ManyToOne
@@ -127,5 +129,11 @@ public class SessionLogEntity extends TraceEntity{
     public void setLogoutTime(Long logoutTime) {
         this.logoutTime = logoutTime;
     }
+	public Long getExpiredTime() {
+		return expiredTime;
+	}
+	public void setExpiredTime(Long expiredTime) {
+		this.expiredTime = expiredTime;
+	}
     
 }
