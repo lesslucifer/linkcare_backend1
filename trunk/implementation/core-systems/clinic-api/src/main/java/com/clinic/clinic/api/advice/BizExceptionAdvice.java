@@ -16,7 +16,7 @@ import com.clinic.clinic.common.exception.BizlogicException;
 public class BizExceptionAdvice {
 	
     @ExceptionHandler(value = BizlogicException.class)
-	public @ResponseBody Object handleBizException(BizlogicException e) {
+	public @ResponseBody Object handleBizException(HttpServletResponse response, BizlogicException e) {
 		response.setStatus(500);
 
 		Map<String, Object> resp = new HashMap<>();
