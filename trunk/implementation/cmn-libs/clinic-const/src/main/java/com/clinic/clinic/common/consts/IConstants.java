@@ -43,6 +43,7 @@ public interface IConstants {
      * session time in 30 minutes
      */
     static final long SESSION_EXPIRES = 30 * 60 * 1000;
+    static final int SLOT_TIME = 10;
 
     static final String SLASH = "/";
 

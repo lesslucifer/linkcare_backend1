@@ -138,6 +138,13 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 		
+		<!-- Utils -->
+		<dependency>
+		    <groupId>com.github.marschall</groupId>
+		    <artifactId>threeten-jpa</artifactId>
+		    <version>1.3.0</version>
+		</dependency>
+
 		<!-- clinic libraries -->
 		<dependency>
 			<groupId>com.clinic.clinic.common</groupId>

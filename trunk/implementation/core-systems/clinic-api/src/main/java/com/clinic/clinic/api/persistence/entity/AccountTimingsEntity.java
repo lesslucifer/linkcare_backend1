@@ -1,10 +1,11 @@
 package com.clinic.clinic.api.persistence.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -12,8 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "account_timings")
@@ -30,16 +31,16 @@ public final class AccountTimingsEntity extends TraceEntity {
 	private AccountEntity account;
 	
 	@Column(name = "begin_date", nullable = false)
-	private Date beginDate;
+	private LocalDate beginDate;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "accountTimings")
 	private List<TimingsEntity> timings = new ArrayList<TimingsEntity>();
 
-	public Date getBeginDate() {
+	public LocalDate getBeginDate() {
 		return beginDate;
 	}
 	
-	public void setBeginDate(Date beginDate) {
+	public void setBeginDate(LocalDate beginDate) {
 		this.beginDate = beginDate;
 	}
 

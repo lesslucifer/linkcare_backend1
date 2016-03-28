@@ -1,19 +1,21 @@
 package com.clinic.clinic.api.bizlogic.service.impl;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpStatusCodeException;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.ITimingsService;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AccountTimingsEntity;
-import com.clinic.clinic.api.persistence.entity.TimingsEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountTimingsRepository;
 import com.clinic.clinic.api.persistence.repository.ITimingsRepository;
@@ -23,8 +25,9 @@ import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.dto.biz.AccountTimingsDto;
+import com.clinic.clinic.common.dto.biz.TimingsDayDto;
 import com.clinic.clinic.common.dto.biz.TimingsDto;
-import com.clinic.clinic.common.exception.BizlogicException;
+import com.clinic.clinic.common.dto.biz.TimingsSlotDto;
 
 @ApplicationService
 public final class TimingsServiceImpl extends AbsService implements ITimingsService {
@@ -106,5 +109,31 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 		}
 		
 		return accTimingsTrans.getDto(ent);
+	}
+
+	@Override
+	public List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range) {
+		AccountTimingsEntity ent = accTimingsRepo.getLastestAccountTimings(accountId);
+		ent.getTimings().size(); // get all timings
+
+		final LocalDate startDay = LocalDate.parse(day, DateTimeFormatter.ofPattern(IConstants.DateForMat_DDMMYYYY));
+		return IntStream.range(0, range).mapToObj(i -> {
+			LocalDate date = startDay.plusDays(i);
+			List<TimingsSlotDto> slots = ent.getTimings().stream().map(t -> {
+				int nSlot = t.getLength() / IConstants.SLOT_TIME;
+				return IntStream.range(0, nSlot).mapToObj(slotOffset -> {
+					TimingsSlotDto slot = new TimingsSlotDto();
+					slot.setTime(t.getBeginTime() + slotOffset * IConstants.SLOT_TIME);
+					slot.setAvailable(true);
+					return slot;
+				});
+			}).flatMap(s -> s).collect(Collectors.toList());
+			
+			TimingsDayDto timingsDay = new TimingsDayDto();
+			timingsDay.setDay(date);
+			timingsDay.setSlots(slots);
+			
+			return timingsDay;
+		}).collect(Collectors.toList());
 	}
 }

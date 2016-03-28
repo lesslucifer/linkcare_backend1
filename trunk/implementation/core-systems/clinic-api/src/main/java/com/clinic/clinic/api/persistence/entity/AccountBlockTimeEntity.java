@@ -1,6 +1,6 @@
 package com.clinic.clinic.api.persistence.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -19,10 +19,10 @@ public final class AccountBlockTimeEntity extends DeleteableEntity {
 	private AccountEntity account;
 
 	@Column(name = "begin", nullable = false)
-	private Date beginDateTime;
+	private LocalDateTime beginDateTime;
 
 	@Column(name = "end", nullable = false)
-	private Date endDateTime;
+	private LocalDateTime endDateTime;
 
 	@Column(name = "length", nullable = false)
 	private int lengthInMinutes;
@@ -35,15 +35,15 @@ public final class AccountBlockTimeEntity extends DeleteableEntity {
 		this.lengthInMinutes = lengthInMinutes;
 	}
 
-	public Date getEndDateTime() {
+	public LocalDateTime getEndDateTime() {
 		return endDateTime;
 	}
 
-	public Date getBeginDateTime() {
+	public LocalDateTime getBeginDateTime() {
 		return beginDateTime;
 	}
 
-	public void setBeginDateTime(Date beginDateTime) {
+	public void setBeginDateTime(LocalDateTime beginDateTime) {
 		this.beginDateTime = beginDateTime;
 	}
 }

@@ -23,8 +23,6 @@
  *=============================================================================*/
 package com.clinic.clinic.common.dto.biz;
 
-import java.util.List;
-
 import com.clinic.clinic.common.dto.NameCodeDescDto;
 
 /**

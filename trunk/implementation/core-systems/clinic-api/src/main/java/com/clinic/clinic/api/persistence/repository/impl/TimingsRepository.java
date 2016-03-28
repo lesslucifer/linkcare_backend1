@@ -28,5 +28,4 @@ public class TimingsRepository extends AbsRepositoryImpl<TimingsEntity, Integer>
 		
 		return this.save(entities.collect(Collectors.toList()));
 	}
-	
 }

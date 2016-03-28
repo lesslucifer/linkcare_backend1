@@ -23,10 +23,12 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import com.clinic.clinic.common.utils.JsonJava8TimeSerialization;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 
 /**
@@ -43,5 +45,12 @@ public class HibernateAwareObjectMapper extends ObjectMapper {
 
     public HibernateAwareObjectMapper() {
         registerModule(new Hibernate4Module());
+
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(LocalDate.class, new JsonJava8TimeSerialization.LocalDateSerializer());
+        module.addDeserializer(LocalDate.class, new JsonJava8TimeSerialization.LocalDateDeserializer());
+        module.addSerializer(LocalDateTime.class, new JsonJava8TimeSerialization.LocalDateTimeSerializer());
+        module.addDeserializer(LocalDateTime.class, new JsonJava8TimeSerialization.LocalDateTimeDeserializer());
+        registerModule(module);
     }
 }
