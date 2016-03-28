@@ -5,18 +5,21 @@ import com.clinic.clinic.common.dto.biz.AccountTimingsDto;
 
 public class AccountTimingsTranslator extends AbstractTranslatorImpl<AccountTimingsDto, AccountTimingsEntity> {
 
+	public static final AccountTimingsTranslator INSTANCE = new AccountTimingsTranslator();
+	
+	private AccountTimingsTranslator() {
+		super(AccountTimingsDto.class, AccountTimingsEntity.class);
+	}
 
-    @Override
-	public AccountTimingsDto getDto(AccountTimingsEntity ent) {
-        AccountTimingsDto dto = new AccountTimingsDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
+	@Override
+	public void entityToDto(AccountTimingsEntity ent, AccountTimingsDto dto) {
+		super.entityToDto(ent, dto);
+		dto.setTimings(TimingsTranslatorImpl.INSTANCE.getDtoList(ent.getTimings()));
+	}
 
-    @Override
-    public AccountTimingsEntity getEntity(AccountTimingsDto dto) {
-        AccountTimingsEntity ent = new AccountTimingsEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	@Override
+	public void dtoToEntity(AccountTimingsDto dto, AccountTimingsEntity ent) {
+		super.dtoToEntity(dto, ent);
+//		ent.setTimings(TimingsTranslatorImpl.INSTANCE.getEntityList(dto.getTimings()));
+	}
 }

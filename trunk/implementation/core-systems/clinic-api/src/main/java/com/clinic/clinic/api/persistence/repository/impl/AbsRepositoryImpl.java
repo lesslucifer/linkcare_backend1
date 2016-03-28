@@ -50,6 +50,7 @@ import org.springframework.data.jpa.repository.support.JpaEntityInformationSuppo
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import com.clinic.clinic.api.persistence.entity.DeleteableEntity;
 import com.clinic.clinic.api.persistence.entity.IdEntity;
 import com.clinic.clinic.api.persistence.entity.NameCodeDescEntity;
 import com.clinic.clinic.api.persistence.entity.TraceEntity;
@@ -632,7 +633,9 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
         if (permanent) {
             repository.delete(entity);
         } else {
-            ((TraceEntity) entity).setIsDeleted(true);
+        	if (entity instanceof DeleteableEntity) {
+        		((DeleteableEntity) entity).setIsDeleted(true);
+        	}
             save(entity);
         }
     }
@@ -642,7 +645,9 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
             repository.delete(entities);
         } else {
             for (T entity : entities) {
-                ((TraceEntity) entity).setIsDeleted(true);
+            	if (entity instanceof DeleteableEntity) {
+            		((DeleteableEntity) entity).setIsDeleted(true);
+            	}
             }
             save(entities);
         }
@@ -679,11 +684,11 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
         
         if (filterLogicalDeletion) {
             for (T entity : tmpList) {
-                if (((TraceEntity) entity).getIsDeleted().booleanValue() == false) {
-                    list.add(entity);
-                } else {
-                    //Ignore
-                }
+            	if (entity instanceof DeleteableEntity) {
+	                if (((DeleteableEntity) entity).getIsDeleted().booleanValue() == false) {
+	                    list.add(entity);
+	                }
+            	}
             }
         } else {
             list = tmpList;
@@ -709,7 +714,7 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
     
     protected T doFindOne(final ID id, final boolean filterLogicalDeletion) {
         T t = repository.findOne(id);
-        if (filterLogicalDeletion && ((TraceEntity) t).getIsDeleted()) {
+        if (filterLogicalDeletion && (t instanceof DeleteableEntity) && ((DeleteableEntity) t).getIsDeleted()) {
             return null;
         }
         return t;
@@ -740,7 +745,9 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
     }
     
     protected <S extends T> S doSave(final S entity) {
-        ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
+    	if (entity instanceof TraceEntity) {
+            ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
+    	}
 		if (!entityManager.contains(entity)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("DEbug save persist in abs repository");
@@ -782,13 +789,17 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
     protected <S extends T> List<S> doSave(final Iterable<S> entities) {
         for (IdEntity entity: entities) {
             //Update last changed time-stamp
-            ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
+        	if (entity instanceof TraceEntity) {
+                ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
+        	}
         }
         return repository.save(entities);
     }
     
     protected <S extends T> S doSaveAndFlush(final S entity) {
-        ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
+    	if (entity instanceof TraceEntity) {
+    		((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
+    	}
         return repository.saveAndFlush(entity);
     }
     

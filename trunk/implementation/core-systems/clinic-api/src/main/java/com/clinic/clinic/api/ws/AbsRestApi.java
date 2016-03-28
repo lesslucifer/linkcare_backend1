@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 import com.clinic.clinic.api.bizlogic.service.IAuthService;
@@ -166,5 +167,9 @@ public abstract class AbsRestApi {
 
     protected IAuthService auth() {
     	return this.authService;
+    }
+    
+    protected void return204(HttpServletResponse resp) {
+    	resp.setStatus(HttpStatus.NO_CONTENT.value());
     }
 }

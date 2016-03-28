@@ -27,7 +27,9 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 
+import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.exception.BizlogicException;
 
 /**
@@ -48,14 +50,25 @@ public abstract class AbsService {
      * @param msgKey {@link String} system message key, should be got from message's constants
      * @param params list of parameter's value will be used in localized message
      */
-    protected void throwBizlogicException(final String msgKey, final String... params) {
+    protected void throwBizlogicException(final int httpCode, final int bizCode, final String msgKey, final Object... params) {
         final BizlogicException bizException = new BizlogicException(msgKey);
         if (null != params && params.length > 0) {
-            for (final String param : params) {
-                bizException.addParamValue(param);
+            for (final Object param : params) {
+                bizException.addParamValue(param.toString());
             }
         }
+        bizException.setHttpCode(httpCode);
+        bizException.setBizCode(bizCode);
+        
         throw bizException;
+    }
+    
+    protected void throwBizlogicException(final HttpStatus httpStatus, final int bizCode, final String msgKey, final Object... params) {
+    	this.throwBizlogicException(httpStatus.value(), bizCode, msgKey, params);
+    }
+    
+    protected void throwBizlogicException(final String msgKey, final Object... params) {
+    	this.throwBizlogicException(500, IBizErrorCode.UNKNOWN_ERROR, msgKey, params);
     }
     
     /**

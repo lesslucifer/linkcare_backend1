@@ -20,8 +20,10 @@
  */
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.AnnualFeeEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.AnnualFeeDto;
 
 /**
@@ -37,29 +39,7 @@ public class AnnualFeeTranslatorImpl extends AbstractTranslatorImpl<AnnualFeeDto
         implements
             ITranslator<AnnualFeeDto, AnnualFeeEntity> {
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api
-     * .persistence.entity.IdEntity)
-     */
-    @Override
-    public AnnualFeeDto getDto(AnnualFeeEntity ent) {
-        AnnualFeeDto dto = new AnnualFeeDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.
-     * common.dto.IdDto)
-     */
-    @Override
-    public AnnualFeeEntity getEntity(AnnualFeeDto dto) {
-        AnnualFeeEntity ent = new AnnualFeeEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	public AnnualFeeTranslatorImpl() {
+		super(AnnualFeeDto.class, AnnualFeeEntity.class);
+	}
 }

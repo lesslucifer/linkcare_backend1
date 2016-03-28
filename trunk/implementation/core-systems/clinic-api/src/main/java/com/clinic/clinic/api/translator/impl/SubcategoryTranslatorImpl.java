@@ -20,8 +20,10 @@
  */
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.SubcategoryEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.SubcategoryDto;
 
 /**
@@ -37,29 +39,8 @@ public class SubcategoryTranslatorImpl extends AbstractTranslatorImpl<Subcategor
         implements
             ITranslator<SubcategoryDto, SubcategoryEntity> {
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api
-     * .persistence.entity.IdEntity)
-     */
-    @Override
-    public SubcategoryDto getDto(SubcategoryEntity ent) {
-        SubcategoryDto dto = new SubcategoryDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.
-     * common.dto.IdDto)
-     */
-    @Override
-    public SubcategoryEntity getEntity(SubcategoryDto dto) {
-        SubcategoryEntity ent = new SubcategoryEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public SubcategoryTranslatorImpl() {
+		super(SubcategoryDto.class, SubcategoryEntity.class);
+	}
 }

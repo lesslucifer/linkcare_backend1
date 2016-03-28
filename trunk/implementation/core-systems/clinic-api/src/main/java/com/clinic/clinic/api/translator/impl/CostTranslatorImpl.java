@@ -23,8 +23,10 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.CostEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.CostDto;
 
 /**
@@ -39,23 +41,9 @@ import com.clinic.clinic.common.dto.biz.CostDto;
 public class CostTranslatorImpl extends AbstractTranslatorImpl<CostDto, CostEntity>
         implements
             ITranslator<CostDto, CostEntity> {
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public CostDto getDto(CostEntity ent) {
-        CostDto dto = new CostDto();
-        entityToDto(ent, dto);
-        return dto;
-    }
 
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public CostEntity getEntity(CostDto dto) {
-        CostEntity ent = new CostEntity();
-        dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public CostTranslatorImpl() {
+		super(CostDto.class, CostEntity.class);
+	}
 }

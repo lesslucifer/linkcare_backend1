@@ -23,8 +23,10 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.StatusEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.StatusDto;
 
 /**
@@ -40,23 +42,8 @@ public class StatusTranslatorImpl extends AbstractTranslatorImpl<StatusDto, Stat
         implements
             ITranslator<StatusDto, StatusEntity> {
 
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public StatusDto getDto(StatusEntity ent) {
-        StatusDto dto = new StatusDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public StatusEntity getEntity(StatusDto dto) {
-        StatusEntity ent = new StatusEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public StatusTranslatorImpl() {
+		super(StatusDto.class, StatusEntity.class);
+	}
 }

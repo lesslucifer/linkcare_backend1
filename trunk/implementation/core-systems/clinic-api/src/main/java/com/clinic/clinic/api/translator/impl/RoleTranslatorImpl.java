@@ -26,8 +26,10 @@ package com.clinic.clinic.api.translator.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.RoleEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.RoleDto;
 
 /**
@@ -43,23 +45,8 @@ public class RoleTranslatorImpl extends AbstractTranslatorImpl<RoleDto, RoleEnti
         implements
             ITranslator<RoleDto, RoleEntity> {
 
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public RoleDto getDto(RoleEntity ent) {
-        RoleDto dto = new RoleDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public RoleEntity getEntity(RoleDto dto) {
-        RoleEntity ent = new RoleEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public RoleTranslatorImpl() {
+		super(RoleDto.class, RoleEntity.class);
+	}
 }

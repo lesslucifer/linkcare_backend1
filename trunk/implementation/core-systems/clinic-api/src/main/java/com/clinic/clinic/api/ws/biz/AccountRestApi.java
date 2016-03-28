@@ -54,6 +54,7 @@ import com.clinic.clinic.common.dto.biz.AccountFilterDto;
 import com.clinic.clinic.common.dto.biz.SubcategoryDto;
 import com.clinic.clinic.common.exception.BizlogicException;
 import com.clinic.clinic.common.utils.StringUtil;
+import com.clinic.clinic.common.utils.Utils;
 
 /**
  * <p>
@@ -169,25 +170,25 @@ public class AccountRestApi extends AbsRestApi {
     
     @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_ACCOUNT_LOGIN, method = RequestMethod.POST, produces = {
     "application/json" })
-    public String login(@RequestBody Map<String, String> body) {
+    public Object login(@RequestBody Map<String, String> body) {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        String retVal = null;
+
         try {
         	String loginName = body.get("loginName");
         	String pass = body.get("password");
+        	
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Debug", StringUtil.getHashedText(pass));
             }
-            retVal = auth().login(loginName, pass);
-        } catch (Exception e) {
-            LOGGER.error("error", e);
+            
+            String session = auth().login(loginName, pass);
+            return Utils.mkMap("session", session);
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
-        return retVal;
     }
 }

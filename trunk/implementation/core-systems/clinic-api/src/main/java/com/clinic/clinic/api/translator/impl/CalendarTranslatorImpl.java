@@ -23,8 +23,10 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.CalendarEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.CalendarDto;
 
 /**
@@ -38,23 +40,8 @@ import com.clinic.clinic.common.dto.biz.CalendarDto;
  */
 public class CalendarTranslatorImpl extends AbstractTranslatorImpl<CalendarDto, CalendarEntity> implements ITranslator<CalendarDto, CalendarEntity> {
 
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public CalendarDto getDto(CalendarEntity ent) {
-        CalendarDto dto = new CalendarDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public CalendarEntity getEntity(CalendarDto dto) {
-        CalendarEntity ent = new CalendarEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public CalendarTranslatorImpl() {
+		super(CalendarDto.class, CalendarEntity.class);
+	}
 }

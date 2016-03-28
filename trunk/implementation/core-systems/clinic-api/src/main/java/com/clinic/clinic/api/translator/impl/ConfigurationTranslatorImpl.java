@@ -26,8 +26,10 @@ package com.clinic.clinic.api.translator.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.ConfigurationEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.ConfigurationDto;
 
 /**
@@ -43,23 +45,8 @@ public class ConfigurationTranslatorImpl extends AbstractTranslatorImpl<Configur
         implements
             ITranslator<ConfigurationDto, ConfigurationEntity> {
 
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public ConfigurationDto getDto(ConfigurationEntity ent) {
-        ConfigurationDto dto = new ConfigurationDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public ConfigurationEntity getEntity(ConfigurationDto dto) {
-        ConfigurationEntity ent = new ConfigurationEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public ConfigurationTranslatorImpl() {
+		super(ConfigurationDto.class, ConfigurationEntity.class);
+	}
 }

@@ -3,6 +3,8 @@ package com.clinic.clinic.common.exception;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clinic.clinic.common.consts.IBizErrorCode;
+
 /**
  * <p>
  * The data structure presents an error at biz-logic processing.
@@ -19,6 +21,9 @@ public class BizlogicException extends RuntimeException {
      * </p>
      */
     private static final long serialVersionUID = 1701713174897230481L;
+    
+    private int httpCode = 0;
+    private int bizCode = IBizErrorCode.UNKNOWN_ERROR;
     private List<String> paramValues;
 
     /**
@@ -73,4 +78,20 @@ public class BizlogicException extends RuntimeException {
     public List<String> getParamValues() {
         return paramValues;
     }
+
+	public int getHttpCode() {
+		return httpCode;
+	}
+
+	public void setHttpCode(int httpCode) {
+		this.httpCode = httpCode;
+	}
+
+	public int getBizCode() {
+		return bizCode;
+	}
+
+	public void setBizCode(int bizCode) {
+		this.bizCode = bizCode;
+	}
 }

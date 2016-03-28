@@ -20,8 +20,10 @@
  */
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.SessionLogEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.SessionLogDto;
 
 /**
@@ -37,29 +39,8 @@ public class SessionLogTranslatorImpl extends AbstractTranslatorImpl<SessionLogD
         implements
             ITranslator<SessionLogDto, SessionLogEntity> {
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api
-     * .persistence.entity.IdEntity)
-     */
-    @Override
-    public SessionLogDto getDto(SessionLogEntity ent) {
-        SessionLogDto dto = new SessionLogDto();
-        entityToDto(ent, dto);
-        return dto;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.
-     * common.dto.IdDto)
-     */
-    @Override
-    public SessionLogEntity getEntity(SessionLogDto dto) {
-        SessionLogEntity ent = new SessionLogEntity();
-        dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public SessionLogTranslatorImpl() {
+		super(SessionLogDto.class, SessionLogEntity.class);
+	}
 }

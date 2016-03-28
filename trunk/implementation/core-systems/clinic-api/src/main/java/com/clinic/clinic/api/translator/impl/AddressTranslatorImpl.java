@@ -39,25 +39,8 @@ import com.clinic.clinic.common.dto.biz.AddressDto;
 public class AddressTranslatorImpl extends AbstractTranslatorImpl<AddressDto, AddressEntity>
         implements
             ITranslator<AddressDto, AddressEntity> {
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public AddressDto getDto(AddressEntity ent) {
-        AddressDto dto = new AddressDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public AddressEntity getEntity(AddressDto dto) {
-        AddressEntity ent = new AddressEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
-    
+	
+	public AddressTranslatorImpl() {
+		super(AddressDto.class, AddressEntity.class);
+	}
 }

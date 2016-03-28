@@ -1,6 +1,7 @@
 package com.clinic.clinic.api.persistence.repository.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public class TimingsRepository extends AbsRepositoryImpl<TimingsEntity, Integer>
 		});
 		
 		
-		return this.save(entities::iterator);
+		return this.save(entities.collect(Collectors.toList()));
 	}
 	
 }

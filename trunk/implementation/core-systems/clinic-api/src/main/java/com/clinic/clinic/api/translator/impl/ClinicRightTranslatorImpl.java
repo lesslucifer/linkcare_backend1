@@ -23,8 +23,10 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.ClinicRightEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.ClinicRightDto;
 
 /**
@@ -40,23 +42,8 @@ public class ClinicRightTranslatorImpl extends AbstractTranslatorImpl<ClinicRigh
         implements
             ITranslator<ClinicRightDto, ClinicRightEntity> {
 
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public ClinicRightDto getDto(ClinicRightEntity ent) {
-        ClinicRightDto dto = new ClinicRightDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public ClinicRightEntity getEntity(ClinicRightDto dto) {
-        ClinicRightEntity ent = new ClinicRightEntity();
-        this.entityToDto(ent, dto);
-        return ent;
-    }
+	
+	public ClinicRightTranslatorImpl() {
+		super(ClinicRightDto.class, ClinicRightEntity.class);
+	}
 }

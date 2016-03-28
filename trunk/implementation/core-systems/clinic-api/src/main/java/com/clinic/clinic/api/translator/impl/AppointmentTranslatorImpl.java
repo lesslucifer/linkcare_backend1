@@ -23,8 +23,10 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.AppoinmentDto;
 
 /**
@@ -39,24 +41,9 @@ import com.clinic.clinic.common.dto.biz.AppoinmentDto;
 public class AppointmentTranslatorImpl extends AbstractTranslatorImpl<AppoinmentDto, AppointmentEntity>
         implements ITranslator<AppoinmentDto, AppointmentEntity> {
 
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public AppoinmentDto getDto(AppointmentEntity ent) {
-        AppoinmentDto dto = new AppoinmentDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public AppointmentEntity getEntity(AppoinmentDto dto) {
-        AppointmentEntity ent = new AppointmentEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public AppointmentTranslatorImpl() {
+		super(AppoinmentDto.class, AppointmentEntity.class);
+	}
 
 }

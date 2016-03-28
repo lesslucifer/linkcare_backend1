@@ -48,8 +48,51 @@ import com.clinic.clinic.common.exception.BizlogicException;
 public abstract class AbstractTranslatorImpl <DTO extends IdDto, ENT extends IdEntity> implements ITranslator<DTO, ENT> {
     /** Logging property. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTranslatorImpl.class);
+    
+    private final Class<DTO> dtoClass;
+    private final Class<ENT> entClass;
 
-    /* (non-Javadoc)
+    protected AbstractTranslatorImpl(Class<DTO> dtoClass, Class<ENT> entClass) {
+		super();
+		this.dtoClass = dtoClass;
+		this.entClass = entClass;
+	}
+
+	@Override
+	public DTO getDto(ENT ent) {
+        DTO dto = null;
+		try {
+			dto = dtoClass.newInstance();
+		} catch (Exception e) {
+			BizlogicException bizEx = new BizlogicException("Cannot init dto", e);
+			bizEx.addParamValue(dtoClass.getName());
+			throw bizEx;
+		}
+		
+        this.entityToDto(ent, dto);
+        return dto;
+	}
+
+
+
+	@Override
+	public ENT getEntity(DTO dto) {
+        ENT ent = null;
+		try {
+			ent = entClass.newInstance();
+		} catch (Exception e) {
+			BizlogicException bizEx = new BizlogicException("Cannot init ent", e);
+			bizEx.addParamValue(entClass.getName());
+			throw bizEx;
+		}
+		
+        this.dtoToEntity(dto, ent);
+        return ent;
+	}
+
+
+
+	/* (non-Javadoc)
      * @see com.clinic.clinic.webapp.cliniccollect.tranlator.Translator#entityToDto(com.clinic.clinic.webapp.cliniccollect.persistence.entity.IdEntity, com.clinic.clinic.common.dto.IdDto)
      */
     @Override

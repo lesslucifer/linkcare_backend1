@@ -23,8 +23,10 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.PlaceEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.PlaceDto;
 
 /**
@@ -40,24 +42,9 @@ public class PlaceTranslatorImpl extends AbstractTranslatorImpl<PlaceDto, PlaceE
         implements
             ITranslator<PlaceDto, PlaceEntity> {
 
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public PlaceDto getDto(PlaceEntity ent) {
-        PlaceDto dto = new PlaceDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public PlaceEntity getEntity(PlaceDto dto) {
-        PlaceEntity ent = new PlaceEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public PlaceTranslatorImpl() {
+		super(PlaceDto.class, PlaceEntity.class);
+	}
     
 }

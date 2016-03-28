@@ -23,8 +23,10 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator.impl;
 
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.CategoryEntity;
 import com.clinic.clinic.api.translator.ITranslator;
+import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.CategoryDto;
 
 /**
@@ -40,23 +42,8 @@ public class CategoryTranslatorImpl extends AbstractTranslatorImpl<CategoryDto, 
         implements
             ITranslator<CategoryDto, CategoryEntity> {
 
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getDto(com.clinic.clinic.api.persistence.entity.IdEntity)
-     */
-    @Override
-    public CategoryDto getDto(CategoryEntity ent) {
-        CategoryDto dto = new CategoryDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.api.translator.ITranslator#getEntity(com.clinic.clinic.common.dto.IdDto)
-     */
-    @Override
-    public CategoryEntity getEntity(CategoryDto dto) {
-        CategoryEntity ent = new CategoryEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	
+	public CategoryTranslatorImpl() {
+		super(CategoryDto.class, CategoryEntity.class);
+	}
 }

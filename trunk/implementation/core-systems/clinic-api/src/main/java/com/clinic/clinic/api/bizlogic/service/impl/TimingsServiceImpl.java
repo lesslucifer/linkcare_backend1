@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.ITimingsService;
@@ -17,6 +19,7 @@ import com.clinic.clinic.api.persistence.repository.IAccountTimingsRepository;
 import com.clinic.clinic.api.persistence.repository.ITimingsRepository;
 import com.clinic.clinic.api.translator.ITranslator;
 import com.clinic.clinic.api.translator.impl.AccountTimingsTranslator;
+import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.dto.biz.AccountTimingsDto;
@@ -35,7 +38,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
     @Autowired
     private ITimingsRepository timingsRepo;
 
-    private ITranslator<AccountTimingsDto, AccountTimingsEntity> accTimingsTrans = new AccountTimingsTranslator();
+    private ITranslator<AccountTimingsDto, AccountTimingsEntity> accTimingsTrans = AccountTimingsTranslator.INSTANCE;
 
 	@Override
 	public AccountTimingsDto updateAccountTimings(Integer accountId, AccountTimingsDto dto) {
@@ -46,33 +49,25 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
         AccountTimingsDto retValue = null;
         try {
         	if (!isTimingsValid(dto.getTimings())) {
-        		throw new BizlogicException("Invalid! Empty timings");
+        		throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.TIMINGS_EMPTY, "Invalid! Empty timings");
         	}
 
         	sortTimings(dto.getTimings());
         	if (!isTimingsConflict(dto.getTimings())) {
-        		throw new BizlogicException("Timings Conflicted!");
+        		throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.TIMINGS_CONFLICT, "Timings Conflicted!");
         	}
         	
         	AccountEntity account = accountRepo.findFirstEntity(IDbConstants.FIELD_ID, accountId, true);
         	if (account == null) {
-        		throw new BizlogicException("Unknown account");
-        	}
-        	
-        	if (!accountRepo.isAccountHasRight(accountId, IDbConstants.RIGHT_UPDATE_TIMINGS)) {
-        		throw new BizlogicException("Permission denied!");
+        		throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Unknown user", accountId);
         	}
         	
         	AccountTimingsEntity accTimings = accTimingsRepo.updateAccountTimings(account, dto);
-        	List<TimingsEntity> timings = timingsRepo.insertTimings(accTimings, dto.getTimings());
+        	/*List<TimingsEntity> timings =*/ timingsRepo.insertTimings(accTimings, dto.getTimings());
         	
         	// Update appointments time
 
         	retValue = dto;
-        } catch (BizlogicException be) {
-            LOGGER.error("Error", be);
-        } catch (Exception e) {
-            LOGGER.error("Error", e);
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
@@ -87,7 +82,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 	}
 	
 	private boolean isTimingsValid(List<TimingsDto> timings) {
-		return timings.stream().allMatch(t -> t.getLength() > 0);
+		return !timings.isEmpty() && timings.stream().allMatch(t -> t.getLength() > 0);
 	}
 
 	private boolean isTimingsConflict(List<TimingsDto> sortedTimings) {
@@ -106,6 +101,10 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 	@Override
 	public AccountTimingsDto getAccountTimings(Integer accountId) {
 		AccountTimingsEntity ent = accTimingsRepo.getLastestAccountTimings(accountId);
+		if (ent == null) {
+			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Cannot find doctor's timings", accountId);
+		}
+		
 		return accTimingsTrans.getDto(ent);
 	}
 }

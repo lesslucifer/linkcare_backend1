@@ -8,17 +8,8 @@ public class AccountTranslatorImpl extends AbstractTranslatorImpl<AccountDto, Ac
         implements
             ITranslator<AccountDto, AccountEntity> {
 
-    @Override
-    public AccountDto getDto(AccountEntity ent) {
-        AccountDto dto = new AccountDto();
-        this.entityToDto(ent, dto);
-        return dto;
-    }
-
-    @Override
-    public AccountEntity getEntity(AccountDto dto) {
-        AccountEntity ent = new AccountEntity();
-        this.dtoToEntity(dto, ent);
-        return ent;
-    }
+	public AccountTranslatorImpl() {
+		super(AccountDto.class, AccountEntity.class);
+		// TODO Auto-generated constructor stub
+	}
 }

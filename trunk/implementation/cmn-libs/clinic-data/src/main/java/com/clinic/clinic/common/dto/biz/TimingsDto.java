@@ -9,15 +9,15 @@ public final class TimingsDto extends IdDto {
 	 */
 	private static final long serialVersionUID = -920324334695393803L;
 
-	private int begin;
+	private int beginTime;
 	private int length;
 	
 	public int getBegin() {
-		return begin;
+		return beginTime;
 	}
 	
 	public void setBegin(int begin) {
-		this.begin = begin;
+		this.beginTime = begin;
 	}
 	
 	public int getLength() {
@@ -29,6 +29,6 @@ public final class TimingsDto extends IdDto {
 	}
 	
 	public int getEnd() {
-		return begin + length;
+		return beginTime + length;
 	}
 }
