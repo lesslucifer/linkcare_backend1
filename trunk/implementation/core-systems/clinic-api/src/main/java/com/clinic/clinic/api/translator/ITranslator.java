@@ -35,7 +35,7 @@ import com.clinic.clinic.common.dto.IdDto;
  * @author Vuong Do<br>
  * @version 1.0<br>
  */
-public interface ITranslator<DTO extends IdDto, ENT extends IdEntity> {
+public interface ITranslator<DTO /*extends IdDto*/, ENT /*extends IdEntity*/> {
     
     /**
      * 

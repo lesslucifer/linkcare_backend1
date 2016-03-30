@@ -94,4 +94,21 @@ public class BizlogicException extends RuntimeException {
 	public void setBizCode(int bizCode) {
 		this.bizCode = bizCode;
 	}
+	
+    public static void throwEx(final int httpCode, final int bizCode, final String msgKey, final Object... params) {
+        final BizlogicException bizException = new BizlogicException(msgKey);
+        if (null != params && params.length > 0) {
+            for (final Object param : params) {
+                bizException.addParamValue(param.toString());
+            }
+        }
+        bizException.setHttpCode(httpCode);
+        bizException.setBizCode(bizCode);
+        
+        throw bizException;
+    }
+    
+    public static void throwEx(final String msgKey, final Object... params) {
+    	throwEx(500, IBizErrorCode.UNKNOWN_ERROR, msgKey, params);
+    }
 }

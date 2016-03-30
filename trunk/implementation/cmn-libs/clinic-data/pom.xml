@@ -58,6 +58,12 @@
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-hibernate4</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>net.sf.oval</groupId>
+			<artifactId>oval</artifactId>
+			<version>1.31</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.clinic.clinic.common</groupId>

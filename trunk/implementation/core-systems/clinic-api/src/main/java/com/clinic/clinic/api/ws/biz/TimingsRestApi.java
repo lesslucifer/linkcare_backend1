@@ -45,6 +45,7 @@ public class TimingsRestApi extends AbsRestApi {
     public void setTimings(@RequestHeader("sess") String session,
     		@RequestBody AccountTimingsDto body,
     		HttpServletResponse response) {
+		validate(body);
 		Integer accountId = auth().authSession(session);
 		auth().authRight(accountId, IDbConstants.RIGHT_UPDATE_TIMINGS);
 

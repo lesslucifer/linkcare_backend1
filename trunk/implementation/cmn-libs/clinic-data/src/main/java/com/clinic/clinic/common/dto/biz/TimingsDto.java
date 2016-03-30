@@ -2,6 +2,8 @@ package com.clinic.clinic.common.dto.biz;
 
 import com.clinic.clinic.common.dto.IdDto;
 
+import net.sf.oval.constraint.NotNull;
+
 public final class TimingsDto extends IdDto {
 
 	/**
@@ -9,8 +11,11 @@ public final class TimingsDto extends IdDto {
 	 */
 	private static final long serialVersionUID = -920324334695393803L;
 
-	private int beginTime;
-	private int length;
+	@NotNull
+	private Integer beginTime;
+	
+	@NotNull
+	private Integer length;
 	
 	public int getBegin() {
 		return beginTime;

@@ -23,6 +23,7 @@ package com.clinic.clinic.api.persistence.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -53,6 +54,16 @@ public class SubcategoryEntity extends NameCodeDescEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "subcategory")
     private List<AccountEntity> accounts = new ArrayList<AccountEntity>();
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private CategoryEntity category;
+    
+    @Column(name = "clinic_dur")
+    private int clinicDur;
+    
+    @Column(name = "patient_home_dur")
+    private int patientHomeDur;
 
     public List<AccountEntity> getAccounts() {
         return accounts;
@@ -61,10 +72,6 @@ public class SubcategoryEntity extends NameCodeDescEntity {
     public void setAccounts(List<AccountEntity> accounts) {
         this.accounts = accounts;
     }
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private CategoryEntity category;
 
     public CategoryEntity getCategory() {
         return category;
@@ -73,4 +80,20 @@ public class SubcategoryEntity extends NameCodeDescEntity {
     public void setCategory(CategoryEntity category) {
         this.category = category;
     }
+
+	public int getClinicDur() {
+		return clinicDur;
+	}
+
+	public void setClinicDur(int clinicDur) {
+		this.clinicDur = clinicDur;
+	}
+
+	public int getPatientHomeDur() {
+		return patientHomeDur;
+	}
+
+	public void setPatientHomeDur(int patientHomeDur) {
+		this.patientHomeDur = patientHomeDur;
+	}
 }

@@ -1,11 +1,12 @@
 package com.clinic.clinic.api.bizlogic.service.impl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +15,14 @@ import org.springframework.http.HttpStatus;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.ITimingsService;
+import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AccountTimingsEntity;
+import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
+import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountTimingsRepository;
+import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
 import com.clinic.clinic.api.persistence.repository.ITimingsRepository;
 import com.clinic.clinic.api.translator.ITranslator;
 import com.clinic.clinic.api.translator.impl.AccountTimingsTranslator;
@@ -40,6 +45,10 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
     private IAccountTimingsRepository accTimingsRepo;
     @Autowired
     private ITimingsRepository timingsRepo;
+    @Autowired
+    private IAccountBlockTimeRepository accBlockTimeRepo;
+    @Autowired
+    private IAppointmentBookingRepository appointmentBookingRepo;
 
     private ITranslator<AccountTimingsDto, AccountTimingsEntity> accTimingsTrans = AccountTimingsTranslator.INSTANCE;
 
@@ -56,7 +65,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
         	}
 
         	sortTimings(dto.getTimings());
-        	if (!isTimingsConflict(dto.getTimings())) {
+        	if (isTimingsConflict(dto.getTimings())) {
         		throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.TIMINGS_CONFLICT, "Timings Conflicted!");
         	}
         	
@@ -93,7 +102,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 			TimingsDto prev = sortedTimings.get(i - 1);
 			TimingsDto cur = sortedTimings.get(i);
 			
-			if (prev.getEnd() <= cur.getBegin()) {
+			if (prev.getEnd() >= cur.getBegin()) {
 				return true;
 			}
 		}
@@ -110,13 +119,22 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 		
 		return accTimingsTrans.getDto(ent);
 	}
-
+	
 	@Override
 	public List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range) {
+		
 		AccountTimingsEntity ent = accTimingsRepo.getLastestAccountTimings(accountId);
 		ent.getTimings().size(); // get all timings
 
 		final LocalDate startDay = LocalDate.parse(day, DateTimeFormatter.ofPattern(IConstants.DateForMat_DDMMYYYY));
+		final LocalDate endDay = startDay.plusDays(range);
+		
+		final List<AccountBlockTimeEntity> blockTimes = accBlockTimeRepo.getBlockTime(accountId, startDay.atStartOfDay(), endDay.atStartOfDay());
+		blockTimes.sort(AccountBlockTimeEntity::compareTo);
+		
+		final List<AppointmentBookingEntity> approvedAppointments = appointmentBookingRepo.getApprovedBooking(accountId, startDay, endDay);
+		approvedAppointments.sort(AppointmentBookingEntity::compareTo);
+
 		return IntStream.range(0, range).mapToObj(i -> {
 			LocalDate date = startDay.plusDays(i);
 			List<TimingsSlotDto> slots = ent.getTimings().stream().map(t -> {
@@ -124,7 +142,8 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 				return IntStream.range(0, nSlot).mapToObj(slotOffset -> {
 					TimingsSlotDto slot = new TimingsSlotDto();
 					slot.setTime(t.getBeginTime() + slotOffset * IConstants.SLOT_TIME);
-					slot.setAvailable(true);
+					slot.setAvailable(isTimeAvailable(date, slot.getTime(), slot.getTime() + IConstants.SLOT_TIME,
+							blockTimes, approvedAppointments));
 					return slot;
 				});
 			}).flatMap(s -> s).collect(Collectors.toList());
@@ -135,5 +154,34 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 			
 			return timingsDay;
 		}).collect(Collectors.toList());
+	}
+	
+	@Override
+	public boolean isTimeAvailable(LocalDate date, int begin, int end,
+			final List<AccountBlockTimeEntity> blockTimes, 
+			final List<AppointmentBookingEntity> approvedAppointments) {
+
+		boolean result = approvedAppointments.stream().allMatch((ab) -> {
+			if (ab.getDate().compareTo(date) == 0) {
+				return ((begin < ab.getTime() && end < ab.getTime()) || begin > ab.getEnd());
+			}
+			
+			return false;
+		});
+		
+		if (!result) {
+			return false;
+		}
+
+		final LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(end / 60, end % 60));
+		final LocalDateTime endDateTime = startDateTime.plusMinutes(IConstants.SLOT_TIME);
+		return blockTimes.stream().allMatch((bt) -> {
+			if (startDateTime.compareTo(bt.getEndDateTime()) > 0) {
+				return true;
+			}
+
+			return ((startDateTime.compareTo(bt.getBeginDateTime()) < 0) && 
+					(endDateTime.compareTo(bt.getBeginDateTime()) < 0));
+		});
 	}
 }

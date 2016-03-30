@@ -15,11 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 import com.clinic.clinic.api.bizlogic.service.IAuthService;
+import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IRestApiConstants;
-import com.clinic.clinic.common.dto.biz.AccountDto;
-import com.clinic.clinic.common.dto.biz.ClinicRightDto;
 import com.clinic.clinic.common.exception.BizlogicException;
 import com.clinic.clinic.common.exception.ClinicBizLogicException;
+
+import net.sf.oval.ConstraintViolation;
+import net.sf.oval.Validator;
 
 /**
  * <p>
@@ -34,6 +36,7 @@ import com.clinic.clinic.common.exception.ClinicBizLogicException;
 public abstract class AbsRestApi {
     /** Logging property. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbsRestApi.class);
+    private static final Validator validator = new Validator();
     
     @Autowired
     private IAuthService authService;
@@ -171,5 +174,15 @@ public abstract class AbsRestApi {
     
     protected void return204(HttpServletResponse resp) {
     	resp.setStatus(HttpStatus.NO_CONTENT.value());
+    }
+    
+    protected void validate(Object o) {
+    	List<ConstraintViolation> violations = validator.validate(o);
+
+    	if(!violations.isEmpty())
+    	{
+    		BizlogicException.throwEx(HttpStatus.BAD_REQUEST.value(), IBizErrorCode.INVALIDATED_OBJECT,
+    				"Object " + o.getClass().getName() + " is invalid", violations.toArray());
+    	}
     }
 }

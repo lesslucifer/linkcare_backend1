@@ -305,6 +305,7 @@ public interface IDbConstants {
     static final String RIGHT_REPORT_READ = "RIGHT_REPORT_READ";
     static final String RIGHT_REPORT_CREATE = "RIGHT_REPORT_CREATE";
     static final String RIGHT_UPDATE_TIMINGS = "RIGHT_UPDATE_TIMINGS";
+    static final String RIGHT_BOOK_APPOINTMENT = "RIGHT_BOOK_APPOINTMENT";
 
     static final String FIELD_VALUE = "value";
     static final String FIELD_PRICE = "price";

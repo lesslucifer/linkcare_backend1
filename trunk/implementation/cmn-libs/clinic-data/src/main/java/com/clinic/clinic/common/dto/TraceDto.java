@@ -25,6 +25,7 @@ package com.clinic.clinic.common.dto;
 
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.utils.TimeUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * <p>
@@ -34,15 +35,22 @@ import com.clinic.clinic.common.utils.TimeUtil;
  * @author Vuong Do<br>
  * @version 1.0<br>
  */
-public abstract class TraceDto extends IdDto {
+public class TraceDto extends IdDto {
     /**
      * <p>Description of this field.</p>
      */
     private static final long serialVersionUID = -6852384703387704784L;
+    
+    @JsonIgnore
     private Long createdDatetime;
+    @JsonIgnore
     private Integer createdBy;
+    
     private Long lastUpdated;
+    @JsonIgnore
     private Integer lastUpdatedBy;
+    	
+    @JsonIgnore
     private Boolean isDeleted = new Boolean(false);
     
     /**
@@ -113,6 +121,7 @@ public abstract class TraceDto extends IdDto {
      *
      * @author minh.nguyen
      */
+    @JsonIgnore
     public String getDateFormatLastUpdated() {
         if(lastUpdated != null){
             return TimeUtil.convertLongToDate(lastUpdated, IConstants.DateForMat_DDMMYYYY_HHMM); 
@@ -128,6 +137,7 @@ public abstract class TraceDto extends IdDto {
      *
      * @author minh.nguyen
      */
+    @JsonIgnore
     public void setDateFormatLastUpdated(String dateFormatLastUpdated) {
         if (lastUpdated != null) {
             this.lastUpdated = TimeUtil.convertDateTimeToLong(dateFormatLastUpdated, IConstants.DateForMat_DDMMYYYY_HHMM);
@@ -190,5 +200,7 @@ public abstract class TraceDto extends IdDto {
      *
      * @author XuanBui
      */
-    public abstract void toUpercaseFirstChar();
+    public void toUpercaseFirstChar() {
+    	
+    }
 }

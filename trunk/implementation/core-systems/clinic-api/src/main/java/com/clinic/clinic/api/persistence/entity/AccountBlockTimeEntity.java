@@ -7,7 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-public final class AccountBlockTimeEntity extends DeleteableEntity {
+public final class AccountBlockTimeEntity extends DeleteableEntity implements Comparable<AccountBlockTimeEntity> {
 
 	/**
 	 * 
@@ -45,5 +45,20 @@ public final class AccountBlockTimeEntity extends DeleteableEntity {
 
 	public void setBeginDateTime(LocalDateTime beginDateTime) {
 		this.beginDateTime = beginDateTime;
+	}
+
+	@Override
+	public int compareTo(AccountBlockTimeEntity bt) {
+		int ret = beginDateTime.compareTo(bt.beginDateTime);
+		if (ret != 0) {
+			return ret;
+		}
+		
+		return Integer.compare(lengthInMinutes, bt.lengthInMinutes);
+	}
+
+	@Override
+	public String toString() {
+		return "AccountBlockTimeEntity [beginDateTime=" + beginDateTime + ", endDateTime=" + endDateTime + "]";
 	}
 }

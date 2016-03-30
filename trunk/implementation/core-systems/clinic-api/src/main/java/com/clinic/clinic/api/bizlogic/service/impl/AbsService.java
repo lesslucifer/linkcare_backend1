@@ -25,8 +25,6 @@ package com.clinic.clinic.api.bizlogic.service.impl;
 
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
 import com.clinic.clinic.common.consts.IBizErrorCode;
@@ -42,7 +40,7 @@ import com.clinic.clinic.common.exception.BizlogicException;
  */
 public abstract class AbsService {
     /** Logging property. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbsService.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(AbsService.class);
     
     /**
      * <p>Create a new business logic exception and throws it to caller.</p>
@@ -51,16 +49,7 @@ public abstract class AbsService {
      * @param params list of parameter's value will be used in localized message
      */
     protected void throwBizlogicException(final int httpCode, final int bizCode, final String msgKey, final Object... params) {
-        final BizlogicException bizException = new BizlogicException(msgKey);
-        if (null != params && params.length > 0) {
-            for (final Object param : params) {
-                bizException.addParamValue(param.toString());
-            }
-        }
-        bizException.setHttpCode(httpCode);
-        bizException.setBizCode(bizCode);
-        
-        throw bizException;
+        BizlogicException.throwEx(httpCode, bizCode, msgKey, params);
     }
     
     protected void throwBizlogicException(final HttpStatus httpStatus, final int bizCode, final String msgKey, final Object... params) {

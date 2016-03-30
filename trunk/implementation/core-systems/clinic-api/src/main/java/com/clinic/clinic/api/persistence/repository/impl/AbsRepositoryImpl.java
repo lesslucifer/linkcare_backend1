@@ -51,7 +51,6 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.clinic.clinic.api.persistence.entity.DeleteableEntity;
-import com.clinic.clinic.api.persistence.entity.IdEntity;
 import com.clinic.clinic.api.persistence.entity.NameCodeDescEntity;
 import com.clinic.clinic.api.persistence.entity.TraceEntity;
 import com.clinic.clinic.api.persistence.repository.IRepository;
@@ -68,7 +67,7 @@ import com.clinic.clinic.common.consts.IDbConstants;
  * @see {@link IRepository}
  */
 @NoRepositoryBean
-public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> implements IRepository<T, ID> {
+public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> implements IRepository<T, ID> {
     /** Logging property. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbsRepositoryImpl.class);
     
@@ -787,7 +786,7 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
         return entity;
     }
     protected <S extends T> List<S> doSave(final Iterable<S> entities) {
-        for (IdEntity entity: entities) {
+        for (S entity: entities) {
             //Update last changed time-stamp
         	if (entity instanceof TraceEntity) {
                 ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
@@ -1074,12 +1073,12 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
 //                newCounterStr = "0" + newCounterStr; // TODO optimize this
 //            }
             
-            int i = 0;
+//            int i = 0;
             
             while (newCounterStr.length() < codeLength) {
                 
                 newCounterStr = "0" + newCounterStr; // TODO optimize this
-                i++;
+//                i++;
             }
             
             

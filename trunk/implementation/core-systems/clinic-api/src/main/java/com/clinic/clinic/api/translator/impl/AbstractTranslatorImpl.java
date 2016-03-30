@@ -45,7 +45,7 @@ import com.clinic.clinic.common.exception.BizlogicException;
  * @version 1.0<br>
  * @see @see {@link com.clinic.clinic.webapp.cliniccollect.tranlator.Translator} 
  */
-public abstract class AbstractTranslatorImpl <DTO extends IdDto, ENT extends IdEntity> implements ITranslator<DTO, ENT> {
+public abstract class AbstractTranslatorImpl <DTO /*extends IdDto*/, ENT /*extends IdEntity*/> implements ITranslator<DTO, ENT> {
     /** Logging property. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTranslatorImpl.class);
     
