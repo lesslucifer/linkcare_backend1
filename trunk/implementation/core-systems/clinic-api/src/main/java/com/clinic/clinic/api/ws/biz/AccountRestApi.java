@@ -52,7 +52,6 @@ import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
 import com.clinic.clinic.common.dto.biz.SubcategoryDto;
-import com.clinic.clinic.common.exception.BizlogicException;
 import com.clinic.clinic.common.utils.StringUtil;
 import com.clinic.clinic.common.utils.Utils;
 
@@ -80,7 +79,7 @@ public class AccountRestApi extends AbsRestApi {
      *  Get all doctor (nurse) by sub-category.
      *  User select option go to the clinic.  
      * */
-    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_ACCOUNT_SUBCATEGORY, method = RequestMethod.GET, produces = {
+    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_ACCOUNT_SUBCATEGORY_SUBCATEGORYID, method = RequestMethod.GET, produces = {
     "application/json" })
     public Page<AccountDto> getAccountBySubcateId(@PathVariable("subcategoryId") Integer subcateId ,@RequestParam(value = IRestApiConstants.SORTING_PARAM_NAME_SORT, required = IDbConstants.FALSE) String sortExp,
             @RequestParam(value = IRestApiConstants.PAGING_PARAM_NAME_PAGE, required = IDbConstants.FALSE, defaultValue = "0") Integer viewPageNo,
