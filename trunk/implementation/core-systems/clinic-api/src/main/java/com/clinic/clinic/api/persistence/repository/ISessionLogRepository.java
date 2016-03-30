@@ -35,5 +35,7 @@ import com.clinic.clinic.api.persistence.entity.SessionLogEntity;
  * @see TODO
  */
 public interface ISessionLogRepository extends IRepository<SessionLogEntity, Integer> {
+	
+	SessionLogEntity findSessionLogByAccountId(final Integer accountId, final Integer sessionId);
 
 }

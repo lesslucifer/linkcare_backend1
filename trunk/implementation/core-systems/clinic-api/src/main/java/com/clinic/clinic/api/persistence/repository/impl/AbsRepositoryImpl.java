@@ -1137,7 +1137,5 @@ public class AbsRepositoryImpl<T extends IdEntity, ID extends Serializable> impl
                 }
             }
         }
-
     }
-    
 }

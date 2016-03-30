@@ -164,7 +164,7 @@ public abstract class AbsRestApi {
         throw be;
     }
     
-    protected AccountDto checkAuthenticated(final String sessionId, final String loginName) throws BizlogicException {
+    protected AccountDto checkAuthenticated(final Integer sessionId, final String loginName) throws BizlogicException {
         return authService.checkAuthenticated(sessionId, loginName);
     }
     

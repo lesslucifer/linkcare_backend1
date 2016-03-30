@@ -76,4 +76,6 @@ public interface IAccountRepository extends IRepository<AccountEntity, Integer> 
      */
     Page<AccountCustomDto> findAccountAndHome(final Pageable range,final AccountFilterDto accountfilterDto);
 
+	AccountEntity findAccountByLoginName(final String loginName);
+
 }

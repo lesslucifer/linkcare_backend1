@@ -47,7 +47,7 @@ public interface IAuthService {
      *
      * @author Vuong Do
      */
-    AccountDto checkAuthenticated(String sessionId, String loginName) throws BizlogicException;
+    AccountDto checkAuthenticated(Integer sessionId, String loginName) throws BizlogicException;
 
     /**
      * <p>Description of this method.</p>

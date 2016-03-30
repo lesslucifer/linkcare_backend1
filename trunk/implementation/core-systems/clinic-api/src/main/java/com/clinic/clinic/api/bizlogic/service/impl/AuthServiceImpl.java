@@ -69,27 +69,28 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
      * @see com.clinic.clinic.api.bizlogic.service.IAuthService#checkAuthenticated(java.lang.String, java.lang.String)
      */
     @Override
-    public AccountDto checkAuthenticated(final String sessionId,final String loginName) throws BizlogicException {
+    public AccountDto checkAuthenticated(final Integer sessionId,final String loginName) throws BizlogicException {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
         AccountDto retValue = null;
         try {
-            AccountEntity accountEnt = accountRepo.findFirstEntity(loginName, IDbConstants.FIELD_ACC_ACCOUNT_LOGIN_NAME, false);
-            List<SessionLogEntity> sessionEnts = sessionRepo.findByTwoFields(IDbConstants.FIELD_FK_ACCOUNT, accountEnt.getId(), IDbConstants.FIELD_SESSION_LOGOUT_TIME, null, false);
-            if (sessionEnts == null || sessionEnts.size() != 1) {
-                LOGGER.error("found NO or too MANY active sessions for {}", loginName);
-                throwBizlogicException("Session time out", loginName);
+            AccountEntity accountEnt = accountRepo.findAccountByLoginName(loginName);
+            if(null != accountEnt) {
+            	SessionLogEntity sessionEnt = sessionRepo.findSessionLogByAccountId(accountEnt.getId(), sessionId);
+                if (null != sessionEnt) {
+                	Long currentTime = System.currentTimeMillis();
+                	Long durableTime = currentTime - sessionEnt.getLastUpdated();
+                	if(durableTime <= IConstants.DURABLE_SESSION) {
+                		retValue = accountTrans.getDto(accountEnt);
+                	} else {
+                		sessionEnt.setIsDeleted(true);
+                	}
+                	sessionEnt.setLastUpdated(currentTime);
+                	sessionEnt.setLastUpdatedBy(accountEnt.getId());
+                	sessionRepo.save(sessionEnt);
+                }
             }
-            // check session id match
-            if (!sessionId.equals(sessionEnts.get(0).getSessionId())) {
-                LOGGER.error("found NO MATCH active session id for {}", loginName);
-                throwBizlogicException("Session not match", loginName);
-            }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(IConstants.END_METHOD_NORMAL);
-            }
-            retValue = accountTrans.getDto(accountEnt);
         } catch (BizlogicException be) {
             LOGGER.error("error", be);
         } catch (Exception e) {

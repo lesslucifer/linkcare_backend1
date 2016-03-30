@@ -106,6 +106,9 @@ public class AccountEntity extends TraceEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicar")
 	private List<AppointmentEntity> appointMedicars = new ArrayList<AppointmentEntity>();
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+	private List<SessionLogEntity> sessions = new ArrayList<SessionLogEntity>();
+	
 	public String getLoginName() {
         return loginName;
     }
@@ -361,4 +364,20 @@ public class AccountEntity extends TraceEntity {
     public void setMedicars(List<CommentEntity> medicars) {
         this.medicars = medicars;
     }
+
+	public RateEntity getRate() {
+		return rate;
+	}
+
+	public void setRate(RateEntity rate) {
+		this.rate = rate;
+	}
+
+	public List<SessionLogEntity> getSessions() {
+		return sessions;
+	}
+
+	public void setSessions(List<SessionLogEntity> sessions) {
+		this.sessions = sessions;
+	}
 }
