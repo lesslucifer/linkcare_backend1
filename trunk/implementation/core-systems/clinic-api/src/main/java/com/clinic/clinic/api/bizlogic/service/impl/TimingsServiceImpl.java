@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -16,10 +18,12 @@ import org.springframework.http.HttpStatus;
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.ITimingsService;
 import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
+import com.clinic.clinic.api.persistence.entity.AccountCustomTimingsEntity;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AccountTimingsEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
+import com.clinic.clinic.api.persistence.repository.IAccountCustomTimingsRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountTimingsRepository;
 import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
@@ -49,6 +53,8 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
     private IAccountBlockTimeRepository accBlockTimeRepo;
     @Autowired
     private IAppointmentBookingRepository appointmentBookingRepo;
+    @Autowired
+    private IAccountCustomTimingsRepository accCustomTimingsRepo;
 
     private ITranslator<AccountTimingsDto, AccountTimingsEntity> accTimingsTrans = AccountTimingsTranslator.INSTANCE;
 
@@ -90,7 +96,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 	}
 	
 	private void sortTimings(List<TimingsDto> timings) {
-		timings.sort((t1, t2) -> Integer.compare(t1.getBegin(), t2.getBegin()));
+		timings.sort((t1, t2) -> Integer.compare(t1.getBeginTime(), t2.getBeginTime()));
 	}
 	
 	private boolean isTimingsValid(List<TimingsDto> timings) {
@@ -102,7 +108,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 			TimingsDto prev = sortedTimings.get(i - 1);
 			TimingsDto cur = sortedTimings.get(i);
 			
-			if (prev.getEnd() >= cur.getBegin()) {
+			if (prev.getEnd() >= cur.getBeginTime()) {
 				return true;
 			}
 		}
@@ -134,6 +140,18 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 		
 		final List<AppointmentBookingEntity> approvedAppointments = appointmentBookingRepo.getApprovedBooking(accountId, startDay, endDay);
 		approvedAppointments.sort(AppointmentBookingEntity::compareTo);
+		
+		final List<AccountCustomTimingsEntity> listCustomTimings = accCustomTimingsRepo.getCustomTimings(accountId, startDay, endDay);
+		final TreeMap<LocalDate, TreeMap<Integer, AccountCustomTimingsEntity>> customTimings = new TreeMap<>();
+		listCustomTimings.forEach((ct) -> {
+			TreeMap<Integer, AccountCustomTimingsEntity> subMap = customTimings.get(ct.getDate());
+			if (subMap == null) {
+				subMap = new TreeMap<>();
+				customTimings.put(ct.getDate(), subMap);
+			}
+			
+			subMap.put(ct.getBegin(), ct);
+		});
 
 		return IntStream.range(0, range).mapToObj(i -> {
 			LocalDate date = startDay.plusDays(i);
@@ -144,6 +162,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 					slot.setTime(t.getBeginTime() + slotOffset * IConstants.SLOT_TIME);
 					slot.setAvailable(isTimeAvailable(date, slot.getTime(), slot.getTime() + IConstants.SLOT_TIME,
 							blockTimes, approvedAppointments));
+					slot.setType(t.getType());
 					return slot;
 				});
 			}).flatMap(s -> s).collect(Collectors.toList());

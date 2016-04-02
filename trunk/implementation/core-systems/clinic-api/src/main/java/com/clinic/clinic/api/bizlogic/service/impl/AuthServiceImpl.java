@@ -79,26 +79,26 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         }
 
         try {
-            AccountEntity accountEnt = accountRepo.findFirstEntity(IDbConstants.FIELD_ACC_ACCOUNT_LOGIN_NAME, loginName, false);
-            if(accountEnt == null || !accountEnt.getHashedPassword().equals(StringUtil.getHashedText(password))) {
-            	throwBizlogicException(200, IBizErrorCode.WRONG_USERNAME_OR_PASSWORD, "Invalid username or password");
+            AccountEntity accountEnt = accountRepo.findAccountByLoginName(loginName);
+            if(null != accountEnt) {
+            	SessionLogEntity sessionEnt = sessionRepo.findSessionLogByAccountId(accountEnt.getId(), sessionId);
+                if (null != sessionEnt) {
+                	Long currentTime = System.currentTimeMillis();
+                	Long durableTime = currentTime - sessionEnt.getLastUpdated();
+                	if(durableTime <= IConstants.DURABLE_SESSION) {
+                		retValue = accountTrans.getDto(accountEnt);
+                	} else {
+                		sessionEnt.setIsDeleted(true);
+                	}
+                	sessionEnt.setLastUpdated(currentTime);
+                	sessionEnt.setLastUpdatedBy(accountEnt.getId());
+                	sessionRepo.save(sessionEnt);
+                }
             }
-
-
-            if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug("login success");
-            }
-            Long logInTime = System.currentTimeMillis();
-            String retSession = StringUtil.getSession();
-            SessionLogEntity sessionEnt = new SessionLogEntity();
-            sessionEnt.setAccount(accountEnt);
-            sessionEnt.setSessionId(retSession);
-            sessionEnt.setLoginTime(logInTime);
-            sessionEnt.setExpiredTime(logInTime + IConstants.SESSION_EXPIRES);
-            sessionEnt.setLogoutTime(null);
-            sessionRepo.save(sessionEnt);
-            
-            return retSession;
+        } catch (BizlogicException be) {
+            LOGGER.error("error", be);
+        } catch (Exception e) {
+            LOGGER.error("error", e);
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);

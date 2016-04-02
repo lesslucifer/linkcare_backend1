@@ -5,9 +5,12 @@ import java.util.List;
 
 import javax.persistence.TypedQuery;
 
+import org.springframework.stereotype.Repository;
+
 import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
 
+@Repository
 public final class AccountBlockTimeRepositoryImpl extends AbsRepositoryImpl<AccountBlockTimeEntity, Integer>
 	implements IAccountBlockTimeRepository {
 

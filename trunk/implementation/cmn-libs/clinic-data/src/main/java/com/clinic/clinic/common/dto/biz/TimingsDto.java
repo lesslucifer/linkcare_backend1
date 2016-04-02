@@ -1,6 +1,7 @@
 package com.clinic.clinic.common.dto.biz;
 
 import com.clinic.clinic.common.dto.IdDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import net.sf.oval.constraint.NotNull;
 
@@ -17,22 +18,34 @@ public final class TimingsDto extends IdDto {
 	@NotNull
 	private Integer length;
 	
-	public int getBegin() {
+	@NotNull
+	private Integer type;
+	
+	public int getBeginTime() {
 		return beginTime;
 	}
-	
-	public void setBegin(int begin) {
+
+	public void setBeginTime(int begin) {
 		this.beginTime = begin;
 	}
-	
+
 	public int getLength() {
 		return length;
 	}
-	
+
 	public void setLength(int length) {
 		this.length = length;
 	}
-	
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	@JsonIgnore
 	public int getEnd() {
 		return beginTime + length;
 	}

@@ -23,19 +23,33 @@
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.repository.impl;
 
+<<<<<<< HEAD
 import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+=======
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
+import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.SessionLogEntity;
 import com.clinic.clinic.api.persistence.repository.ISessionLogRepository;
 import com.clinic.clinic.common.consts.IConstants;
+import com.clinic.clinic.common.consts.IDbConstants;
+import com.clinic.clinic.common.exception.BizlogicException;
+
 
 /**
  * <p>
@@ -99,5 +113,32 @@ public class SessionLogRepository extends AbsRepositoryImpl<SessionLogEntity, In
         }
         
 		return null;
+    }
+
+	public SessionLogEntity findSessionLogByAccountId(final Integer accountId, final Integer sessionId) {
+		if(LOGGER.isDebugEnabled()) {
+			LOGGER.debug(IConstants.BEGIN_METHOD);
+		}
+		SessionLogEntity retEnt = null;
+		try {
+			Specification<SessionLogEntity> spec = new Specification<SessionLogEntity>() {
+				
+				@Override
+				public Predicate toPredicate(Root<SessionLogEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+					final Join<SessionLogEntity, AccountEntity> joinAccount = root.join(IDbConstants.FIELD_FK_ACCOUNT);
+					return cb.and(cb.equal(joinAccount.get(IDbConstants.FIELD_FK_ACCOUNT), accountId), cb.equal(joinAccount.get("sessionId"), sessionId));
+				}
+			};
+			retEnt = findOne(spec, false);
+		} catch (BizlogicException be) {
+			LOGGER.error("Error", be);
+		} catch (Exception e) {
+			LOGGER.error("Error", e);
+		} finally {
+			if(LOGGER.isDebugEnabled()) {
+				LOGGER.debug(IConstants.END_METHOD);
+			}
+		}
+		return retEnt;
 	}
 }

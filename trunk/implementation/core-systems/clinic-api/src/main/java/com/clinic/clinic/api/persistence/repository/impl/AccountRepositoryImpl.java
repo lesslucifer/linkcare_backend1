@@ -51,6 +51,7 @@ import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
+import com.clinic.clinic.common.exception.BizlogicException;
 import com.clinic.clinic.common.utils.StringUtil;
 
 /**
@@ -398,4 +399,31 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
 
     	return Collections.emptySet();
     }
+
+	@Override
+	public AccountEntity findAccountByLoginName(final String loginName) {
+		if(LOGGER.isDebugEnabled()) {
+			LOGGER.debug(IConstants.BEGIN_METHOD);
+		}
+		AccountEntity ent = null;
+		try {
+			Specification<AccountEntity> spec = new Specification<AccountEntity>() {
+
+				@Override
+				public Predicate toPredicate(Root<AccountEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+					return cb.equal(root.get(IDbConstants.FIELD_ACC_LOGIN_NAME), loginName);
+				}
+			};
+			ent = findOne(spec);
+		} catch (BizlogicException be) {
+			LOGGER.error("Error", be);
+		} catch (Exception e) {
+			LOGGER.error("Error", e);
+		} finally {
+			if(LOGGER.isDebugEnabled()) {
+				LOGGER.debug(IConstants.END_METHOD);
+			}
+		}
+		return ent;
+	}
 }

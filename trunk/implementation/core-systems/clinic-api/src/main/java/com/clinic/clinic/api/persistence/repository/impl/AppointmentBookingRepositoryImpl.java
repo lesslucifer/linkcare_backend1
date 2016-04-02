@@ -60,7 +60,7 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 	public List<AppointmentBookingEntity> getApprovedBooking(Integer medicarId, LocalDate dateFrom, LocalDate dateTo) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ab FROM AppointmentBookingEntity ab ");
-		sb.append("WHERE ab.medicar = :medicarId AND ");
+		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date >= :dateFrom AND ");
 		sb.append("ab.date <= :dateTo AND ");
 		sb.append("ab.status = 2");

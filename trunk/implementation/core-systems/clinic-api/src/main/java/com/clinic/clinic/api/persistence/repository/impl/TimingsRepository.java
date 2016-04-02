@@ -20,7 +20,7 @@ public class TimingsRepository extends AbsRepositoryImpl<TimingsEntity, Integer>
 		Stream<TimingsEntity> entities = timings.stream().map(t -> {
 			TimingsEntity entity = new TimingsEntity();
 			entity.setAccountTimings(accTimings);
-			entity.setBeginTime(t.getBegin());
+			entity.setBeginTime(t.getBeginTime());
 			entity.setLength(t.getLength());
 			
 			return entity;

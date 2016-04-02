@@ -33,6 +33,8 @@ public interface IConstants {
      */
     static final int INTERNAL_SYSTEM_ERROR_CODE = 1000;
     static final int BIZLOGIC_ERROR_CODE = 2000;
+    
+    static final long DURABLE_SESSION = 1200000;
 
     /**
      * default value of page size (number of row in a page).

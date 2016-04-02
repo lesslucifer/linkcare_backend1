@@ -80,4 +80,5 @@ public interface IAccountRepository extends IRepository<AccountEntity, Integer> 
 
     boolean isAccountHasRight(final Integer accountId, final String right);
     Set<String> checkAccountRights(final Integer accountId, final String[] rights);
+	AccountEntity findAccountByLoginName(final String loginName);
 }

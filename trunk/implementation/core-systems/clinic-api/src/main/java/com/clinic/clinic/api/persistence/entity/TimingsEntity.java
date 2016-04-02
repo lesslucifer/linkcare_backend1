@@ -27,6 +27,10 @@ public final class TimingsEntity extends IdEntity {
 	
 	@Column(name = "length", nullable = false)
 	private int length;
+	
+	// type IAppointmentPosition
+	@Column
+	private int type;
 
 	public int getLength() {
 		return length;
@@ -63,5 +67,13 @@ public final class TimingsEntity extends IdEntity {
 
 	public void setAccountTimings(AccountTimingsEntity accountTimings) {
 		this.accountTimings = accountTimings;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 }

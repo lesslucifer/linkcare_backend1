@@ -10,7 +10,16 @@ public class TimingsSlotDto implements Serializable {
 	
 	private int time;
 	private boolean available;
+	private int type;
 	
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
 	public int getTime() {
 		return time;
 	}
