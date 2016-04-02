@@ -35,7 +35,11 @@ import com.clinic.clinic.common.utils.StringUtil;
  * @see {@link NameCodeDto}
  */
 public abstract class NameCodeDescDto extends NameCodeDto {
-    private String description;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2194506570680038533L;
+	private String description;
     
     /**
      * <p>Default constructor of this class.</p>

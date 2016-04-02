@@ -24,11 +24,8 @@
 package com.clinic.clinic.api.bizlogic.service.impl;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,15 +37,9 @@ import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.SessionLogEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.ISessionLogRepository;
-import com.clinic.clinic.api.translator.ITranslator;
-import com.clinic.clinic.api.translator.impl.AccountTranslatorImpl;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
-import com.clinic.clinic.common.consts.IDbConstants;
-import com.clinic.clinic.common.dto.biz.AccountDto;
-import com.clinic.clinic.common.dto.biz.ClinicRightDto;
 import com.clinic.clinic.common.exception.BizlogicException;
-import com.clinic.clinic.common.utils.StringUtil;
 
 /**
  * <p>
@@ -77,23 +68,23 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-
+        String retValue = null;
         try {
             AccountEntity accountEnt = accountRepo.findAccountByLoginName(loginName);
             if(null != accountEnt) {
-            	SessionLogEntity sessionEnt = sessionRepo.findSessionLogByAccountId(accountEnt.getId(), sessionId);
-                if (null != sessionEnt) {
-                	Long currentTime = System.currentTimeMillis();
-                	Long durableTime = currentTime - sessionEnt.getLastUpdated();
-                	if(durableTime <= IConstants.DURABLE_SESSION) {
-                		retValue = accountTrans.getDto(accountEnt);
-                	} else {
-                		sessionEnt.setIsDeleted(true);
-                	}
-                	sessionEnt.setLastUpdated(currentTime);
-                	sessionEnt.setLastUpdatedBy(accountEnt.getId());
-                	sessionRepo.save(sessionEnt);
-                }
+            	SessionLogEntity sessionEnt = new SessionLogEntity();
+            	sessionEnt.setAccount(accountEnt);
+            	sessionEnt.setCreatedBy(accountEnt.getId());
+            	sessionEnt.setCreatedDatetime(System.currentTimeMillis());
+            	sessionEnt.setLastUpdated(System.currentTimeMillis());
+            	sessionEnt.setLastUpdatedBy(accountEnt.getId());
+            	UUID uuid = UUID.randomUUID();
+                String sessionId = uuid.toString();
+                sessionEnt.setSessionId(sessionId); 
+            	sessionRepo.save(sessionEnt);
+            	retValue = sessionId;
+            } else {
+            	throwBizlogicException(401, IBizErrorCode.WRONG_USERNAME_OR_PASSWORD, "User or password invalid");
             }
         } catch (BizlogicException be) {
             LOGGER.error("error", be);
@@ -104,6 +95,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
                 LOGGER.debug(IConstants.END_METHOD);
             } 
         }
+        return retValue;
     }
 
 	@Override
@@ -114,11 +106,9 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         
         try {
         	Integer retValue = sessionRepo.getAccountIdForSession(sessionId);
-        	
         	if (retValue == null) {
         		throwBizlogicException(401, IBizErrorCode.INVALID_SESSION, "Invalid sessions", sessionId);
         	}
-        	
         	return retValue;
         } finally {
             if(LOGGER.isDebugEnabled()) {
@@ -132,14 +122,12 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        
         try {
         	boolean hasRight = accountRepo.isAccountHasRight(accountId, right);
         	
         	if (!hasRight) {
         		throwBizlogicException(403, IBizErrorCode.INVALID_SESSION, "Permission deined!", right);
         	}
-        	
         	return true;
         } finally {
             if(LOGGER.isDebugEnabled()) {
