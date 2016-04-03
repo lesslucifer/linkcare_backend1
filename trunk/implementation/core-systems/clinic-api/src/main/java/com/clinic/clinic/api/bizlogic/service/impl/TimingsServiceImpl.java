@@ -81,6 +81,8 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
         	}
         	
         	AccountTimingsEntity accTimings = accTimingsRepo.updateAccountTimings(account, dto);
+        	// new Timin
+        	// timingsRepo.sa
         	/*List<TimingsEntity> timings =*/ timingsRepo.insertTimings(accTimings, dto.getTimings());
         	
         	// Update appointments time

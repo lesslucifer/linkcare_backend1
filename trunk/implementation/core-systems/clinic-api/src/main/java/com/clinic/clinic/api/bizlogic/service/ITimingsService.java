@@ -9,10 +9,13 @@ import com.clinic.clinic.common.dto.biz.AccountTimingsDto;
 import com.clinic.clinic.common.dto.biz.TimingsDayDto;
 
 public interface ITimingsService {
+    
 	AccountTimingsDto getAccountTimings(Integer accountId);
+	
 	AccountTimingsDto updateAccountTimings(Integer accountId, AccountTimingsDto dto);
 	
 	List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range);
+	
 	boolean isTimeAvailable(LocalDate date, int begin, int end,
 			final List<AccountBlockTimeEntity> blockTimes, 
 			final List<AppointmentBookingEntity> approvedAppointments);

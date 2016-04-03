@@ -3,7 +3,6 @@ package com.clinic.clinic.api.persistence.repository.impl;
 import java.util.List;
 
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
