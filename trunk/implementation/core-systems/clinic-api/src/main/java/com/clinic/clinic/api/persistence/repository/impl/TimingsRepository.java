@@ -17,6 +17,7 @@ public class TimingsRepository extends AbsRepositoryImpl<TimingsEntity, Integer>
 
 	@Override
 	public List<TimingsEntity> insertTimings(AccountTimingsEntity accTimings, List<TimingsDto> timings) {
+	    
 		Stream<TimingsEntity> entities = timings.stream().map(t -> {
 			TimingsEntity entity = new TimingsEntity();
 			entity.setAccountTimings(accTimings);

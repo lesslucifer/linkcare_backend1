@@ -6,7 +6,7 @@
 -- Generation Time: Apr 02, 2016 at 03:21 AM
 -- Server version: 5.7.9
 -- PHP Version: 5.6.16
-
+use cliniccore_db;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 

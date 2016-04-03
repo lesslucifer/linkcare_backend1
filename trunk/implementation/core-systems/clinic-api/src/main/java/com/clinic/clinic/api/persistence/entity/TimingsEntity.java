@@ -29,7 +29,7 @@ public final class TimingsEntity extends IdEntity {
 	private int length;
 	
 	// type IAppointmentPosition
-	@Column
+	@Column(name = "type", nullable =false)
 	private int type;
 
 	public int getLength() {
