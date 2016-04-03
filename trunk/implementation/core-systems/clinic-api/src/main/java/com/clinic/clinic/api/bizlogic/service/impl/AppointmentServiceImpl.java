@@ -92,37 +92,4 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		return AppointmentBookingTranslator.INST.getDto(appBooking);
 	}
 	
-	@Override
-	public void confirmAppointment(Integer booker, AppointmentConfirmDto dto) {
-		AppointmentBookingEntity bookingEntity = appBookingRepo.findOne(dto.getAppointment_id());
-		if (bookingEntity == null) {
-			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Invalid booking id", dto.getAppointment_id());
-		}
-		
-		if (bookingEntity.getBooker().getId() != booker) {
-			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_BOOKER_MISMATCH, "Invalid booker", booker);
-		}
-
-		if (bookingEntity.getStatus() != 0) {
-			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_STATUS_MISMATCH, "Appointment is already confirmed!");
-		}
-		
-		// try to check conflicts time
-		LocalDateTime startDateTime = LocalDateTime.of(bookingEntity.getDate(), LocalTime.of(bookingEntity.getTime() / 60, bookingEntity.getTime() % 60));
-		LocalDateTime endDateTime = LocalDateTime.of(bookingEntity.getDate(), LocalTime.of(bookingEntity.getEnd() / 60, bookingEntity.getEnd() % 60));
-		List<AccountBlockTimeEntity> blockTimes = accBlockTimeRepo.getBlockTime(bookingEntity.getMedicar().getId(), startDateTime, endDateTime);
-		if (!blockTimes.isEmpty()) {
-			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Time is blocked!", blockTimes.toArray());
-		}
-		
-		List<AppointmentBookingEntity> approvedAppointments = appBookingRepo.getApprovedBooking(bookingEntity.getMedicar().getId(),
-				bookingEntity.getDate(), bookingEntity.getTime(), bookingEntity.getEnd());
-		if (!approvedAppointments.isEmpty()) {
-			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Conflict with another appointment!",
-					approvedAppointments.stream().map((aa) -> aa.getId()).toArray());
-		}
-		
-		bookingEntity.setStatus(1);
-		appBookingRepo.save(bookingEntity);
-	}
 }

@@ -6,5 +6,4 @@ import com.clinic.clinic.common.dto.biz.AppointmentConfirmDto;
 
 public interface IAppointmentService {
 	AppointmentBookingDto bookAppointment(Integer booker, AppointmentBookingRequestDto dto);
-	void confirmAppointment(Integer booker, AppointmentConfirmDto dto);
 }

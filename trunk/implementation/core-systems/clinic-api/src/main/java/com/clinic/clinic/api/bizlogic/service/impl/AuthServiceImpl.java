@@ -24,6 +24,7 @@
 package com.clinic.clinic.api.bizlogic.service.impl;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
@@ -123,18 +124,23 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
+        
+        boolean retVal = false;
         try {
         	boolean hasRight = accountRepo.isAccountHasRight(accountId, right);
         	
         	if (!hasRight) {
         		throwBizlogicException(403, IBizErrorCode.INVALID_SESSION, "Permission deined!", right);
         	}
-        	return true;
+
+        	retVal = true;
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
+        
+        return retVal;
 	}
 
 	@Override
@@ -143,6 +149,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
         
+        boolean retVal = false;
         try {
         	Set<String> matchedRights = accountRepo.checkAccountRights(accountId, rights);
         	
@@ -151,12 +158,14 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         		throwBizlogicException(403, IBizErrorCode.MISSING_RIGHT, "Permission Denied", lackedRights);
         	}
 
-        	return true;
+        	retVal = true;
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
+        
+        return retVal;
 	}
 
 	@Override
@@ -165,6 +174,8 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
+        
+        Set<String> retVal = Collections.emptySet();
         
     	String[] allRights = new String[requiredRights.length + optionalRights.length];
     	System.arraycopy(requiredRights, 0, allRights, 0, requiredRights.length);
@@ -175,14 +186,16 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         	String[] lackedRights = Arrays.stream(requiredRights).filter((r) -> !matchedRights.contains(r)).toArray(String[]::new);
         	
         	if (lackedRights.length > 0) {
-        		throwBizlogicException(403, IBizErrorCode.MISSING_RIGHT, "Permission Denied", lackedRights);
+        		throwBizlogicException(403, IBizErrorCode.MISSING_RIGHT, "Permission Denied", (Object[]) lackedRights);
         	}
 
-    		return matchedRights;
+    		retVal = matchedRights;
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
+        
+        return retVal;
 	}
 }

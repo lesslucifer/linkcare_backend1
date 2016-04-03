@@ -38,5 +38,5 @@ public interface IRestApiUrlMaps {
     // ## Appointments
     static final String REST_API_BIZ_APPOINTMENT = "/appointments";
     static final String REST_API_BIZ_APPOINTMENT_BOOK = "/appointments/book";
-    static final String REST_API_BIZ_APPOINTMENT_CONFIRM = "/appointments/confirm";
+    static final String REST_API_BIZ_APPOINTMENT_APPROVE = "/appointments/approve";
 }
