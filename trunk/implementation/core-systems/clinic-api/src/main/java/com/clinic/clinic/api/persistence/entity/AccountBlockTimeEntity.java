@@ -27,9 +27,6 @@ public final class AccountBlockTimeEntity extends DeleteableEntity implements Co
 	@Column(name = "begin", nullable = false)
 	private LocalDateTime beginDateTime;
 
-	@Column(name = "end", nullable = false)
-	private LocalDateTime endDateTime;
-
 	@Column(name = "length", nullable = false)
 	private int lengthInMinutes;
 
@@ -42,7 +39,7 @@ public final class AccountBlockTimeEntity extends DeleteableEntity implements Co
 	}
 
 	public LocalDateTime getEndDateTime() {
-		return endDateTime;
+		return beginDateTime.plusMinutes(this.lengthInMinutes);
 	}
 
 	public LocalDateTime getBeginDateTime() {
@@ -65,6 +62,6 @@ public final class AccountBlockTimeEntity extends DeleteableEntity implements Co
 
 	@Override
 	public String toString() {
-		return "AccountBlockTimeEntity [beginDateTime=" + beginDateTime + ", endDateTime=" + endDateTime + "]";
+		return "AccountBlockTimeEntity [beginDateTime=" + beginDateTime + ", endDateTime=" + getEndDateTime() + "]";
 	}
 }

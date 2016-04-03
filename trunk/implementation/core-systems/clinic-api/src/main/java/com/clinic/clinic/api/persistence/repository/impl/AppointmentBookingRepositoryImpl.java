@@ -38,11 +38,11 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 			int timeTo) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ab FROM AppointmentBookingEntity ab ");
-		sb.append("WHERE ab.medicar = :medicarId AND ");
+		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date = :date AND ");
 		sb.append("NOT (");
 		sb.append("(ab.time < :timeFrom AND ");
-		sb.append("ab.end < :timeFrom) OR ");
+		sb.append("ab.time + ab.duration < :timeFrom) OR ");
 		sb.append("(ab.time > :timeTo)");
 		sb.append(") AND ");
 		sb.append("ab.status = 2");

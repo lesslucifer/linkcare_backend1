@@ -21,7 +21,7 @@ public final class AccountBlockTimeRepositoryImpl extends AbsRepositoryImpl<Acco
 		sb.append("WHERE account_id = :accountId AND ");
 		sb.append("NOT (");
 		sb.append("(bt.beginDateTime < :from AND ");
-		sb.append("bt.endDateTime < :from) OR ");
+		sb.append("bt.beginDateTime + 60 * bt.lengthInMinutes < :from) OR ");
 		sb.append("(bt.beginDateTime > :to)");
 		sb.append(")");
 		

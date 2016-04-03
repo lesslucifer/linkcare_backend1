@@ -30,9 +30,6 @@ public class AccountCustomTimingsEntity extends DeleteableEntity {
 	@Column
 	private int length;
 	
-	@Column
-	private int end;
-	
 	// type IAppointmentPosition
 	@Column
 	private int type;
@@ -70,11 +67,7 @@ public class AccountCustomTimingsEntity extends DeleteableEntity {
 	}
 
 	public int getEnd() {
-		return end;
-	}
-
-	public void setEnd(int end) {
-		this.end = end;
+		return begin + length;
 	}
 
 	public int getType() {

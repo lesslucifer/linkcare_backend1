@@ -1,0 +1,216 @@
+FORMAT: 1A
+HOST: http://concon.vn:8080/biz/v1
+
+# LinkCare
+
+Polls is a simple API allowing consumers to view polls and vote in them.
+
+## Common [/*]
+### Default API Error [POST]
+
++ Response 500 (application/json)
+
+        {
+          "error": {
+            "msg": "<error_msg>",
+            "code": "<error_code>",
+            "params": [
+                "error_param1",
+                "error_param2"
+            ]
+          }
+        }
+
+
+## Majors [/majors]
+### Get Majors [GET]
++ Response 200 (application/json)
+
+        [
+            {
+              "content": [
+                {
+                  "id": 5,
+                  "createdDatetime": null,
+                  "createdBy": null,
+                  "lastUpdated": null,
+                  "lastUpdatedBy": null,
+                  "isDeleted": false,
+                  "name": "Bác sĩ",
+                  "code": "DOCTOR",
+                  "dateFormatLastUpdated": null
+                },
+                {
+                  "id": 6,
+                  "createdDatetime": null,
+                  "createdBy": null,
+                  "lastUpdated": null,
+                  "lastUpdatedBy": null,
+                  "isDeleted": false,
+                  "name": "Y tá",
+                  "code": "NURSE",
+                  "dateFormatLastUpdated": null
+                }
+              ],
+              "last": true,
+              "totalPages": 1,
+              "totalElements": 2,
+              "first": true,
+              "sort": null,
+              "numberOfElements": 2,
+              "size": 0,
+              "number": 0
+            }
+        ]
+
+## Major By Id [/major/{majorId}]
++ Parameters
+    + majorId: id of major
+
+### Get Major Detail [GET]
++ Response 200 (application/json)
+
+        {
+          "content": [
+            {
+              "id": 1,
+              "createdDatetime": null,
+              "createdBy": null,
+              "lastUpdated": null,
+              "lastUpdatedBy": null,
+              "isDeleted": false,
+              "name": "Tim mach",
+              "code": "TIM",
+              "description": null,
+              "accounts": null,
+              "dateFormatLastUpdated": null
+            },
+            {
+              "id": 2,
+              "createdDatetime": null,
+              "createdBy": null,
+              "lastUpdated": null,
+              "lastUpdatedBy": null,
+              "isDeleted": false,
+              "name": "Ho hap",
+              "code": "HOHAP",
+              "description": null,
+              "accounts": null,
+              "dateFormatLastUpdated": null
+            }
+          ],
+          "last": true,
+          "totalPages": 1,
+          "totalElements": 2,
+          "size": 0,
+          "number": 0,
+          "sort": null,
+          "first": true,
+          "numberOfElements": 2
+        }
+
+## Search bac si hoac y ta, kham tai phong kham [/account/filter]
+### Search [POST]
++ Body
+    {
+        "name" : null, // String
+        "major" : 6, // Integer
+        "subcategory" : null, // Integer
+        "category" : null, // Integer
+        "longtitude" : null, // Double
+        "latitude" : null // Double
+    }
+
++ Response 200 (application/json)
+
+        {
+          "content": [
+            {
+              "id": 1,
+              "avatar": "/var/hcmus/abc.png",
+              "name": "Vương a Đỗ",
+              "lastName": "Đỗ",
+              "midleName": "a",
+              "firstName": "Vương",
+              "major": "Bác sĩ",
+              "category": "Nội",
+              "subcategory": "Tim mach",
+              "experience": 9,
+              "costHome": 150,
+              "costClinic": 50,
+              "addressHome": "12, Điện Biên Phủ, 10, 10, Hồ Chí Minh",
+              "addressClinic": "12, Điện Biên Phủ, 10, 10, Hồ Chí Minh",
+              "homeLongtitude": 106.6812825,
+              "homeLatitude": 10.7656281,
+              "clinicLongtitude": 106.6812825,
+              "clinicLatitude": 10.7656281,
+              "distance": null
+            }
+          ],
+          "last": true,
+          "totalPages": 1,
+          "totalElements": 1,
+          "size": 0,
+          "number": 0,
+          "first": true,
+          "sort": null,
+          "numberOfElements": 1
+        }
+
+## Search bac si/ y ta, yeu cau bac si toi nha [/account/filter]
+### Search [POST]
++ Request (application/json)
+
+        {
+            "name" : null,
+            "major" : 5,
+            "subcategory" : null,
+            "category" : null,
+            "longtitude" : 106.6812825,
+            "latitude" : 10.7656281
+        }
+
++ Response 200 (application/json)
+
+        {
+          "content": [
+            {
+              "id": 1,
+              "avatar": "/var/hcmus/abc.png",
+              "name": "Vương a Đỗ",
+              "lastName": "Đỗ",
+              "midleName": "a",
+              "firstName": "Vương",
+              "major": "Bác sĩ",
+              "category": "Nội",
+              "subcategory": "Tim mach",
+              "experience": 9,
+              "costHome": 150,
+              "costClinic": 50,
+              "addressHome": "12, Điện Biên Phủ, 10, 10, Hồ Chí Minh",
+              "addressClinic": "12, Điện Biên Phủ, 10, 10, Hồ Chí Minh",
+              "homeLongtitude": 106.6812825,
+              "homeLatitude": 10.7656281,
+              "clinicLongtitude": 106.6812825,
+              "clinicLatitude": 10.7656281,
+              "distance": 0
+            }
+          ],
+          "last": true,
+          "totalPages": 1,
+          "totalElements": 1,
+          "size": 0,
+          "number": 0,
+          "first": true,
+          "sort": null,
+          "numberOfElements": 1
+        }
+
+## Login API [/account/login]
+### Login [POST]
++ Request (application/json)
+
+    {
+    "loginName": "215215883",
+    "password": "123456"
+    }

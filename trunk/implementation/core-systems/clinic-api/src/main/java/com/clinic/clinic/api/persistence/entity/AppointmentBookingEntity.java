@@ -49,9 +49,6 @@ public final class AppointmentBookingEntity extends IdEntity implements Comparab
 	private int duration;
 	
 	@Column
-	private int end;
-	
-	@Column
 	private int status;
 	
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "appointmentBooking")
@@ -111,7 +108,6 @@ public final class AppointmentBookingEntity extends IdEntity implements Comparab
 
 	public void setTime(int time) {
 		this.time = time;
-		this.end = time + duration;
 	}
 
 	public int getDuration() {
@@ -120,11 +116,10 @@ public final class AppointmentBookingEntity extends IdEntity implements Comparab
 
 	public void setDuration(int duration) {
 		this.duration = duration;
-		this.end = time + duration;
 	}
 
 	public int getEnd() {
-		return end;
+		return time + duration;
 	}
 
 	public int getStatus() {
@@ -155,6 +150,6 @@ public final class AppointmentBookingEntity extends IdEntity implements Comparab
 			return ret;
 		}
 		
-		return Integer.compare(end, o.end);
+		return Integer.compare(duration, o.duration);
 	}
 }

@@ -13,6 +13,4 @@ public class AppointmentConfirmDto {
 	public void setAppointment_id(Integer appointment_id) {
 		this.appointment_id = appointment_id;
 	}
-	
-	
 }

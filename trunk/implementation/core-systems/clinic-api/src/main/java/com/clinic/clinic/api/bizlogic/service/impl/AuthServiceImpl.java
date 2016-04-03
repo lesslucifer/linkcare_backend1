@@ -78,6 +78,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
             	sessionEnt.setCreatedDatetime(System.currentTimeMillis());
             	sessionEnt.setLastUpdated(System.currentTimeMillis());
             	sessionEnt.setLastUpdatedBy(accountEnt.getId());
+            	sessionEnt.setExpiredTime(sessionEnt.getLastUpdated() + IConstants.DURABLE_SESSION);
             	UUID uuid = UUID.randomUUID();
                 String sessionId = uuid.toString();
                 sessionEnt.setSessionId(sessionId); 
