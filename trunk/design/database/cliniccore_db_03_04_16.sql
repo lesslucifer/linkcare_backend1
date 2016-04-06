@@ -6,7 +6,7 @@
 -- Generation Time: Apr 03, 2016 at 02:24 AM
 -- Server version: 5.7.9
 -- PHP Version: 5.6.16
-
+use cliniccore_db;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -819,10 +819,10 @@ INSERT INTO `timings` (`id`, `account_timings_id`, `begin`, `length`, `type`) VA
 --
 -- Indexes for table `appointment_patient`
 --
-ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_name` (`name`);
-ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_address` (`address`);
-ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_symtoms` (`symtoms`);
-ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_name` (`name`);
+-- ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_name` (`name`);
+-- ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_address` (`address`);
+-- ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_symtoms` (`symtoms`);
+-- ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_name` (`name`);
 
 --
 -- Constraints for dumped tables

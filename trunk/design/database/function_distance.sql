@@ -9,3 +9,9 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+// doctor_id
+// partient_id
+// doctor_comment
+// partient_comment
+// parttient_id

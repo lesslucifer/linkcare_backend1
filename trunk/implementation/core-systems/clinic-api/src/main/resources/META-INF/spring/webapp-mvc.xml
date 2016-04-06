@@ -54,6 +54,6 @@
 	</bean>
 	
 	<bean id="bizLogicExceptionAdvice"
-          class="com.clinic.clinic.api.advice.BizExceptionAdvice">
+          class="com.clinic.clinic.common.exception.BizExceptionAdvice">
     </bean>
 </beans>
