@@ -29,11 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
-import com.clinic.clinic.api.persistence.entity.AccountEntity;
-import com.clinic.clinic.api.persistence.entity.IdEntity;
 import com.clinic.clinic.api.translator.ITranslator;
-import com.clinic.clinic.common.dto.IdDto;
-import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.exception.BizlogicException;
 
 /**
@@ -139,7 +135,7 @@ public abstract class AbstractTranslatorImpl <DTO /*extends IdDto*/, ENT /*exten
      * (java.util.List)
      */
     @Override
-    public List<DTO> getDtoList(List<ENT> entList) {
+    public List<DTO> getDtoList(List<? extends ENT> entList) {
         List<DTO> resultList = new ArrayList<DTO>();
 
         if (entList == null) {
@@ -160,7 +156,7 @@ public abstract class AbstractTranslatorImpl <DTO /*extends IdDto*/, ENT /*exten
      * (java.util.List)
      */
     @Override
-    public List<ENT> getEntityList(List<DTO> dtoList) {
+    public List<ENT> getEntityList(List<? extends DTO> dtoList) {
         List<ENT> resultList = new ArrayList<ENT>();
 
         if (dtoList == null) {

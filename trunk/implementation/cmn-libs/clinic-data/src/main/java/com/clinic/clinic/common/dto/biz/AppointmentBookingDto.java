@@ -4,7 +4,12 @@ import java.time.LocalDate;
 
 import com.clinic.clinic.common.dto.TraceDto;
 
-public final class AppointmentBookingDto {
+public final class AppointmentBookingDto extends TraceDto {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7956521828569668258L;
+	
 	private Integer id;
 	private TraceDto booker;
 	private TraceDto medicar;

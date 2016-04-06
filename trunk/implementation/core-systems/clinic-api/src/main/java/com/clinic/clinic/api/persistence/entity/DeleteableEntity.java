@@ -23,6 +23,9 @@ public abstract class DeleteableEntity extends IdEntity {
      * @return the isDeleted
      */
     public Boolean getIsDeleted() {
+    	if (isDeleted == null) {
+    		return false;
+    	}
         return isDeleted;
     }
     /**

@@ -1,5 +1,8 @@
 package com.clinic.clinic.common.utils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,4 +38,8 @@ public final class Utils {
         
         return m;
     }
+	
+	public static LocalDateTime toDateTime(LocalDate date, int minutes) {
+		return LocalDateTime.of(date, LocalTime.of(minutes / 60, minutes % 60));
+	}
 }

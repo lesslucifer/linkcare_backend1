@@ -632,7 +632,7 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
         if (permanent) {
             repository.delete(entity);
         } else {
-        	if (entity instanceof DeleteableEntity) {
+        	if (entity != null && entity instanceof DeleteableEntity) {
         		((DeleteableEntity) entity).setIsDeleted(true);
         	}
             save(entity);
@@ -644,7 +644,7 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
             repository.delete(entities);
         } else {
             for (T entity : entities) {
-            	if (entity instanceof DeleteableEntity) {
+            	if (entity != null && entity instanceof DeleteableEntity) {
             		((DeleteableEntity) entity).setIsDeleted(true);
             	}
             }
@@ -683,7 +683,7 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
         
         if (filterLogicalDeletion) {
             for (T entity : tmpList) {
-            	if (entity instanceof DeleteableEntity) {
+            	if (entity != null && entity instanceof DeleteableEntity) {
 	                if (((DeleteableEntity) entity).getIsDeleted().booleanValue() == false) {
 	                    list.add(entity);
 	                }
@@ -713,7 +713,7 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
     
     protected T doFindOne(final ID id, final boolean filterLogicalDeletion) {
         T t = repository.findOne(id);
-        if (filterLogicalDeletion && (t instanceof DeleteableEntity) && ((DeleteableEntity) t).getIsDeleted()) {
+        if (filterLogicalDeletion && t != null && (t instanceof DeleteableEntity) && ((DeleteableEntity) t).getIsDeleted()) {
             return null;
         }
         return t;
@@ -744,7 +744,7 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
     }
     
     protected <S extends T> S doSave(final S entity) {
-    	if (entity instanceof TraceEntity) {
+    	if (entity != null && entity instanceof TraceEntity) {
             ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
     	}
 		if (!entityManager.contains(entity)) {
@@ -788,7 +788,7 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
     protected <S extends T> List<S> doSave(final Iterable<S> entities) {
         for (S entity: entities) {
             //Update last changed time-stamp
-        	if (entity instanceof TraceEntity) {
+        	if (entity != null && entity instanceof TraceEntity) {
                 ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
         	}
         }
@@ -796,7 +796,7 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
     }
     
     protected <S extends T> S doSaveAndFlush(final S entity) {
-    	if (entity instanceof TraceEntity) {
+    	if (entity != null && entity instanceof TraceEntity) {
     		((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
     	}
         return repository.saveAndFlush(entity);

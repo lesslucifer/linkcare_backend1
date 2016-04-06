@@ -31,7 +31,7 @@ public class TraceTranslatorImpl extends AbstractTranslatorImpl<TraceDto, TraceE
 	}
 
 	@Override
-	public List<TraceEntity> getEntityList(List<TraceDto> dtoList) {
+	public List<TraceEntity> getEntityList(List<? extends TraceDto> dtoList) {
 		BizlogicException.throwEx(HttpStatus.INTERNAL_SERVER_ERROR.value(), IBizErrorCode.NOT_SUPPORTED, "Translation not supported",
 				TraceDto.class.getSimpleName(), TraceEntity.class.getSimpleName());
 		return null;

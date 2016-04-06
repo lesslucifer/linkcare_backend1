@@ -177,6 +177,16 @@ public abstract class AbsRestApi {
     }
     
     protected void validate(Object o) {
+    	if (o == null) {
+    		BizlogicException.throwEx(HttpStatus.BAD_REQUEST.value(), IBizErrorCode.INVALIDATED_OBJECT,
+    				"Null request data");
+    	}
+    	
+    	if (o instanceof String && "".equals(o)) {
+    		BizlogicException.throwEx(HttpStatus.BAD_REQUEST.value(), IBizErrorCode.INVALIDATED_OBJECT,
+    				"Empty request data");
+    	}
+    	
     	List<ConstraintViolation> violations = validator.validate(o);
 
     	if(!violations.isEmpty())

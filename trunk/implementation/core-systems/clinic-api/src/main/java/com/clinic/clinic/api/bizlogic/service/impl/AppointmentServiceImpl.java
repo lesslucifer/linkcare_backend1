@@ -1,8 +1,12 @@
 package com.clinic.clinic.api.bizlogic.service.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,11 +24,13 @@ import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepositor
 import com.clinic.clinic.api.persistence.repository.IAppointmentPatientRepository;
 import com.clinic.clinic.api.persistence.repository.ITimingsRepository;
 import com.clinic.clinic.api.translator.impl.AppointmentBookingTranslator;
+import com.clinic.clinic.api.translator.impl.TraceTranslatorImpl;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
+import com.clinic.clinic.common.dto.TraceDto;
 import com.clinic.clinic.common.dto.biz.AppointmentBookingDto;
 import com.clinic.clinic.common.dto.biz.AppointmentBookingRequestDto;
-import com.clinic.clinic.common.dto.biz.AppointmentConfirmDto;
+import com.clinic.clinic.common.utils.Utils;
 
 @ApplicationService
 public class AppointmentServiceImpl extends AbsService implements IAppointmentService {
@@ -43,6 +49,22 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	
 	@Autowired
 	private IAppointmentPatientRepository appPatientRepo;
+	
+	@Override
+	public List<AppointmentBookingDto> getAppointments(Integer requester, List<Integer> appointmentIds) {
+		if (requester == null) {
+			return Collections.emptyList();
+		}
+		
+		List<AppointmentBookingEntity> entities = appBookingRepo.findAll(appointmentIds);
+		
+		Predicate<AppointmentBookingEntity> hasPermission = (ab) -> {
+			return requester.equals(ab.getBooker().getId()) || requester.equals(ab.getMedicar().getId());
+		};
+		entities = entities.stream().filter(hasPermission).collect(Collectors.toList());
+		
+		return AppointmentBookingTranslator.INST.getDtoList(entities);
+	}
 	
 	@Override
 	public AppointmentBookingDto bookAppointment(Integer booker, AppointmentBookingRequestDto dto) {
@@ -77,11 +99,10 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Time is blocked!", blockTimes.toArray());
 		}
 		
-		List<AppointmentBookingEntity> approvedAppointments = appBookingRepo.getApprovedBooking(medicar.getId(), dto.getDate(),
+		boolean hasActiveAppointment = appBookingRepo.hasActiveAppointment(medicar.getId(), dto.getDate(),
 				appointmentStartTime, appointmentEndTime);
-		if (!approvedAppointments.isEmpty()) {
-			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Conflict with another appointment!",
-					approvedAppointments.stream().map((aa) -> aa.getId()).toArray());
+		if (hasActiveAppointment) {
+			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Conflict with another appointment!");
 		}
 		
 		AddressEntity address = (dto.isAtHome()) ? (accRepo.findOne(booker).getAddress()) : (medicar.getAddress());
@@ -92,4 +113,121 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		return AppointmentBookingTranslator.INST.getDto(appBooking);
 	}
 	
+	@Override
+	public void approveAppointment(Integer medicar, Integer appointmentId) {
+		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
+		if (appBooking == null) {
+			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Appointment not found!", appointmentId);
+		}
+		
+		if (appBooking.getMedicar().getId() != medicar) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_MISMATCH, "Medicar mismatch!",
+					medicar);
+		}
+		
+		if (appBooking.getStatus() != AppointmentBookingEntity.STATUS_WAITING) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_STATUS_MISMATCH, "Status mismatch!",
+					appBooking.getStatus());
+		}
+
+		LocalDateTime now = LocalDateTime.now();
+		if (now.compareTo(Utils.toDateTime(appBooking.getDate(), appBooking.getTime())) <= 0) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_APPROVE_TIME, "Cannot approve over appointment",
+					now);
+		}
+
+		if (appBookingRepo.hasApprovedBooking(medicar, appBooking.getDate(), appBooking.getTime(), appBooking.getEnd())) {
+			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Conflict with another appointment!");
+		}
+		
+		appBooking.setStatus(AppointmentBookingEntity.STATUS_APPROVED);
+		appBookingRepo.save(appBooking);
+	}
+
+	@Override
+	public void rejectAppointment(Integer medicar, Integer appointmentId) {
+		// TODO Auto-generated method stub
+		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
+		if (appBooking == null) {
+			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Appointment not found!", appointmentId);
+		}
+		
+		if (appBooking.getMedicar().getId() != medicar) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_MISMATCH, "Medicar mismatch!",
+					medicar);
+		}
+		
+		if (appBooking.getStatus() != AppointmentBookingEntity.STATUS_WAITING) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_STATUS_MISMATCH, "Status mismatch!",
+					appBooking.getStatus());
+		}
+		
+		appBooking.setStatus(AppointmentBookingEntity.STATUS_REJECTED);
+		appBookingRepo.save(appBooking);
+	}
+
+	@Override
+	public void cancelAppointment(Integer canceller, Integer appointmentId) {
+		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
+		if (appBooking == null) {
+			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Appointment not found!", appointmentId);
+		}
+		
+		if (appBooking.getMedicar().getId() != canceller && appBooking.getBooker().getId() != canceller) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_MISMATCH, "Medicar mismatch!",
+					canceller);
+		}
+		
+		if (appBooking.getStatus() != AppointmentBookingEntity.STATUS_APPROVED) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_STATUS_MISMATCH, "Status mismatch!",
+					appBooking.getStatus());
+		}
+		
+		appBooking.setStatus(AppointmentBookingEntity.STATUS_CANCELLED);
+		appBookingRepo.save(appBooking);
+	}
+
+	@Override
+	public void startAppointment(Integer medicar, Integer appointmentId) {
+		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
+		if (appBooking == null) {
+			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Appointment not found!", appointmentId);
+		}
+		
+		if (appBooking.getMedicar().getId() != medicar) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_MISMATCH, "Medicar mismatch!",
+					medicar);
+		}
+		
+		if (appBooking.getStatus() != AppointmentBookingEntity.STATUS_APPROVED) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_STATUS_MISMATCH, "Status mismatch!",
+					appBooking.getStatus());
+		}
+		
+		LocalDateTime now = LocalDateTime.now();
+		if (now.toLocalDate().compareTo(appBooking.getDate()) != 0) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Invalid appointment time, wrong day",
+					appBooking);
+		}
+
+		int timeInMinutes = now.getHour() * 60 + now.getMinute();
+		if (timeInMinutes < appBooking.getTime() || timeInMinutes > appBooking.getEnd()) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Invalid appointment time, out of time",
+					appBooking.getTime(), appBooking.getEnd());
+		}
+		
+		// make sure there's no unfinished appointment
+		if (appBookingRepo.hasProcessingAppointment(medicar)) {
+			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_HAVE_UNFINISHED_APPOINTMENT, "Have another unfinished appointment");
+		}
+		
+		appBooking.setStatus(AppointmentBookingEntity.STATUS_PROCESSING);
+		appBookingRepo.save(appBooking);
+	}
+	
+	@Override
+	public List<TraceDto> getMedicarAppointment(Integer medicar, LocalDate date) {
+		List<AppointmentBookingEntity> entities = appBookingRepo.getActiveAppointments(medicar, date);
+		return TraceTranslatorImpl.INSTANCE.getDtoList(entities);
+	}
 }
