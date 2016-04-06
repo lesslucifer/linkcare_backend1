@@ -1,6 +1,9 @@
 package com.clinic.clinic.api.persistence.entity;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +17,21 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "appointment_booking")
 @NamedQuery(name = "AppointmentBookingEntity.findAll", query = "Select a From AppointmentBookingEntity a")
-public final class AppointmentBookingEntity extends IdEntity implements Comparable<AppointmentBookingEntity> {
+public final class AppointmentBookingEntity extends TraceEntity implements Comparable<AppointmentBookingEntity> {
 
+	public static final int STATUS_WAITING = 0;
+	public static final int STATUS_APPROVED = 1;
+	public static final int STATUS_REJECTED = 2;
+	public static final int STATUS_PROCESSING = 3;
+	public static final int STATUS_CANCELLED = 4;
+	public static final int STATUS_FINISHED = 5;
+	public static final int STATUS_RATED = 6;
+	
+	public static final List<Integer> ACTIVE_STATUSES = Collections.unmodifiableList(
+			Arrays.asList(STATUS_WAITING, STATUS_APPROVED, STATUS_PROCESSING));
+	public static final List<Integer> INACTIVE_STATUSES = Collections.unmodifiableList(
+			Arrays.asList(STATUS_REJECTED, STATUS_CANCELLED, STATUS_FINISHED, STATUS_RATED));
+	
 	/**
 	 * 
 	 */

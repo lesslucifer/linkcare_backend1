@@ -3,6 +3,7 @@ package com.clinic.clinic.api.persistence.repository.impl;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,53 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 
 		return getJpaRepo().save(entity);
 	}
+	
+	@Override
+	public List<AppointmentBookingEntity> getActiveAppointments(Integer medicarId, LocalDate date) {
+		// TODO Auto-generated method stub
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT ab FROM AppointmentBookingEntity ab ");
+		sb.append("WHERE ab.medicar.id = :medicarId AND ");
+		sb.append("ab.date = :date AND ");
+		sb.append("ab.status IN :active_statuses");
+		
+		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
+		q.setParameter("medicarId", medicarId);
+		q.setParameter("date", date);
+		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
+
+		List<AppointmentBookingEntity> result = q.getResultList();
+		if (result != null) {
+			return result;
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public boolean hasActiveAppointment(Integer medicarId, LocalDate date, int timeFrom, int timeTo) {
+		// TODO Auto-generated method stub
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT 1 FROM AppointmentBookingEntity ab ");
+		sb.append("WHERE ab.medicar.id = :medicarId AND ");
+		sb.append("ab.date = :date AND ");
+		sb.append("NOT (");
+		sb.append("(ab.time < :timeFrom AND ");
+		sb.append("ab.time + ab.duration < :timeFrom) OR ");
+		sb.append("(ab.time > :timeTo)");
+		sb.append(") AND ");
+		sb.append("ab.status IN :active_statuses");
+		
+		Query q = getEntityManager().createQuery(sb.toString());
+		q.setParameter("medicarId", medicarId);
+		q.setParameter("date", date);
+		q.setParameter("timeFrom", timeFrom);
+		q.setParameter("timeTo", timeTo);
+		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
+
+		List<?> result = q.getResultList();
+		return result != null && !result.isEmpty();
+	}
 
 	@Override
 	public List<AppointmentBookingEntity> getApprovedBooking(Integer medicarId, LocalDate date, int timeFrom,
@@ -45,15 +93,42 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("ab.time + ab.duration < :timeFrom) OR ");
 		sb.append("(ab.time > :timeTo)");
 		sb.append(") AND ");
-		sb.append("ab.status = 2");
+		sb.append("ab.status = :approved_status");
 		
 		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
 		q.setParameter("medicarId", medicarId);
 		q.setParameter("date", date);
 		q.setParameter("timeFrom", timeFrom);
 		q.setParameter("timeTo", timeTo);
+		q.setParameter("approved_status", AppointmentBookingEntity.STATUS_APPROVED);
 
 		return q.getResultList();
+	}
+	
+	@Override
+	public boolean hasApprovedBooking(Integer medicarId, LocalDate date, int timeFrom,
+			int timeTo) {
+		// TODO Auto-generated method stub
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT 1 FROM AppointmentBookingEntity ab ");
+		sb.append("WHERE ab.medicar.id = :medicarId AND ");
+		sb.append("ab.date = :date AND ");
+		sb.append("NOT (");
+		sb.append("(ab.time < :timeFrom AND ");
+		sb.append("ab.time + ab.duration < :timeFrom) OR ");
+		sb.append("(ab.time > :timeTo)");
+		sb.append(") AND ");
+		sb.append("ab.status = :approved_status");
+		
+		Query q = getEntityManager().createQuery(sb.toString());
+		q.setParameter("medicarId", medicarId);
+		q.setParameter("date", date);
+		q.setParameter("timeFrom", timeFrom);
+		q.setParameter("timeTo", timeTo);
+		q.setParameter("approved_status", AppointmentBookingEntity.STATUS_APPROVED);
+
+		List<?> result = q.getResultList();
+		return result != null && !result.isEmpty();
 	}
 	
 	@Override
@@ -63,13 +138,30 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date >= :dateFrom AND ");
 		sb.append("ab.date <= :dateTo AND ");
-		sb.append("ab.status = 2");
+		sb.append("ab.status = :approved_status");
 		
 		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
 		q.setParameter("medicarId", medicarId);
 		q.setParameter("dateFrom", dateFrom);
 		q.setParameter("dateTo", dateTo);
+		q.setParameter("approved_status", AppointmentBookingEntity.STATUS_APPROVED);
 
 		return q.getResultList();
+	}
+	
+	@Override
+	public boolean hasProcessingAppointment(Integer medicarId) {
+		// TODO Auto-generated method stub
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT 1 FROM AppointmentBookingEntity ab ");
+		sb.append("WHERE ab.medicar.id = :medicarId AND ");
+		sb.append("ab.status = :processing_status");
+		
+		Query q = getEntityManager().createQuery(sb.toString());
+		q.setParameter("medicarId", medicarId);
+		q.setParameter("processing_status", AppointmentBookingEntity.STATUS_PROCESSING);
+
+		List<?> result = q.getResultList();
+		return result != null && !result.isEmpty();
 	}
 }

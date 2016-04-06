@@ -306,6 +306,11 @@ public interface IDbConstants {
     static final String RIGHT_REPORT_CREATE = "RIGHT_REPORT_CREATE";
     static final String RIGHT_UPDATE_TIMINGS = "RIGHT_UPDATE_TIMINGS";
     static final String RIGHT_BOOK_APPOINTMENT = "RIGHT_BOOK_APPOINTMENT";
+    static final String RIGHT_APPROVE_APPOINTMENT = "RIGHT_APPROVE_APPOINTMENT";
+    static final String RIGHT_REJECT_APPOINTMENT = "RIGHT_REJECT_APPOINTMENT";
+    static final String RIGHT_CANCEL_APPOINTMENT = "RIGHT_CANCEL_APPOINTMENT";
+    static final String RIGHT_START_APPOINTMENT = "RIGHT_START_APPOINTMENT";
+    static final String RIGHT_GET_MEDICAR_APPOINTMENT = "RIGHT_GET_MEDICAR_APPOINTMENT";
 
     static final String FIELD_VALUE = "value";
     static final String FIELD_PRICE = "price";

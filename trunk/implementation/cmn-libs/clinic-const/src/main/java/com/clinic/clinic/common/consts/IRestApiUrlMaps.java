@@ -35,8 +35,16 @@ public interface IRestApiUrlMaps {
     static final String REST_API_BIZ_TIMINGS = "/timings";
     static final String REST_API_BIZ_TIMINGS_SLOT = "/timings/slot/{targetId}";
     
-    // ## Appointments
-    static final String REST_API_BIZ_APPOINTMENT = "/appointments";
-    static final String REST_API_BIZ_APPOINTMENT_BOOK = "/appointments/book";
-    static final String REST_API_BIZ_APPOINTMENT_CONFIRM = "/appointments/confirm";
+    // ### Appointments
+    static final String REST_API_BIZ_APPOINTMENTS = "/appointments";
+    static final String REST_API_BIZ_APPOINTMENTS_SINGLE = REST_API_BIZ_APPOINTMENTS + "/{appointment_id}";
+    static final String REST_API_BIZ_APPOINTMENTS_APPROVE = REST_API_BIZ_APPOINTMENTS_SINGLE + "/approve";
+    static final String REST_API_BIZ_APPOINTMENTS_REJECT = REST_API_BIZ_APPOINTMENTS_SINGLE + "/reject";
+    static final String REST_API_BIZ_APPOINTMENTS_CANCEL = REST_API_BIZ_APPOINTMENTS_SINGLE + "/cancel";
+    static final String REST_API_BIZ_APPOINTMENTS_START = REST_API_BIZ_APPOINTMENTS_SINGLE + "/start";
+    
+    // ### Medicar's appointments
+    static final String REST_API_MEDICAR_APPOINTMENTS = "/medicar/appointments";
+    static final String REST_API_MEDICAR_APPOINTMENTS_DATE = REST_API_MEDICAR_APPOINTMENTS + "/{date}";
+    static final String REST_API_MEDICAR_APPOINTMENTS_TODAY = REST_API_MEDICAR_APPOINTMENTS + "/today";
 }

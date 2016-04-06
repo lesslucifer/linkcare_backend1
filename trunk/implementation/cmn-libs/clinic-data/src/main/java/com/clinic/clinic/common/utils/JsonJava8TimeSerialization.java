@@ -18,11 +18,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 public class JsonJava8TimeSerialization {
-	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(IConstants.DateForMat_DDMMYYYY);
-	private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern(IConstants.DateForMat_DDMMYYYY_HHMM);
+	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(IConstants.DateForMat_DDMMYYYY);
+	public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern(IConstants.DateForMat_DDMMYYYY_HHMM);
 	
 	public static class LocalDateSerializer extends JsonSerializer<LocalDate> {
-		  
+		
 	    @Override
 	    public void serialize(LocalDate date, JsonGenerator generator,
 	            SerializerProvider provider) throws IOException,
@@ -34,7 +34,7 @@ public class JsonJava8TimeSerialization {
 	}
 	
 	public static class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
-		 
+		
 	    @Override
 	    public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
 	            throws IOException, JsonProcessingException {

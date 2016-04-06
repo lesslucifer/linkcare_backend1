@@ -24,4 +24,7 @@ public interface IBizErrorCode {
 	static final int APPOINTMENT_INVALID_TIME = -2002;
 	static final int APPOINTMENT_BOOKER_MISMATCH = -2003;
 	static final int APPOINTMENT_STATUS_MISMATCH = -2004;
+	static final int APPOINTMENT_MEDICAR_MISMATCH = -2005;
+	static final int APPOINTMENT_INVALID_APPROVE_TIME = -2006;
+	static final int APPOINTMENT_HAVE_UNFINISHED_APPOINTMENT = -2007;
 }

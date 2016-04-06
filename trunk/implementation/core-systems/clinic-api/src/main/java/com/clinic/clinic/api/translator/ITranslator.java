@@ -24,9 +24,6 @@ package com.clinic.clinic.api.translator;
 
 import java.util.List;
 
-import com.clinic.clinic.api.persistence.entity.IdEntity;
-import com.clinic.clinic.common.dto.IdDto;
-
 /**
  * <p>
  * Translator to translate Dto from/to Entity.
@@ -87,7 +84,7 @@ public interface ITranslator<DTO /*extends IdDto*/, ENT /*extends IdEntity*/> {
      *
      * @author Vuong Do
      */
-    List<DTO> getDtoList(List<ENT> entList);
+    List<DTO> getDtoList(List<? extends ENT> entList);
     
     /**
      * 
@@ -97,5 +94,5 @@ public interface ITranslator<DTO /*extends IdDto*/, ENT /*extends IdEntity*/> {
      *
      * @author Vuong Do
      */
-    List<ENT> getEntityList(List<DTO> dtoList);
+    List<ENT> getEntityList(List<? extends DTO> dtoList);
 }

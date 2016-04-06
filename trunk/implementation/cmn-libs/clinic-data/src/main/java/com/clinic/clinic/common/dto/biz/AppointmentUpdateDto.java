@@ -2,7 +2,7 @@ package com.clinic.clinic.common.dto.biz;
 
 import net.sf.oval.constraint.NotNull;
 
-public class AppointmentConfirmDto {
+public class AppointmentUpdateDto {
 	@NotNull
 	private Integer appointment_id;
 
