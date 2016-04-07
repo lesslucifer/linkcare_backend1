@@ -136,7 +136,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		}
 
 		LocalDateTime now = LocalDateTime.now();
-		if (now.compareTo(Utils.toDateTime(appBooking.getDate(), appBooking.getTime())) <= 0) {
+		if (now.compareTo(Utils.toDateTime(appBooking.getDate(), appBooking.getTime())) >= 0) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_APPROVE_TIME, "Cannot approve over appointment",
 					now);
 		}

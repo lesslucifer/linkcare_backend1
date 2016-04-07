@@ -27,4 +27,9 @@ public interface IBizErrorCode {
 	static final int APPOINTMENT_MEDICAR_MISMATCH = -2005;
 	static final int APPOINTMENT_INVALID_APPROVE_TIME = -2006;
 	static final int APPOINTMENT_HAVE_UNFINISHED_APPOINTMENT = -2007;
+	
+	// ## Prescription (-3001 -> -3999)
+	static final int PRESCRIPTION_APPOINTMENT_STATUS_MISMATCH = -3001;
+	static final int PRESCRIPTION_MEDICAR_MISMATCH = -3002;
+	static final int PRESCRIPTION_PATIENT_MISMATCH = -3003;
 }

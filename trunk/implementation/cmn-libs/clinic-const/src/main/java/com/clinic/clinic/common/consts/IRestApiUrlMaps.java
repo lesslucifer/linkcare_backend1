@@ -47,4 +47,9 @@ public interface IRestApiUrlMaps {
     static final String REST_API_MEDICAR_APPOINTMENTS = "/medicar/appointments";
     static final String REST_API_MEDICAR_APPOINTMENTS_DATE = REST_API_MEDICAR_APPOINTMENTS + "/{date}";
     static final String REST_API_MEDICAR_APPOINTMENTS_TODAY = REST_API_MEDICAR_APPOINTMENTS + "/today";
+    
+    // ### Prescriptions
+    static final String REST_API_BIZ_PRESCRIPTIONS = "/prescriptions";
+    static final String REST_API_BIZ_PRESCRIPTIONS_SINGLE = REST_API_BIZ_PRESCRIPTIONS + "/{prescription_id}";
+    static final String REST_API_BIZ_PATIENT_PRESCRIPTIONS = "account/{patient_id}/prescriptions";
 }

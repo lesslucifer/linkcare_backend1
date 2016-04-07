@@ -44,17 +44,16 @@ public class AppointmentRestApi extends AbsRestApi {
 		return Utils.mkMap("data", appServ.getAppointments(requester, appointmentIds));
 	}
 	
-	
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_APPOINTMENTS, method = RequestMethod.POST, produces = {
     "application/json" })
     public Object bookAppointment(@RequestHeader("sess") String session,
-    		@RequestBody AppointmentBookingRequestDto appointment_id,
+    		@RequestBody AppointmentBookingRequestDto dto,
     		HttpServletResponse response) {
-		validate(appointment_id);
+		validate(dto);
 		Integer patientId = auth().authSession(session);
 		auth().authRight(patientId, IDbConstants.RIGHT_BOOK_APPOINTMENT);
 		
-		return Utils.mkMap("data", appServ.bookAppointment(patientId, appointment_id));
+		return Utils.mkMap("data", appServ.bookAppointment(patientId, dto));
     }
 	
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_APPOINTMENTS_APPROVE, method = RequestMethod.PUT, produces = {
