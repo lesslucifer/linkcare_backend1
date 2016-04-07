@@ -22,7 +22,7 @@ public class TestRestApi extends AbsRestApi {
 	@RequestMapping(value = "/timings", method = RequestMethod.GET, produces = {
     "application/json" })
     public Object getTimings(HttpServletResponse response, @RequestParam Integer medicar, @RequestParam Integer timingsId) {
-		Object ret = timingsRepo.getTimings(medicar, timingsId);
+		Object ret = null;//timingsRepo.getTimings(medicar, timingsId);
 		if (ret == null) {
 			BizlogicException.throwEx(404, -1, "Timings not found");
 		}

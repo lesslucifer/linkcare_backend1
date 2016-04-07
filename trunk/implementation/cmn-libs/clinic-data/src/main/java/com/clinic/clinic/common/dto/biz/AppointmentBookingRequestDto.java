@@ -15,9 +15,7 @@ public class AppointmentBookingRequestDto {
 	@NotNull
 	private Integer subCategory;
 	@NotNull
-	private Integer timingsId;
-	@NotNull
-	private Integer timingsOffset;
+	private Integer time;
 
 	@NotNull
 	@AssertValid
@@ -55,20 +53,12 @@ public class AppointmentBookingRequestDto {
 		this.subCategory = subCategory;
 	}
 
-	public int getTimingsId() {
-		return timingsId;
+	public int getTime() {
+		return time;
 	}
 	
-	public void setTimingsId(int timingsId) {
-		this.timingsId = timingsId;
-	}
-	
-	public int getTimingsOffset() {
-		return timingsOffset;
-	}
-	
-	public void setTimingsOffset(int timingsOffset) {
-		this.timingsOffset = timingsOffset;
+	public void setTime(int time) {
+		this.time = time;
 	}
 	
 	public AppointmentPatientDto getPatient() {

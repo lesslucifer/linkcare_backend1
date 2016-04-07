@@ -30,9 +30,9 @@ public class TimingsRepository extends AbsRepositoryImpl<TimingsEntity, Integer>
 		
 		return this.save(entities.collect(Collectors.toList()));
 	}
-
+	
 	@Override
-	public TimingsEntity getTimings(Integer medicar, Integer timingsId) {
+	public TimingsEntity getTimingsAtTime(Integer medicar, Integer time) {
 		final StringBuilder sb = new StringBuilder();
 
 		sb.append("SELECT * FROM `timings` AS t ");
@@ -46,10 +46,10 @@ public class TimingsRepository extends AbsRepositoryImpl<TimingsEntity, Integer>
 			sb.append("LIMIT 1");
 		}
 		sb.append(") ");
-		sb.append("WHERE t.id = :timingsId");
+		sb.append("WHERE t.begin <= :time AND time <= t.begin + t.length");
 
 		Query q = getEntityManager().createNativeQuery(sb.toString(), TimingsEntity.class);
-		q.setParameter("timingsId", timingsId);
+		q.setParameter("time", time);
 		q.setParameter("medicar", medicar);
 		
 		List<?> timings = q.getResultList();

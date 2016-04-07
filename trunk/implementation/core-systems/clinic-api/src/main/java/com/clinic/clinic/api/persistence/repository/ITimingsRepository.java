@@ -8,5 +8,5 @@ import com.clinic.clinic.common.dto.biz.TimingsDto;
 
 public interface ITimingsRepository extends IRepository<TimingsEntity, Integer> {
 	List<TimingsEntity> insertTimings(AccountTimingsEntity accTimings, List<TimingsDto> timings);
-	TimingsEntity getTimings(Integer medicar, Integer timingsId);
+	TimingsEntity getTimingsAtTime(Integer medicar, Integer time);
 }

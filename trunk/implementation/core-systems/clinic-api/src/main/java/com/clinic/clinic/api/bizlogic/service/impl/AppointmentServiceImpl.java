@@ -78,12 +78,17 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 					medicar.getSubcategory().getId(), dto.getSubCategory());
 		}
 		
-		TimingsEntity timings = timingsRepo.getTimings(dto.getMedicar(), dto.getTimingsId());
+		TimingsEntity timings = timingsRepo.getTimingsAtTime(dto.getMedicar(), dto.getTime());
 		if (timings == null) {
-			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Timings not found!", dto.getMedicar(), dto.getTimingsId());
+			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Timings not found!", dto.getMedicar(), dto.getTime());
+		}
+
+		if (((dto.getTime() - timings.getBeginTime()) % IConstants.SLOT_TIME) != 0) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME,
+					"Appointment's time doesn't match with timings slot", dto.getMedicar(), dto.getTime());
 		}
 		
-		int appointmentStartTime = timings.getBeginTime() + dto.getTimingsOffset() * IConstants.SLOT_TIME;
+		int appointmentStartTime = dto.getTime();
 		int duration = dto.isAtHome() ? medicar.getSubcategory().getPatientHomeDur() : medicar.getSubcategory().getClinicDur();
 		int appointmentEndTime = appointmentStartTime + duration;
 		
