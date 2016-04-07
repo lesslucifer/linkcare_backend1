@@ -13,7 +13,7 @@ public class DoctorNoteDto implements Serializable {
 	@NotNull
 	private String text;
 	
-	private String imgage;
+	private String image;
 	
 	public String getText() {
 		return text;
@@ -23,11 +23,11 @@ public class DoctorNoteDto implements Serializable {
 		this.text = text;
 	}
 	
-	public String getImgage() {
-		return imgage;
+	public String getImage() {
+		return image;
 	}
 	
-	public void setImgage(String imgage) {
-		this.imgage = imgage;
+	public void setImage(String imgage) {
+		this.image = imgage;
 	}
 }
