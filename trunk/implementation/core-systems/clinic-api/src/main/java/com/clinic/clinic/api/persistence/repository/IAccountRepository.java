@@ -78,7 +78,7 @@ public interface IAccountRepository extends IRepository<AccountEntity, Integer> 
      */
     Page<AccountCustomDto> findAccountAndHome(final Pageable range,final AccountFilterDto accountfilterDto);
 
-    boolean isAccountHasRight(final Integer accountId, final String right);
+    Boolean isAccountHasRight(final Integer accountId, final String right);
     Set<String> checkAccountRights(final Integer accountId, final String[] rights);
 	AccountEntity findAccountByLoginName(final String loginName);
 }

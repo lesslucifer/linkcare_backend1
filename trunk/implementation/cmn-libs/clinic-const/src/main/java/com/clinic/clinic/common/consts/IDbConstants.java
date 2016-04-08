@@ -191,8 +191,8 @@ public interface IDbConstants {
     /**
      * static final code, type, status. Changing of these values requires rebuild of the system.
      */
-    
-
+ /*
+  * 
     // DataType
     static final String DATA_INTEGER = "DATA_INTEGER";
     static final String DATA_DOUBLE = "DATA_DOUBLE";
@@ -245,12 +245,15 @@ public interface IDbConstants {
     // AdditionalDescriptionType
     static final String ADD_DESC_LOC_IMG_URL = "ADD_DESC_LOC_IMG_URL";
     static final String ADD_DESC_LOC_MENU_IMG_URL = "ADD_DESC_LOC_MENU_IMG_URL";
+      * */   
     //AccountRole
     static final String ROLE_NEWCOMER = "ROLE_NEWCOMER";  
     static final String ROLE_COLLABORATOR = "ROLE_COLLABORATOR";
     static final String ROLE_ADMIN = "ROLE_ADMIN";
     static final String ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN";
     static final String ROLE_SYSTEM_ADMIN = "ROLE_SYSTEM_ADMIN";
+
+
     /**
      * logic error code
      */
@@ -336,4 +339,5 @@ public interface IDbConstants {
     static final String FIELD_ACC_ACCOUNT_LOGIN_NAME = "loginName";
     
     static final String FIELD_SESSION_LOGOUT_TIME = "logoutTime";
+    static final String RIGHT_RATING = "RIGHT_RATING";
 }

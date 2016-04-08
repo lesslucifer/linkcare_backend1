@@ -25,7 +25,6 @@ package com.clinic.clinic.api.persistence.repository.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,6 +33,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -46,6 +46,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
+import com.clinic.clinic.api.persistence.entity.ClinicRightEntity;
+import com.clinic.clinic.api.persistence.entity.RoleEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
@@ -315,12 +317,29 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
         return retVal;
     }
     
-    public boolean isAccountHasRight(final Integer accountId, final String right) {
+    public Boolean isAccountHasRight(final Integer accountId, final String right) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        
+        Boolean ret = null;
         try {
+            Specification<AccountEntity> spec = new Specification<AccountEntity>() {
+                
+                @Override
+                public Predicate toPredicate(Root<AccountEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    final Join<AccountEntity, RoleEntity> joinRole = root.join("roles");
+                    final Join<RoleEntity, ClinicRightEntity> joinRight = joinRole.join("clinicRights");
+                    return cb.and(cb.equal(joinRight.get("code"), IDbConstants.RIGHT_RATING),
+                            cb.equal(joinRight.get(IDbConstants.FIELD_ID), accountId));
+                }
+            };
+            AccountEntity accEnt = findOne(spec); 
+            if(null == accEnt) {
+                ret = false;
+            } else {
+                ret = true;
+            }
+    /**        
             final EntityManager entityManager = getEntityManager();
             
             Query query = null;
@@ -344,7 +363,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             if (result != null && !result.isEmpty()) {
             	return true;
             }
-            
+       */     
         } catch (Exception e) {
             LOGGER.error("error", e);
         } finally {
@@ -353,7 +372,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             }
         }
         
-		return false;
+		return ret;
     }
     
     @Override

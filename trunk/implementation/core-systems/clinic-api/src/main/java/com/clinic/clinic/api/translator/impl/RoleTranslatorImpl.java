@@ -23,13 +23,8 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.RoleEntity;
 import com.clinic.clinic.api.translator.ITranslator;
-import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.RoleDto;
 
 /**

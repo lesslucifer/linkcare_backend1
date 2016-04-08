@@ -36,4 +36,14 @@ import com.clinic.clinic.api.persistence.entity.RateEntity;
  */
 public interface IRateRepository extends IRepository<RateEntity, Integer> {
 
+    /**
+     * <p>Description of this method.</p>
+     *
+     * @param medicarId
+     * @return
+     *
+     * @author Vuong Do
+     */
+    RateEntity findRateEntityByMedicarId(Integer medicarId);
+
 }

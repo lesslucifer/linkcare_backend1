@@ -73,18 +73,25 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         try {
             AccountEntity accountEnt = accountRepo.findAccountByLoginName(loginName);
             if(null != accountEnt) {
-            	SessionLogEntity sessionEnt = new SessionLogEntity();
-            	sessionEnt.setAccount(accountEnt);
-            	sessionEnt.setCreatedBy(accountEnt.getId());
-            	sessionEnt.setCreatedDatetime(System.currentTimeMillis());
-            	sessionEnt.setLastUpdated(System.currentTimeMillis());
-            	sessionEnt.setLastUpdatedBy(accountEnt.getId());
-            	sessionEnt.setExpiredTime(sessionEnt.getLastUpdated() + IConstants.DURABLE_SESSION);
-            	UUID uuid = UUID.randomUUID();
+                UUID uuid = UUID.randomUUID();
                 String sessionId = uuid.toString();
-                sessionEnt.setSessionId(sessionId); 
-            	sessionRepo.save(sessionEnt);
-            	retValue = sessionId;
+                retValue = sessionId;
+                SessionLogEntity sessEnt = sessionRepo.findSessionLogByAccountId(accountEnt.getId());
+                if(null == sessEnt) {
+                	SessionLogEntity sessionEnt = new SessionLogEntity();
+                	sessionEnt.setAccount(accountEnt);
+                	sessionEnt.setCreatedBy(accountEnt.getId());
+                	sessionEnt.setLoginTime(System.currentTimeMillis());
+                	sessionEnt.setCreatedDatetime(System.currentTimeMillis());
+                	sessionEnt.setLastUpdated(System.currentTimeMillis());
+                	sessionEnt.setLastUpdatedBy(accountEnt.getId());
+                	sessionEnt.setExpiredTime(sessionEnt.getLastUpdated() + IConstants.DURABLE_SESSION);
+                    sessionEnt.setSessionId(sessionId); 
+                    sessionRepo.save(sessionEnt);
+                } else {
+                    sessEnt.setSessionId(sessionId);
+                    sessionRepo.save(sessEnt);
+                }
             } else {
             	throwBizlogicException(401, IBizErrorCode.WRONG_USERNAME_OR_PASSWORD, "User or password invalid");
             }

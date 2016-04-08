@@ -12,11 +12,11 @@
  * clinic providing access to this software.
  *
  * Project name  : clinic-api<br>
- * File name     : RateEntity.java<br>
+ * File name     : RateTraceEntity.java<br>
  * <p>
  * Changes History <br>
  *		Date				Person				Reason<br>
- *		Mar 20, 2016				Vuong Do				Initial<br>
+ *		Apr 7, 2016				Vuong Do				Initial<br>
  * </p>
  *
  * @author Vuong Do
@@ -29,6 +29,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -41,45 +42,46 @@ import javax.persistence.Table;
  * @see TODO
  */
 @Entity
-@Table(name = "rate")
-@NamedQuery(name = "RateEntity.findAll", query = "Select r From RateEntity r")
-public class RateEntity extends NameCodeEntity {
-    
+@Table(name = "rate_trace")
+@NamedQuery(name = "RateTraceEntity.findAll", query = "Select r From RateTraceEntity r")
+public class RateTraceEntity extends TraceEntity {
     /**
      * <p>Description of this field.</p>
      */
-    private static final long serialVersionUID = -8984484485695033071L;
+    private static final long serialVersionUID = 5855848231776242322L;
     
     @Column(name = "mark", nullable = false)
     private Double mark;
-    @Column(name = "count", nullable = false)
-    private Integer count;
-    
+    @Column(name = "comment", nullable = true)
+    private String comment;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "appointment_booking_id", nullable = false)
+    private AppointmentBookingEntity appointmentBooking;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "medicar_id", nullable = false)
-    private AccountEntity medicar;
-
+    @JoinColumn(name = "partient_id", nullable = false)
+    private AccountEntity partient;
     public Double getMark() {
         return mark;
     }
-
     public void setMark(Double mark) {
         this.mark = mark;
     }
-
-    public AccountEntity getMedicar() {
-        return medicar;
+    public String getComment() {
+        return comment;
     }
-
-    public void setMedicar(AccountEntity medicar) {
-        this.medicar = medicar;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
-
-    public Integer getCount() {
-        return count;
+    public AppointmentBookingEntity getAppointmentBooking() {
+        return appointmentBooking;
     }
-
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setAppointmentBooking(AppointmentBookingEntity appointmentBooking) {
+        this.appointmentBooking = appointmentBooking;
+    }
+    public AccountEntity getPartient() {
+        return partient;
+    }
+    public void setPartient(AccountEntity partient) {
+        this.partient = partient;
     }
 }

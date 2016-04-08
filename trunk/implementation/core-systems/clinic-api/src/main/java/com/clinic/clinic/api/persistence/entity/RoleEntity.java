@@ -56,7 +56,7 @@ public class RoleEntity extends NameCodeDescEntity {
     private static final long serialVersionUID = -2840256603887150592L;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,targetEntity=ClinicRightEntity.class)
-    @JoinTable(name = "role_right", catalog = "cliniccollect_db",
+    @JoinTable(name = "role_right", catalog = "cliniccore_db",
     joinColumns = { @JoinColumn(name = "role_id", nullable = false, updatable = false)}, 
     inverseJoinColumns = {@JoinColumn(name = "clinic_right_id", nullable = false, updatable = false)})
     @JsonIgnore

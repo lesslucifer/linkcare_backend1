@@ -11,37 +11,37 @@
  * agreement, nondisclosure agreement or contract entered into with 
  * clinic providing access to this software.
  *
- * Project name  : clinic-api<br>
- * File name     : ConfigurationTranslatorImpl.java<br>
+ * Project name  : clinic-data<br>
+ * File name     : RateTraceDto.java<br>
  * <p>
  * Changes History <br>
  *		Date				Person				Reason<br>
- *		Mar 16, 2016				dailq				Initial<br>
+ *		Apr 7, 2016				Vuong Do				Initial<br>
  * </p>
  *
- * @author dailq
+ * @author Vuong Do
  *=============================================================================*/
-package com.clinic.clinic.api.translator.impl;
+package com.clinic.clinic.common.dto.biz;
 
-import com.clinic.clinic.api.persistence.entity.ConfigurationEntity;
-import com.clinic.clinic.api.translator.ITranslator;
-import com.clinic.clinic.common.dto.biz.ConfigurationDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.clinic.clinic.common.dto.TraceDto;
 
 /**
  * <p>
  * Describe functionality of this class here.
  * </p>
  *
- * @author dailq<br>
+ * @author Vuong Do<br>
  * @version 1.0<br>
  * @see TODO
  */
-public class ConfigurationTranslatorImpl extends AbstractTranslatorImpl<ConfigurationDto, ConfigurationEntity>
-        implements
-            ITranslator<ConfigurationDto, ConfigurationEntity> {
-
-	
-	public ConfigurationTranslatorImpl() {
-		super(ConfigurationDto.class, ConfigurationEntity.class);
-	}
+public class RateTraceDto extends TraceDto {
+    /**
+     * <p>Description of this field.</p>
+     */
+    private static final long serialVersionUID = -7060891016195309464L;
+    /** Logging property. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(RateTraceDto.class);
 }

@@ -23,10 +23,8 @@
  *=============================================================================*/
 package com.clinic.clinic.api.translator.impl;
 
-import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.PlaceEntity;
 import com.clinic.clinic.api.translator.ITranslator;
-import com.clinic.clinic.common.dto.biz.AddressDto;
 import com.clinic.clinic.common.dto.biz.PlaceDto;
 
 /**

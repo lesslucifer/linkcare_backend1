@@ -114,16 +114,16 @@
 	<logger name="com.clinic.clinic.api.persistence" level="info">
 		<appender-ref ref="PERSISTENCELOG"/>
 	</logger>
-	<logger name="com.clinic.clinic.api.bizlogic" level="info">
+	<logger name="com.clinic.clinic.api.bizlogic" level="debug">
 		<appender-ref ref="BIZLOGICLOG"/>
 	</logger>
-	<logger name="com.clinic.clinic.api.ws" level="info">
+	<logger name="com.clinic.clinic.api.ws" level="debug">
 		<appender-ref ref="WEBSERVICESLOG"/>
 	</logger>	
-	<logger name="org.springframework" level="info">
+	<logger name="org.springframework" level="debug">
 		<appender-ref ref="WEBAPPFWKLOG"/>
 	</logger>
-	<logger name="org.springframework.beans" level="info">
+	<logger name="org.springframework.beans" level="debug">
 		<appender-ref ref="WEBAPPFWKLOG"/>
 	</logger>
 

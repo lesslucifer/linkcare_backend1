@@ -24,11 +24,6 @@
 package com.clinic.clinic.api.persistence.repository.impl;
 
 
-import java.math.BigInteger;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -67,40 +62,16 @@ public class SessionLogRepository extends AbsRepositoryImpl<SessionLogEntity, In
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        
+        Integer ret = null;
         try {
-            final EntityManager entityManager = getEntityManager();
-            
-            Query query = null;
-            
-            final StringBuilder summaryQuerySql = new StringBuilder();
-            summaryQuerySql.append("SELECT account_id, expired_time ");
-            summaryQuerySql.append("FROM `session_log` sl ");
-            summaryQuerySql.append("WHERE sl.session_id = :session_id ");
-            summaryQuerySql.append("ORDER BY login_time DESC ");
-            summaryQuerySql.append("LIMIT 1");
-            query = entityManager.createNativeQuery(summaryQuerySql.toString());
-            
-            query.setParameter("session_id", session);
-            
-            @SuppressWarnings("unchecked")
-            List<Object[]> result = query.getResultList();
-            
-            if (result == null || result.isEmpty()) {
-            	return null;
-            }
-            
-            final Object[] row = result.get(0);
-            final int uid = (Integer) row[0];
-            final long expired_time = ((BigInteger) row[1]).longValue();
-            
-            long now = System.currentTimeMillis();
-            if (now >= expired_time) {
-                LOGGER.debug("Session " + session + " is expired!");
-                return null;
-            }
-            
-            return uid;
+            Specification<SessionLogEntity> spec = new Specification<SessionLogEntity>() {
+                @Override
+                public Predicate toPredicate(Root<SessionLogEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return cb.equal(root.get("sessionId"), session);
+                }
+            };
+            SessionLogEntity ent = findOne(spec);
+            ret = ent.getAccount().getId();
         } catch (Exception e) {
             LOGGER.error("error", e);
         } finally {
@@ -108,8 +79,7 @@ public class SessionLogRepository extends AbsRepositoryImpl<SessionLogEntity, In
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
-        
-		return null;
+		return ret;
     }
 
 	public SessionLogEntity findSessionLogByAccountId(final Integer accountId, final Integer sessionId) {
@@ -138,4 +108,30 @@ public class SessionLogRepository extends AbsRepositoryImpl<SessionLogEntity, In
 		}
 		return retEnt;
 	}
+
+    /* (non-Javadoc)
+     * @see com.clinic.clinic.api.persistence.repository.ISessionLogRepository#findSessionLogByAccountId(java.lang.Integer)
+     */
+    @Override
+    public SessionLogEntity findSessionLogByAccountId(Integer id) {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        SessionLogEntity ret = null;
+        try {
+            Specification<SessionLogEntity> spec = new Specification<SessionLogEntity>() {
+                
+                @Override
+                public Predicate toPredicate(Root<SessionLogEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return getPredicateParentNotDeleted(root, id, IDbConstants.FIELD_FK_ACCOUNT, IDbConstants.FALSE);
+                }
+            };
+            ret = findOne(spec);
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return ret;
+    }
 }

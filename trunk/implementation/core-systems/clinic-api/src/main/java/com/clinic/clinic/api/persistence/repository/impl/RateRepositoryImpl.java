@@ -23,12 +23,20 @@
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.repository.impl;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import com.clinic.clinic.api.persistence.entity.RateEntity;
 import com.clinic.clinic.api.persistence.repository.IRateRepository;
+import com.clinic.clinic.common.consts.IConstants;
+import com.clinic.clinic.common.consts.IDbConstants;
 
 /**
  * <p>
@@ -43,4 +51,29 @@ import com.clinic.clinic.api.persistence.repository.IRateRepository;
 public class RateRepositoryImpl extends AbsRepositoryImpl<RateEntity, Integer> implements IRateRepository {
     /** Logging property. */
     private static final Logger LOGGER = LoggerFactory.getLogger(RateRepositoryImpl.class);
+
+    /* (non-Javadoc)
+     * @see com.clinic.clinic.api.persistence.repository.IRateRepository#findRateEntityByMedicarId(java.lang.Integer)
+     */
+    @Override
+    public RateEntity findRateEntityByMedicarId(Integer medicarId) {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        RateEntity retEnt = null;
+        try {
+            Specification<RateEntity> spec = new Specification<RateEntity>() {
+                @Override
+                public Predicate toPredicate(Root<RateEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return getPredicateParentNotDeleted(root, medicarId, "medicar", IDbConstants.FALSE);
+                }
+            };
+            retEnt = findOne(spec);
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return retEnt;
+    }
 }

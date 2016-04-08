@@ -12,36 +12,35 @@
  * clinic providing access to this software.
  *
  * Project name  : clinic-api<br>
- * File name     : ConfigurationTranslatorImpl.java<br>
+ * File name     : RateTraceRepositoryImpl.java<br>
  * <p>
  * Changes History <br>
  *		Date				Person				Reason<br>
- *		Mar 16, 2016				dailq				Initial<br>
+ *		Apr 7, 2016				Vuong Do				Initial<br>
  * </p>
  *
- * @author dailq
+ * @author Vuong Do
  *=============================================================================*/
-package com.clinic.clinic.api.translator.impl;
+package com.clinic.clinic.api.persistence.repository.impl;
 
-import com.clinic.clinic.api.persistence.entity.ConfigurationEntity;
-import com.clinic.clinic.api.translator.ITranslator;
-import com.clinic.clinic.common.dto.biz.ConfigurationDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
+import com.clinic.clinic.api.persistence.entity.RateTraceEntity;
+import com.clinic.clinic.api.persistence.repository.IRateTraceRepository;
 
 /**
  * <p>
  * Describe functionality of this class here.
  * </p>
  *
- * @author dailq<br>
+ * @author Vuong Do<br>
  * @version 1.0<br>
  * @see TODO
  */
-public class ConfigurationTranslatorImpl extends AbstractTranslatorImpl<ConfigurationDto, ConfigurationEntity>
-        implements
-            ITranslator<ConfigurationDto, ConfigurationEntity> {
-
-	
-	public ConfigurationTranslatorImpl() {
-		super(ConfigurationDto.class, ConfigurationEntity.class);
-	}
+@Repository
+public class RateTraceRepositoryImpl extends AbsRepositoryImpl<RateTraceEntity, Integer> implements IRateTraceRepository {
+    /** Logging property. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(RateTraceRepositoryImpl.class);
 }
