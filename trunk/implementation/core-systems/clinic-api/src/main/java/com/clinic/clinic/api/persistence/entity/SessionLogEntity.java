@@ -43,7 +43,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="session_log")
 @NamedQuery(name="SessionLogEntity.findAll", query="SELECT s FROM SessionLogEntity s")
-public class SessionLogEntity extends TraceEntity{
+public class SessionLogEntity extends TraceEntity {
     private static final long serialVersionUID = -2212878037326891620L;
     /**
      * <p>Default constructor </p>
@@ -129,9 +129,11 @@ public class SessionLogEntity extends TraceEntity{
     public void setLogoutTime(Long logoutTime) {
         this.logoutTime = logoutTime;
     }
+    
 	public Long getExpiredTime() {
 		return expiredTime;
 	}
+	
 	public void setExpiredTime(Long expiredTime) {
 		this.expiredTime = expiredTime;
 	}

@@ -33,6 +33,7 @@ import net.sf.oval.Validator;
  */
 public abstract class AbsRestApi {
     /** Logging property. */
+//    private static final Logger LOGGER = LoggerFactory.getLogger(AbsRestApi.class);
     private static final Validator validator = new Validator();
     
     @Autowired

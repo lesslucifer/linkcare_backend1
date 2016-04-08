@@ -46,7 +46,7 @@ public class TimingsRepository extends AbsRepositoryImpl<TimingsEntity, Integer>
 			sb.append("LIMIT 1");
 		}
 		sb.append(") ");
-		sb.append("WHERE t.begin <= :time AND time <= t.begin + t.length");
+		sb.append("WHERE t.begin <= :time AND :time <= t.begin + t.length");
 
 		Query q = getEntityManager().createNativeQuery(sb.toString(), TimingsEntity.class);
 		q.setParameter("time", time);
