@@ -321,9 +321,9 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        Boolean ret = null;
+        Boolean ret = false;
         try {
-            Specification<AccountEntity> spec = new Specification<AccountEntity>() {
+  /*          Specification<AccountEntity> spec = new Specification<AccountEntity>() {
                 
                 @Override
                 public Predicate toPredicate(Root<AccountEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -339,7 +339,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             } else {
                 ret = true;
             }
-    /**        
+            */
+            
             final EntityManager entityManager = getEntityManager();
             
             Query query = null;
@@ -363,7 +364,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             if (result != null && !result.isEmpty()) {
             	return true;
             }
-       */     
+          
         } catch (Exception e) {
             LOGGER.error("error", e);
         } finally {

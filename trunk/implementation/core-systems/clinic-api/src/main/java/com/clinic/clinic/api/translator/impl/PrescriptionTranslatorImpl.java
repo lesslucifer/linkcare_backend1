@@ -9,7 +9,7 @@ import com.clinic.clinic.common.exception.BizlogicException;
 
 public class PrescriptionTranslatorImpl extends AbstractTranslatorImpl<PrescriptionDto, PrescriptionEntity> {
 
-	public static final PrescriptionTranslatorImpl INST = new PrescriptionTranslatorImpl();
+	public static PrescriptionTranslatorImpl INST = new PrescriptionTranslatorImpl();
 	
 	private PrescriptionTranslatorImpl() {
 		super(PrescriptionDto.class, PrescriptionEntity.class);
