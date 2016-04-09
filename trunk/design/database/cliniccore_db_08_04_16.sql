@@ -26,6 +26,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `account`
 --
 
+use cliniccore_db;
+
 DROP TABLE IF EXISTS `account`;
 CREATE TABLE IF NOT EXISTS `account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -942,10 +944,10 @@ INSERT INTO `timings` (`id`, `account_timings_id`, `begin`, `length`, `type`) VA
 --
 -- Indexes for table `appointment_patient`
 --
-ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_name` (`name`);
-ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_address` (`address`);
-ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_symtoms` (`symtoms`);
-ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_name` (`name`);
+-- ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_name` (`name`);
+-- ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_address` (`address`);
+-- ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_symtoms` (`symtoms`);
+-- ALTER TABLE `appointment_patient` ADD FULLTEXT KEY `index_fulltext_name` (`name`);
 
 --
 -- Constraints for dumped tables
