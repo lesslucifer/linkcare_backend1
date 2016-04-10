@@ -106,6 +106,9 @@ public class RateTraceServiceImpl extends AbsService implements IRateTraceServic
             rateTraceEnt.setPartient(accountRepo.getOne(partientId));
             rateTraceRepo.save(rateTraceEnt);
             
+            aptBookingEnt.setStatus(AppointmentBookingEntity.STATUS_RATED);
+            aptBookingRepo.save(aptBookingEnt);
+            
             ret = rateTraceTrans.getDto(rateTraceEnt);
         } finally {
             if(LOGGER.isDebugEnabled()) {
