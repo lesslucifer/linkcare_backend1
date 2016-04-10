@@ -12,11 +12,11 @@
  * clinic providing access to this software.
  *
  * Project name  : clinic-api<br>
- * File name     : RateTraceRestApi.java<br>
+ * File name     : RateRestApi.java<br>
  * <p>
  * Changes History <br>
  *		Date				Person				Reason<br>
- *		Apr 7, 2016				Vuong Do				Initial<br>
+ *		Apr 10, 2016				Vuong Do				Initial<br>
  * </p>
  *
  * @author Vuong Do
@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,12 +36,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.clinic.clinic.api.bizlogic.service.IRateTraceService;
+import com.clinic.clinic.api.bizlogic.service.IRateService;
 import com.clinic.clinic.api.ws.AbsRestApi;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.consts.IRestApiUrlMaps;
 import com.clinic.clinic.common.dto.biz.AppointmentBookingDto;
+import com.clinic.clinic.common.dto.biz.RateDto;
 import com.clinic.clinic.common.dto.biz.RateTraceDto;
 
 /**
@@ -54,20 +56,17 @@ import com.clinic.clinic.common.dto.biz.RateTraceDto;
  */
 @RestController
 @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_GROUP)
-public class RateTraceRestApi extends AbsRestApi {
+public class RateRestApi extends AbsRestApi {
     /** Logging property. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(RateTraceRestApi.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RateRestApi.class);
     
     @Autowired
-    private IRateTraceService rateTraceService;
+    private IRateService rateService;
     
-    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_PARTIENT_RATING, method = RequestMethod.POST, produces = {
+    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_MEDICAR_RATE, method = RequestMethod.GET, produces = {
     "application/json" })
-    public RateTraceDto rating(@RequestHeader("sess") String sess,
-            @RequestParam(value = "mark", required = IDbConstants.TRUE) Double mark,
-            @RequestParam(value = "comment", required = IDbConstants.TRUE) String comment,
-            @RequestBody AppointmentBookingDto appointmentBookingDto,
-            HttpServletResponse response) {
+    public RateDto getMark(@RequestHeader("sess") String sess,
+            @PathVariable("medicarId") Integer medicarId) {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
@@ -75,10 +74,10 @@ public class RateTraceRestApi extends AbsRestApi {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug("Account Login" + accountId);
         }
-        auth().authRight(accountId, IDbConstants.RIGHT_RATING);
-        RateTraceDto ret = null;
+        // auth().authRight(accountId, IDbConstants.RIGHT_RATING);
+        RateDto ret = null;
         try {
-            ret = rateTraceService.rating(appointmentBookingDto, mark, comment, accountId);
+            ret = rateService.getMarkMedicarByMedicarId(medicarId);
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);

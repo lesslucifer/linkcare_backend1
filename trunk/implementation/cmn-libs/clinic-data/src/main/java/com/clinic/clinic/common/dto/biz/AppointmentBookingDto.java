@@ -10,7 +10,6 @@ public final class AppointmentBookingDto extends TraceDto {
 	 */
 	private static final long serialVersionUID = 7956521828569668258L;
 	
-	private Integer id;
 	private TraceDto booker;
 	private TraceDto medicar;
 	private boolean isAtHome;
@@ -20,14 +19,6 @@ public final class AppointmentBookingDto extends TraceDto {
 	private int duration;
 	private int status;
 	private AppointmentPatientDto patient;
-	
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public TraceDto getBooker() {
 		return booker;

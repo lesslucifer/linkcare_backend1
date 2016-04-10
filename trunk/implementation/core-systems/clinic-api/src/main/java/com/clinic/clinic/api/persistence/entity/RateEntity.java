@@ -29,6 +29,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -55,7 +56,7 @@ public class RateEntity extends NameCodeEntity {
     @Column(name = "count", nullable = false)
     private Integer count;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicar_id", nullable = false)
     private AccountEntity medicar;
 

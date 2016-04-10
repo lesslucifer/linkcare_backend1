@@ -123,7 +123,7 @@
 	<logger name="org.springframework" level="debug">
 		<appender-ref ref="WEBAPPFWKLOG"/>
 	</logger>
-	<logger name="org.springframework.beans" level="debug">
+	<logger name="org.springframework.beans" level="info">
 		<appender-ref ref="WEBAPPFWKLOG"/>
 	</logger>
 

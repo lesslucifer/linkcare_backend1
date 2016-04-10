@@ -11,19 +11,19 @@
  * agreement, nondisclosure agreement or contract entered into with 
  * clinic providing access to this software.
  *
- * Project name  : clinic-data<br>
- * File name     : RateTraceDto.java<br>
+ * Project name  : clinic-api<br>
+ * File name     : IRateService.java<br>
  * <p>
  * Changes History <br>
  *		Date				Person				Reason<br>
- *		Apr 7, 2016				Vuong Do				Initial<br>
+ *		Apr 10, 2016				Vuong Do				Initial<br>
  * </p>
  *
  * @author Vuong Do
  *=============================================================================*/
-package com.clinic.clinic.common.dto.biz;
+package com.clinic.clinic.api.bizlogic.service;
 
-import com.clinic.clinic.common.dto.TraceDto;
+import com.clinic.clinic.common.dto.biz.RateDto;
 
 /**
  * <p>
@@ -34,24 +34,8 @@ import com.clinic.clinic.common.dto.TraceDto;
  * @version 1.0<br>
  * @see TODO
  */
-public class RateTraceDto extends TraceDto {
-    /**
-     * <p>Description of this field.</p>
-     */
-    private static final long serialVersionUID = -7060891016195309464L;
+public interface IRateService {
     
-    private Double mark;
-    private String comment;
-    public Double getMark() {
-        return mark;
-    }
-    public void setMark(Double mark) {
-        this.mark = mark;
-    }
-    public String getComment() {
-        return comment;
-    }
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+    
+    RateDto getMarkMedicarByMedicarId(Integer medicarId);
 }

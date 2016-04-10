@@ -25,9 +25,10 @@ package com.clinic.clinic.api.persistence.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -61,8 +62,8 @@ public class SessionLogEntity extends TraceEntity {
     private Long expiredTime;
     
     //fk: account and session_log table
-    @ManyToOne
-    @JoinColumn(name="account_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="account_id", nullable = false)
     private AccountEntity account;
     
     /**
@@ -137,5 +138,4 @@ public class SessionLogEntity extends TraceEntity {
 	public void setExpiredTime(Long expiredTime) {
 		this.expiredTime = expiredTime;
 	}
-    
 }

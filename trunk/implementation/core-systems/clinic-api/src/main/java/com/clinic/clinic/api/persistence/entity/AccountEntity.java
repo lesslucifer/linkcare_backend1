@@ -101,9 +101,9 @@ public class AccountEntity extends TraceEntity {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "rate_id", nullable = true)
 	private RateEntity rate;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
-	private List<SessionLogEntity> sessions = new ArrayList<SessionLogEntity>();
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
+	private SessionLogEntity sessions;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "partient")
 	private List<RateTraceEntity> rateTraces = new ArrayList<RateTraceEntity>();
@@ -355,14 +355,14 @@ public class AccountEntity extends TraceEntity {
 	public void setRate(RateEntity rate) {
 		this.rate = rate;
 	}
+	
+    public SessionLogEntity getSessions() {
+        return sessions;
+    }
 
-	public List<SessionLogEntity> getSessions() {
-		return sessions;
-	}
-
-	public void setSessions(List<SessionLogEntity> sessions) {
-		this.sessions = sessions;
-	}
+    public void setSessions(SessionLogEntity sessions) {
+        this.sessions = sessions;
+    }
 
     public List<RateTraceEntity> getRateTraces() {
         return rateTraces;
