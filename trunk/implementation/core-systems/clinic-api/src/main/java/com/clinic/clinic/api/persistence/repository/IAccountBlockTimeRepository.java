@@ -7,4 +7,6 @@ import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 
 public interface IAccountBlockTimeRepository extends IRepository<AccountBlockTimeEntity, Integer> {
 	List<AccountBlockTimeEntity> getBlockTime(Integer accountId, LocalDateTime from, LocalDateTime to);
+	List<AccountBlockTimeEntity> getBlockTime(Integer accountId, List<Integer> ids);
+	boolean hasBlockTime(Integer accountId, LocalDateTime from, LocalDateTime to);
 }

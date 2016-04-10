@@ -1152,4 +1152,9 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
             }
         }
     }
+    
+    @Override
+    public T getReference(Class<T> clazz, ID id) {
+    	return getEntityManager().getReference(clazz, id);
+    }
 }

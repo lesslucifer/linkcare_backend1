@@ -30,6 +30,14 @@ public final class AccountBlockTimeEntity extends DeleteableEntity implements Co
 	@Column(name = "length", nullable = false)
 	private int lengthInMinutes;
 
+	public AccountEntity getAccount() {
+		return account;
+	}
+
+	public void setAccount(AccountEntity account) {
+		this.account = account;
+	}
+
 	public int getLengthInMinutes() {
 		return lengthInMinutes;
 	}

@@ -57,6 +57,10 @@ public interface IRestApiUrlMaps {
     static final String REST_API_BIZ_PRESCRIPTIONS = "/prescriptions";
     static final String REST_API_BIZ_PRESCRIPTIONS_SINGLE = REST_API_BIZ_PRESCRIPTIONS + "/{prescription_id}";
     static final String REST_API_BIZ_PATIENT_PRESCRIPTIONS = "account/{patient_id}/prescriptions";
+    
+    // ### Prescriptions
+    static final String REST_API_BIZ_BLOCK_VACATIONS = "/block_vacations";
+    static final String REST_API_BIZ_BLOCK_VACATIONS_SINGLE = REST_API_BIZ_BLOCK_VACATIONS + "/{block_vacation_id}";
 
     // ### Doctor or Nurse
     static final String REST_API_BIZ_MEDICAR_RATE = "/medicar/{medicarId}/rate";

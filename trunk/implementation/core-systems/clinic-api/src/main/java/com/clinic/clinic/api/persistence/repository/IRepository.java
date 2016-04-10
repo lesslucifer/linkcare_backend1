@@ -215,4 +215,5 @@ public interface IRepository <T, ID extends Serializable> extends JpaRepository<
      */
     String getNewCounter(final String entityCodePrefix, int codeLength, boolean filterLogicalDeletion);
     
+    T getReference(Class<T> clazz, ID id);
 }

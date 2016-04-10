@@ -314,6 +314,7 @@ public interface IDbConstants {
 	static final String RIGHT_GET_MEDICAR_APPOINTMENT = "RIGHT_GET_MEDICAR_APPOINTMENT";
 	static final String RIGHT_SUBMIT_PRESCRIPTION = "RIGHT_SUBMIT_PRESCRIPTION";
 	static final String RIGHT_GET_PRESCRIPTION_HISTORY = "RIGHT_GET_PRESCRIPTION_HISTORY";
+	static final String RIGHT_BLOCK_VACATION = "RIGHT_BLOCK_VACATION";
 
 	static final String FIELD_VALUE = "value";
 	static final String FIELD_PRICE = "price";
