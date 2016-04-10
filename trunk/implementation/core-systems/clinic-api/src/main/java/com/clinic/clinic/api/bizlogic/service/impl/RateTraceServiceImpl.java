@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IRateTraceService;
@@ -74,19 +75,20 @@ public class RateTraceServiceImpl extends AbsService implements IRateTraceServic
         }
         RateTraceDto ret = null;
         try {
-            Integer medicarId = appointmentBookingDto.getMedicar().getId();
-            RateEntity rateEnt = rateRepo.findRateEntityByMedicarId(medicarId);
-            if(null == rateEnt) {
-                throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.RATING_NOT_FOUNT, "Unknown medicar", medicarId);
-            }
             AppointmentBookingEntity aptBookingEnt = aptBookingRepo.getOne(appointmentBookingDto.getId());
             if(null == aptBookingEnt) {
                 throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.APPOINTMENT_NOT_FOUNT, "Unknown appointment booking");
             }
+            Integer medicarId = aptBookingEnt.getMedicar().getId();
+            RateEntity rateEnt = rateRepo.findRateEntityByMedicarId(medicarId);
+            if(null == rateEnt) {
+                throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.RATING_NOT_FOUNT, "Unknown medicar", medicarId);
+            }
+            // AppointmentBookingEntity aptBookingEnt = aptBookingRepo.getOne(appointmentBookingDto.getId());
+            
             if(null != aptBookingEnt && aptBookingEnt.getStatus() != AppointmentBookingEntity.STATUS_FINISHED) {
                 throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_NOT_FINISHED, "Appointment isn't finished", aptBookingEnt.getId());
             }
-            
             Integer count = rateEnt.getCount();
             Double x = (((rateEnt.getMark() * rateEnt.getCount()) + mark) / ++count);
             rateEnt.setCount(count);

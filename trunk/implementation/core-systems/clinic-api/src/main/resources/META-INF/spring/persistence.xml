@@ -24,6 +24,7 @@
 		<class>com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity</class>
 		<class>com.clinic.clinic.api.persistence.entity.AccountTimingsEntity</class>
 		<class>com.clinic.clinic.api.persistence.entity.Timings</class>
+		<class>com.clinic.clinic.api.persistence.entity.RateEntity</class>
 		<class>com.clinic.clinic.api.persistence.entity.RateTraceEntity</class>
 	    <class>com.github.marschall.threeten.jpa.LocalTimeConverter</class>
 	    <class>com.github.marschall.threeten.jpa.LocalDateConverter</class>
