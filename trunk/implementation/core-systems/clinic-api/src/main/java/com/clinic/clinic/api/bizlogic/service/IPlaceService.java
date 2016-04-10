@@ -23,9 +23,6 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * <p>
  * Describe functionality of this class here.
@@ -37,5 +34,5 @@ import org.slf4j.LoggerFactory;
  */
 public class IPlaceService {
     /** Logging property. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(IPlaceService.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(IPlaceService.class);
 }

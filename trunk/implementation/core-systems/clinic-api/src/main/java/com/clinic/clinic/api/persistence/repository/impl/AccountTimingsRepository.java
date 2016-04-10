@@ -18,7 +18,6 @@ public final class AccountTimingsRepository extends AbsRepositoryImpl<AccountTim
 	public AccountTimingsEntity updateAccountTimings(AccountEntity account, AccountTimingsDto dto) {
 		AccountTimingsEntity entity = new AccountTimingsEntity();
 		entity.setAccount(account);
-		entity.setBeginDate(dto.getBeginDate());
 
 		return save(entity);
 	}
@@ -41,5 +40,4 @@ public final class AccountTimingsRepository extends AbsRepositoryImpl<AccountTim
 
 		return (AccountTimingsEntity) result.get(0);
 	}
-
 }

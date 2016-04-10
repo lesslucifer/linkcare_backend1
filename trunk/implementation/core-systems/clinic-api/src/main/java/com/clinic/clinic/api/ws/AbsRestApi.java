@@ -171,7 +171,8 @@ public abstract class AbsRestApi {
     }
     
     protected void return204(HttpServletResponse resp) {
-    	resp.setStatus(HttpStatus.NO_CONTENT.value());
+    	// ignore, all response is set status to 200 now
+//    	resp.setStatus(HttpStatus.NO_CONTENT.value());
     }
     
     protected void validate(Object o) {

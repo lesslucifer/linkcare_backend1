@@ -35,7 +35,8 @@ public class BizExceptionAdvice {
 
     @ExceptionHandler(value = Exception.class)
 	public @ResponseBody Object handleDefaultException(HttpServletRequest request, HttpServletResponse response, Exception e) {
-    	response.setStatus(this.resolveAnnotatedResponseStatus(e));
+//    	response.setStatus(this.resolveAnnotatedResponseStatus(e));
+    	response.setStatus(HttpServletResponse.SC_OK);	// now, all error still response 200
 
 		return Utils.mkMap("error", Utils.mkMap(
 					"code", IBizErrorCode.UNKNOWN_ERROR,
@@ -46,12 +47,10 @@ public class BizExceptionAdvice {
 	
     @ExceptionHandler(value = BizlogicException.class)
 	public @ResponseBody Object handleBizException(HttpServletResponse response, BizlogicException e) {
-    	if (e.getHttpCode() != 0) {
-    		response.setStatus(e.getHttpCode());
-    	}
-    	else {
-    		response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-    	}
+    	// response 200 for all error - excepts 401
+    	int status = (e.getHttpCode() != HttpServletResponse.SC_UNAUTHORIZED) ? HttpServletResponse.SC_OK : e.getHttpCode();
+    	response.setStatus(status);
+    	
 		return Utils.mkMap("error", Utils.mkMap(
 					"code", e.getBizCode(),
 					"msg", e.getLocalizedMessage(),

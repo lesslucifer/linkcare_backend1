@@ -45,7 +45,7 @@
 	<!-- Scan RESTful WS API -->
 	<context:component-scan base-package="com.clinic.clinic.api.ws" />
 	<context:annotation-config />
-
+	
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
 		up static resources in the ${webappRoot}/resources directory -->
 		
@@ -55,5 +55,9 @@
 	
 	<bean id="bizLogicExceptionAdvice"
           class="com.clinic.clinic.common.exception.BizExceptionAdvice">
+    </bean>
+    
+	<bean id="bizLogicResponseAdvice"
+          class="com.clinic.clinic.common.exception.BizLogicResponseAdvice">
     </bean>
 </beans>

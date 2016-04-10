@@ -40,6 +40,8 @@ public class AddressTranslatorImpl extends AbstractTranslatorImpl<AddressDto, Ad
         implements
             ITranslator<AddressDto, AddressEntity> {
 	
+	public static final AddressTranslatorImpl INST = new AddressTranslatorImpl();
+	
 	public AddressTranslatorImpl() {
 		super(AddressDto.class, AddressEntity.class);
 	}

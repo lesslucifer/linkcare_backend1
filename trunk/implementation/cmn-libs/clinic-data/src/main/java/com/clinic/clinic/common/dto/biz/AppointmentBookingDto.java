@@ -14,7 +14,7 @@ public final class AppointmentBookingDto extends TraceDto {
 	private TraceDto booker;
 	private TraceDto medicar;
 	private boolean isAtHome;
-	private TraceDto address;
+	private AddressDto address;
 	private LocalDate date;
 	private int time;
 	private int duration;
@@ -53,11 +53,11 @@ public final class AppointmentBookingDto extends TraceDto {
 		this.isAtHome = isAtHome;
 	}
 	
-	public TraceDto getAddress() {
+	public AddressDto getAddress() {
 		return address;
 	}
 	
-	public void setAddress(TraceDto address) {
+	public void setAddress(AddressDto address) {
 		this.address = address;
 	}
 	

@@ -27,7 +27,7 @@ public class AppointmentBookingTranslator extends AbstractTranslatorImpl<Appoint
 		
 		dto.setBooker(TraceTranslatorImpl.INSTANCE.getDto(ent.getBooker()));
 		dto.setMedicar(TraceTranslatorImpl.INSTANCE.getDto(ent.getMedicar()));
-		dto.setAddress(TraceTranslatorImpl.INSTANCE.getDto(ent.getAddress()));
+		dto.setAddress(AddressTranslatorImpl.INST.getDto(ent.getAddress()));
 		dto.setPatient(AppointmentPatientTranslator.INSTANCE.getDto(ent.getPatient()));
 	}
 }

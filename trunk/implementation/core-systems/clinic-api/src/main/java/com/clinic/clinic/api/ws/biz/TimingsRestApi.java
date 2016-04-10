@@ -19,7 +19,6 @@ import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.consts.IRestApiUrlMaps;
 import com.clinic.clinic.common.dto.biz.AccountTimingsDto;
 import com.clinic.clinic.common.dto.biz.TimingsDayDto;
-import com.clinic.clinic.common.utils.Utils;
 
 @RestController
 @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_GROUP)
@@ -37,7 +36,7 @@ public class TimingsRestApi extends AbsRestApi {
 		Integer accountId = auth().authSession(session);
 		auth().authRight(accountId, IDbConstants.RIGHT_UPDATE_TIMINGS);
 
-		return Utils.mkMap("data", timingsServ.getAccountTimings(accountId));
+		return timingsServ.getAccountTimings(accountId);
     }
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_TIMINGS, method = RequestMethod.POST, produces = {
@@ -61,6 +60,18 @@ public class TimingsRestApi extends AbsRestApi {
     		HttpServletResponse response) {
 		auth().authSession(session);
 
-		return timingsServ.getTimingDaySlots(targetId, date, 30);
+		return timingsServ.getTimingDaySlots(targetId, date, 30, i -> true);
+    }
+
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_TIMINGS_SLOT_TYPE, method = RequestMethod.GET, produces = {
+    "application/json" })
+    public List<TimingsDayDto> getTimingsSlotByType(@RequestHeader("sess") String session,
+    		@PathVariable("targetId") Integer targetId,
+    		@PathVariable("type") Integer type,
+    		@RequestParam("date") String date,
+    		HttpServletResponse response) {
+		auth().authSession(session);
+
+		return timingsServ.getTimingDaySlots(targetId, date, 30, i -> i == type);
     }
 }

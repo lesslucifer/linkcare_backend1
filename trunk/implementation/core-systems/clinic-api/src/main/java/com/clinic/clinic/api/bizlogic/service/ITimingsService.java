@@ -2,6 +2,7 @@ package com.clinic.clinic.api.bizlogic.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
@@ -14,7 +15,8 @@ public interface ITimingsService {
 	
 	AccountTimingsDto updateAccountTimings(Integer accountId, AccountTimingsDto dto);
 	
-	List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range);
+	List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range,
+			Predicate<Integer> typeFilter);
 	
 	boolean isTimeAvailable(LocalDate date, int begin, int end,
 			final List<AccountBlockTimeEntity> blockTimes, 

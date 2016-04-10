@@ -20,7 +20,6 @@ import com.clinic.clinic.api.ws.AbsRestApi;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.consts.IRestApiUrlMaps;
 import com.clinic.clinic.common.dto.biz.PrescriptionSubmitDto;
-import com.clinic.clinic.common.utils.Utils;
 
 @RestController
 @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_GROUP)
@@ -40,7 +39,7 @@ public class PrescriptionRestApi extends AbsRestApi {
 		List<Integer> ids = Arrays.stream(prescriptionIds.split(","))
 				.map(Integer::parseInt).collect(Collectors.toList());
 		
-		return Utils.mkMap("data", prescriptionServ.getPrescriptions(requesters, ids));
+		return prescriptionServ.getPrescriptions(requesters, ids);
     }
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_PRESCRIPTIONS, method = RequestMethod.POST, produces = {
@@ -52,7 +51,7 @@ public class PrescriptionRestApi extends AbsRestApi {
 		Integer medicar = auth().authSession(session);
 		auth().authRight(medicar, IDbConstants.RIGHT_SUBMIT_PRESCRIPTION);
 		
-		return Utils.mkMap("data", prescriptionServ.submitPrescription(medicar, dto));
+		return prescriptionServ.submitPrescription(medicar, dto);
     }
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_PATIENT_PRESCRIPTIONS, method = RequestMethod.GET, produces = {
@@ -67,6 +66,6 @@ public class PrescriptionRestApi extends AbsRestApi {
 		Integer medicar = auth().authSession(session);
 		auth().authRight(medicar, IDbConstants.RIGHT_GET_PRESCRIPTION_HISTORY);
 		
-		return Utils.mkMap("data", prescriptionServ.getPrescriptionHistory(medicar, patient, appointment));
+		return prescriptionServ.getPrescriptionHistory(medicar, patient, appointment);
     }
 }

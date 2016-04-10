@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -17,12 +17,11 @@ import org.springframework.http.HttpStatus;
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.ITimingsService;
 import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
-import com.clinic.clinic.api.persistence.entity.AccountCustomTimingsEntity;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AccountTimingsEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
+import com.clinic.clinic.api.persistence.entity.TimingsEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
-import com.clinic.clinic.api.persistence.repository.IAccountCustomTimingsRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountTimingsRepository;
 import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
@@ -52,8 +51,8 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
     private IAccountBlockTimeRepository accBlockTimeRepo;
     @Autowired
     private IAppointmentBookingRepository appointmentBookingRepo;
-    @Autowired
-    private IAccountCustomTimingsRepository accCustomTimingsRepo;
+//    @Autowired
+//    private IAccountCustomTimingsRepository accCustomTimingsRepo;
 
     private ITranslator<AccountTimingsDto, AccountTimingsEntity> accTimingsTrans = AccountTimingsTranslator.INSTANCE;
 
@@ -128,10 +127,12 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 	}
 	
 	@Override
-	public List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range) {
+	public List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range,
+			final Predicate<Integer> typeFilter) {
 		
 		AccountTimingsEntity ent = accTimingsRepo.getLastestAccountTimings(accountId);
 		ent.getTimings().size(); // get all timings
+		final List<TimingsEntity> timings = ent.getTimings().stream().filter((t) -> typeFilter.test(t.getType())).collect(Collectors.toList());
 
 		final LocalDate startDay = LocalDate.parse(day, DateTimeFormatter.ofPattern(IConstants.DateForMat_DDMMYYYY));
 		final LocalDate endDay = startDay.plusDays(range);
@@ -142,21 +143,21 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 		final List<AppointmentBookingEntity> activeAppointments = appointmentBookingRepo.getActiveAppointments(accountId, startDay, endDay);
 		activeAppointments.sort(AppointmentBookingEntity::compareTo);
 		
-		final List<AccountCustomTimingsEntity> listCustomTimings = accCustomTimingsRepo.getCustomTimings(accountId, startDay, endDay);
-		final TreeMap<LocalDate, TreeMap<Integer, AccountCustomTimingsEntity>> customTimings = new TreeMap<>();
-		listCustomTimings.forEach((ct) -> {
-			TreeMap<Integer, AccountCustomTimingsEntity> subMap = customTimings.get(ct.getDate());
-			if (subMap == null) {
-				subMap = new TreeMap<>();
-				customTimings.put(ct.getDate(), subMap);
-			}
-			
-			subMap.put(ct.getBegin(), ct);
-		});
+//		final List<AccountCustomTimingsEntity> listCustomTimings = accCustomTimingsRepo.getCustomTimings(accountId, startDay, endDay);
+//		final TreeMap<LocalDate, TreeMap<Integer, AccountCustomTimingsEntity>> customTimings = new TreeMap<>();
+//		listCustomTimings.forEach((ct) -> {
+//			TreeMap<Integer, AccountCustomTimingsEntity> subMap = customTimings.get(ct.getDate());
+//			if (subMap == null) {
+//				subMap = new TreeMap<>();
+//				customTimings.put(ct.getDate(), subMap);
+//			}
+//			
+//			subMap.put(ct.getBegin(), ct);
+//		});
 
 		return IntStream.range(0, range).mapToObj(i -> {
 			LocalDate date = startDay.plusDays(i);
-			List<TimingsSlotDto> slots = ent.getTimings().stream().map(t -> {
+			List<TimingsSlotDto> slots = timings.stream().map(t -> {
 				int nSlot = t.getLength() / IConstants.SLOT_TIME;
 				return IntStream.range(0, nSlot).mapToObj(slotOffset -> {
 					TimingsSlotDto slot = new TimingsSlotDto();

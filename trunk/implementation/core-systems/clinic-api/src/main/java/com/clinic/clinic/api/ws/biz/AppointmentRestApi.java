@@ -41,7 +41,7 @@ public class AppointmentRestApi extends AbsRestApi {
 		List<Integer> appointmentIds = Arrays.stream(appointment_id.split(","))
 				.map((sId) -> Integer.parseInt(sId)).collect(Collectors.toList());
 		
-		return Utils.mkMap("data", appServ.getAppointments(requester, appointmentIds));
+		return appServ.getAppointments(requester, appointmentIds);
 	}
 	
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_APPOINTMENTS, method = RequestMethod.POST, produces = {
@@ -53,7 +53,7 @@ public class AppointmentRestApi extends AbsRestApi {
 		Integer patientId = auth().authSession(session);
 		auth().authRight(patientId, IDbConstants.RIGHT_BOOK_APPOINTMENT);
 		
-		return Utils.mkMap("data", appServ.bookAppointment(patientId, dto));
+		return appServ.bookAppointment(patientId, dto);
     }
 	
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_APPOINTMENTS_APPROVE, method = RequestMethod.PUT, produces = {
@@ -118,7 +118,7 @@ public class AppointmentRestApi extends AbsRestApi {
 		
 		LocalDate localDate = LocalDate.parse(date, JsonJava8TimeSerialization.DATE_FORMATTER);
 		
-		return Utils.mkMap("data", appServ.getMedicarAppointments(medicar, localDate));
+		return appServ.getMedicarAppointments(medicar, localDate);
 	}
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_APPOINTMENTS_TODAY, method = RequestMethod.GET, produces = {
@@ -129,7 +129,7 @@ public class AppointmentRestApi extends AbsRestApi {
 		Integer medicar = auth().authSession(session);
 		auth().authRight(medicar, IDbConstants.RIGHT_GET_MEDICAR_APPOINTMENT);
 		
-		return Utils.mkMap("data", appServ.getMedicarAppointments(medicar, LocalDate.now()));
+		return appServ.getMedicarAppointments(medicar, LocalDate.now());
 	}
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_APPOINTMENTS_BY_TYPE, method = RequestMethod.GET, produces = {
@@ -150,7 +150,7 @@ public class AppointmentRestApi extends AbsRestApi {
 			localDate = LocalDate.parse(date, JsonJava8TimeSerialization.DATE_FORMATTER);
 		}
 		
-		return Utils.mkMap("data", appServ.getMedicarAppointmentsByType(medicar, localDate, type));
+		return appServ.getMedicarAppointmentsByType(medicar, localDate, type);
 	}
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_COUNT_MEDICAR_APPOINTMENTS_BY_TYPE, method = RequestMethod.GET, produces = {
@@ -171,7 +171,6 @@ public class AppointmentRestApi extends AbsRestApi {
 			localDate = LocalDate.parse(date, JsonJava8TimeSerialization.DATE_FORMATTER);
 		}
 		
-		return Utils.mkMap("data", Utils.mkMap("count",
-				appServ.countMedicarAppointmentsByType(medicar, localDate, type)));
+		return Utils.mkMap("count", appServ.countMedicarAppointmentsByType(medicar, localDate, type));
 	}
 }
