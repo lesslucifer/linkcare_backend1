@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class Utils {
@@ -28,7 +28,7 @@ public final class Utils {
             }
         }
         
-        Map<String, Object> m = new HashMap<>();
+        Map<String, Object> m = new LinkedHashMap<>();
         for (int i = 0; i < objs.length; i += 2) {
             String k = (String) objs[i];
             Object v = objs[i + 1];
