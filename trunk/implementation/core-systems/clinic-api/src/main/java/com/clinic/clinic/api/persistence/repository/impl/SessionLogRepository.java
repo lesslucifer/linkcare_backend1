@@ -120,7 +120,6 @@ public class SessionLogRepository extends AbsRepositoryImpl<SessionLogEntity, In
         SessionLogEntity ret = null;
         try {
             Specification<SessionLogEntity> spec = new Specification<SessionLogEntity>() {
-                
                 @Override
                 public Predicate toPredicate(Root<SessionLogEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                     return getPredicateParentNotDeleted(root, id, IDbConstants.FIELD_FK_ACCOUNT, IDbConstants.FALSE);

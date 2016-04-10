@@ -1,4 +1,4 @@
-package com.clinic.clinic.api.ws.biz;
+   package com.clinic.clinic.api.ws.biz;
 
 import java.time.LocalDate;
 import java.util.Arrays;

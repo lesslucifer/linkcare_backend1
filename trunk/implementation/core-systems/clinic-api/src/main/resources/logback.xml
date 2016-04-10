@@ -111,19 +111,19 @@
 	</appender>
 	
 	<!-- Loggers definitions -->
-	<logger name="com.clinic.clinic.api.persistence" level="debug">
+	<logger name="com.clinic.clinic.api.persistence" level="info">
 		<appender-ref ref="PERSISTENCELOG"/>
 	</logger>
-	<logger name="com.clinic.clinic.api.bizlogic" level="debug">
+	<logger name="com.clinic.clinic.api.bizlogic" level="info">
 		<appender-ref ref="BIZLOGICLOG"/>
 	</logger>
-	<logger name="com.clinic.clinic.api.ws" level="debug">
+	<logger name="com.clinic.clinic.api.ws" level="info">
 		<appender-ref ref="WEBSERVICESLOG"/>
 	</logger>	
-	<logger name="org.springframework" level="debug">
+	<logger name="org.springframework" level="info">
 		<appender-ref ref="WEBAPPFWKLOG"/>
 	</logger>
-	<logger name="org.springframework.beans" level="debug">
+	<logger name="org.springframework.beans" level="info">
 		<appender-ref ref="WEBAPPFWKLOG"/>
 	</logger>
 

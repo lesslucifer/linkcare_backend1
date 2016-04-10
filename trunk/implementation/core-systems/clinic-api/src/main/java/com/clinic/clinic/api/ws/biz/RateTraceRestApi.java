@@ -72,6 +72,9 @@ public class RateTraceRestApi extends AbsRestApi {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
         Integer accountId = auth().authSession(sess);
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Account Login" + accountId);
+        }
         auth().authRight(accountId, IDbConstants.RIGHT_RATING);
         RateTraceDto ret = null;
         try {

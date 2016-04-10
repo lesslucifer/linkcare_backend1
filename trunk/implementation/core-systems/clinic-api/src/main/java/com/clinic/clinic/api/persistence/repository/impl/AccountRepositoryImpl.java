@@ -255,7 +255,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 summaryQuerySql.append("AND major.id=:major ");
             }
             if(accountFilterDto.getLatitude() != null && accountFilterDto.getLongtitude() != null) {
-                summaryQuerySql.append("AND GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) <= 8 ");
+                summaryQuerySql.append("AND GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) <= 100 ");
             }
             query = entityManager.createNativeQuery(summaryQuerySql.toString());
             // set parameter
