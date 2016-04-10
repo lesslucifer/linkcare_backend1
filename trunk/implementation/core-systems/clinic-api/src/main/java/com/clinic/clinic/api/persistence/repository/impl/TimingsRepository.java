@@ -42,7 +42,7 @@ public class TimingsRepository extends AbsRepositoryImpl<TimingsEntity, Integer>
 		{
 			sb.append("SELECT at2.id FROM `account_timings` AS at2 ");
 			sb.append("WHERE at2.account_id = :medicar ");
-			sb.append("ORDER BY at2.begin_date DESC ");
+			sb.append("ORDER BY at2.id DESC ");
 			sb.append("LIMIT 1");
 		}
 		sb.append(") ");

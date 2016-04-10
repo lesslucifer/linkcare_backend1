@@ -28,7 +28,7 @@ public final class AccountTimingsRepository extends AbsRepositoryImpl<AccountTim
 		final StringBuilder sb = new StringBuilder();
 		sb.append("SELECT acc_t FROM AccountTimingsEntity acc_t ");
 		sb.append("WHERE account_id = :account_id ");
-		sb.append("ORDER BY begin_date DESC ");
+		sb.append("ORDER BY id DESC ");
 
 		Query q = getEntityManager().createQuery(sb.toString(), AccountTimingsEntity.class);
 		q.setParameter("account_id", accountId);

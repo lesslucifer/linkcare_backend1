@@ -27,6 +27,7 @@ public interface IBizErrorCode {
 	static final int APPOINTMENT_MEDICAR_MISMATCH = -2005;
 	static final int APPOINTMENT_INVALID_APPROVE_TIME = -2006;
 	static final int APPOINTMENT_HAVE_UNFINISHED_APPOINTMENT = -2007;
+	static final int APPOINTMENT_INVALID_TYPE = -2008;
     
 	// # rating
 	static final int RATING_NOT_FOUNT = -4001;

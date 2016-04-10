@@ -14,5 +14,7 @@ public interface IAppointmentService {
 	void rejectAppointment(Integer medicar, Integer appointmentId);
 	void cancelAppointment(Integer medicar, Integer appointmentId);
 	void startAppointment(Integer medicar, Integer appointmentId);
-	List<TraceDto> getMedicarAppointment(Integer medicar, LocalDate date);
+	List<TraceDto> getMedicarAppointments(Integer medicar, LocalDate date);
+	List<TraceDto> getMedicarAppointmentsByType(Integer medicar, LocalDate date, int type);
+	int countMedicarAppointmentsByType(Integer medicar, LocalDate date, int type);
 }

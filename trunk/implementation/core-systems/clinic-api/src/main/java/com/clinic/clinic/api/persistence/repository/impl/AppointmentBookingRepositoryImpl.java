@@ -1,6 +1,7 @@
 package com.clinic.clinic.api.persistence.repository.impl;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -54,6 +55,54 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public List<AppointmentBookingEntity> getActiveAppointmentsAtHome(Integer medicarId, LocalDate date, boolean atHome) {
+		// TODO Auto-generated method stub
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT ab FROM AppointmentBookingEntity ab ");
+		sb.append("WHERE ab.medicar.id = :medicarId AND ");
+		sb.append("ab.date = :date AND ");
+		sb.append("ab.home = :home AND ");
+		sb.append("ab.status IN :active_statuses");
+		
+		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
+		q.setParameter("medicarId", medicarId);
+		q.setParameter("date", date);
+		q.setParameter("home", atHome ? 1 : 0);
+		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
+
+		List<AppointmentBookingEntity> result = q.getResultList();
+		if (result != null) {
+			return result;
+		}
+		
+		return Collections.emptyList();
+	}
+	
+	@Override
+	public int countActiveAppointmentsAtHome(Integer medicarId, LocalDate date, boolean atHome) {
+		// TODO Auto-generated method stub
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT COUNT(*) FROM AppointmentBookingEntity ab ");
+		sb.append("WHERE ab.medicar.id = :medicarId AND ");
+		sb.append("ab.date = :date AND ");
+		sb.append("ab.home = :home AND ");
+		sb.append("ab.status IN :active_statuses");
+		
+		TypedQuery<Integer> q = getEntityManager().createQuery(sb.toString(), Integer.class);
+		q.setParameter("medicarId", medicarId);
+		q.setParameter("date", date);
+		q.setParameter("home", atHome ? 1 : 0);
+		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
+
+		List<Integer> result = q.getResultList();
+		if (result == null || result.isEmpty()) {
+			return 0;
+		}
+		
+		return result.get(0);
 	}
 	
 	@Override

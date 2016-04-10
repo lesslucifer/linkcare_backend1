@@ -13,6 +13,8 @@ public interface IAppointmentBookingRepository extends IRepository<AppointmentBo
 	List<AppointmentBookingEntity> getActiveAppointments(Integer medicarId, LocalDate date);
 	List<AppointmentBookingEntity> getActiveAppointments(Integer medicarId, LocalDate dateFrom, LocalDate dateTo);
 	boolean hasActiveAppointment(Integer medicarId, LocalDate date, int timeFrom, int timeTo);
+	List<AppointmentBookingEntity> getActiveAppointmentsAtHome(Integer medicarId, LocalDate date, boolean atHome);
+	int countActiveAppointmentsAtHome(Integer medicarId, LocalDate date, boolean atHome);
 	
 	List<AppointmentBookingEntity> getApprovedBooking(Integer medicarId, LocalDate date, int timeFrom, int timeTo);
 	boolean hasApprovedBooking(Integer medicarId, LocalDate date, int timeFrom, int timeTo);

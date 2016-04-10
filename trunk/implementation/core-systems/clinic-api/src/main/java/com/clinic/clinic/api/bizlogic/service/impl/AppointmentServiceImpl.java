@@ -231,8 +231,27 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 	
 	@Override
-	public List<TraceDto> getMedicarAppointment(Integer medicar, LocalDate date) {
+	public List<TraceDto> getMedicarAppointments(Integer medicar, LocalDate date) {
 		List<AppointmentBookingEntity> entities = appBookingRepo.getActiveAppointments(medicar, date);
 		return TraceTranslatorImpl.INSTANCE.getDtoList(entities);
+	}
+	
+	@Override
+	public List<TraceDto> getMedicarAppointmentsByType(Integer medicar, LocalDate date, int type) {
+		if (type != 0 && type !=1) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TYPE, "Invalid appointment type", type);
+		}
+		
+		List<AppointmentBookingEntity> entities = appBookingRepo.getActiveAppointmentsAtHome(medicar, date, type != 0);
+		return TraceTranslatorImpl.INSTANCE.getDtoList(entities);
+	}
+	
+	@Override
+	public int countMedicarAppointmentsByType(Integer medicar, LocalDate date, int type) {
+		if (type != 0 && type !=1) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TYPE, "Invalid appointment type", type);
+		}
+
+		return appBookingRepo.countActiveAppointmentsAtHome(medicar, date, type != 0);
 	}
 }

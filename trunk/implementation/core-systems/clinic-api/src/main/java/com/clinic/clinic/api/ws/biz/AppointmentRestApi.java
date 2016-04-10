@@ -118,7 +118,7 @@ public class AppointmentRestApi extends AbsRestApi {
 		
 		LocalDate localDate = LocalDate.parse(date, JsonJava8TimeSerialization.DATE_FORMATTER);
 		
-		return appServ.getMedicarAppointment(medicar, localDate);
+		return Utils.mkMap("data", appServ.getMedicarAppointments(medicar, localDate));
 	}
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_APPOINTMENTS_TODAY, method = RequestMethod.GET, produces = {
@@ -129,6 +129,49 @@ public class AppointmentRestApi extends AbsRestApi {
 		Integer medicar = auth().authSession(session);
 		auth().authRight(medicar, IDbConstants.RIGHT_GET_MEDICAR_APPOINTMENT);
 		
-		return appServ.getMedicarAppointment(medicar, LocalDate.now());
+		return Utils.mkMap("data", appServ.getMedicarAppointments(medicar, LocalDate.now()));
+	}
+
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_APPOINTMENTS_BY_TYPE, method = RequestMethod.GET, produces = {
+    "application/json" })
+	public Object getActiveAppointmentsByType(@RequestHeader("sess") String session,
+    		@PathVariable String date,
+    		@PathVariable Integer type,
+    		HttpServletResponse response) {
+		
+		Integer medicar = auth().authSession(session);
+		auth().authRight(medicar, IDbConstants.RIGHT_GET_MEDICAR_APPOINTMENT);
+
+		LocalDate localDate = null;
+		if ("today".equals(date)) {
+			localDate = LocalDate.now();
+		}
+		else {
+			localDate = LocalDate.parse(date, JsonJava8TimeSerialization.DATE_FORMATTER);
+		}
+		
+		return Utils.mkMap("data", appServ.getMedicarAppointmentsByType(medicar, localDate, type));
+	}
+
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_COUNT_MEDICAR_APPOINTMENTS_BY_TYPE, method = RequestMethod.GET, produces = {
+    "application/json" })
+	public Object getCountActiveAppointmentsByType(@RequestHeader("sess") String session,
+    		@PathVariable String date,
+    		@PathVariable Integer type,
+    		HttpServletResponse response) {
+		
+		Integer medicar = auth().authSession(session);
+		auth().authRight(medicar, IDbConstants.RIGHT_GET_MEDICAR_APPOINTMENT);
+
+		LocalDate localDate = null;
+		if ("today".equals(date)) {
+			localDate = LocalDate.now();
+		}
+		else {
+			localDate = LocalDate.parse(date, JsonJava8TimeSerialization.DATE_FORMATTER);
+		}
+		
+		return Utils.mkMap("data", Utils.mkMap("count",
+				appServ.countMedicarAppointmentsByType(medicar, localDate, type)));
 	}
 }
