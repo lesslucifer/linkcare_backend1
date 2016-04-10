@@ -57,6 +57,24 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 	}
 	
 	@Override
+	public List<AppointmentBookingEntity> getActiveAppointments(Integer medicarId, LocalDate dateFrom, LocalDate dateTo) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT ab FROM AppointmentBookingEntity ab ");
+		sb.append("WHERE ab.medicar.id = :medicarId AND ");
+		sb.append("ab.date >= :dateFrom AND ");
+		sb.append("ab.date <= :dateTo AND ");
+		sb.append("ab.status IN :active_statuses");
+		
+		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
+		q.setParameter("medicarId", medicarId);
+		q.setParameter("dateFrom", dateFrom);
+		q.setParameter("dateTo", dateTo);
+		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
+
+		return q.getResultList();
+	}
+	
+	@Override
 	public boolean hasActiveAppointment(Integer medicarId, LocalDate date, int timeFrom, int timeTo) {
 		// TODO Auto-generated method stub
 		final StringBuilder sb = new StringBuilder();

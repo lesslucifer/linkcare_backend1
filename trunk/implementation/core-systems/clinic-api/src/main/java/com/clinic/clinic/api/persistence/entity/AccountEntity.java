@@ -103,15 +103,6 @@ public class AccountEntity extends TraceEntity {
 	private RateEntity rate;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
-	private List<CalendarEntity> calendars = new ArrayList<CalendarEntity>();
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "patient")
-	private List<AppointmentEntity> appointPatients = new ArrayList<AppointmentEntity>();
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medicar")
-	private List<AppointmentEntity> appointMedicars = new ArrayList<AppointmentEntity>();
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
 	private List<SessionLogEntity> sessions = new ArrayList<SessionLogEntity>();
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "partient")
@@ -339,30 +330,6 @@ public class AccountEntity extends TraceEntity {
 
     public void setExperience(Double experience) {
         this.experience = experience;
-    }
-
-    public List<CalendarEntity> getCalendars() {
-        return calendars;
-    }
-
-    public void setCalendars(List<CalendarEntity> calendars) {
-        this.calendars = calendars;
-    }
-
-    public List<AppointmentEntity> getAppointPatients() {
-        return appointPatients;
-    }
-
-    public void setAppointPatients(List<AppointmentEntity> appointPatients) {
-        this.appointPatients = appointPatients;
-    }
-
-    public List<AppointmentEntity> getAppointMedicars() {
-        return appointMedicars;
-    }
-
-    public void setAppointMedicars(List<AppointmentEntity> appointMedicars) {
-        this.appointMedicars = appointMedicars;
     }
 
     public List<CommentEntity> getPatients() {

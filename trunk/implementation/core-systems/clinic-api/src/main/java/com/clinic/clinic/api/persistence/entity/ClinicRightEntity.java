@@ -48,13 +48,13 @@ public class ClinicRightEntity extends NameCodeDescEntity {
      * <p>Description of this field.</p>
      */
     private static final long serialVersionUID = 1728903689391722238L;
-    @ManyToMany(mappedBy = "clinicRights", targetEntity = RoleEntity.class)
-    private List<RoleEntity> roles = new ArrayList<RoleEntity>();
-    
-    public List<RoleEntity> getRoles() {
-        return roles;
-    }
-    public void setRoles(List<RoleEntity> roles) {
-        this.roles = roles;
-    }
+//    @ManyToMany(mappedBy = "clinicRights", targetEntity = RoleEntity.class)
+//    private List<RoleEntity> roles = new ArrayList<RoleEntity>();
+//    
+//    public List<RoleEntity> getRoles() {
+//        return roles;
+//    }
+//    public void setRoles(List<RoleEntity> roles) {
+//        this.roles = roles;
+//    }
 }
