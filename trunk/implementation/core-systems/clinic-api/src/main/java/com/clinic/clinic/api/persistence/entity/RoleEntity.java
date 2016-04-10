@@ -48,26 +48,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @NamedQuery(name = "RoleEntity.findAll", query = "Select r From RoleEntity r")
 public class RoleEntity extends NameCodeDescEntity {
 
-    /**
-     * <p>
-     * Description of this field.
-     * </p>
-     */
-    private static final long serialVersionUID = -2840256603887150592L;
-    
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,targetEntity=ClinicRightEntity.class)
-    @JoinTable(name = "role_right", catalog = "cliniccore_db",
-    joinColumns = { @JoinColumn(name = "role_id", nullable = false, updatable = false)}, 
-    inverseJoinColumns = {@JoinColumn(name = "clinic_right_id", nullable = false, updatable = false)})
-    @JsonIgnore
-    private List<ClinicRightEntity> clinicRights = new ArrayList<ClinicRightEntity>();
+	/**
+	 * <p>
+	 * Description of this field.
+	 * </p>
+	 */
+	private static final long serialVersionUID = -2840256603887150592L;
 
-    public List<ClinicRightEntity> getClinicRights() {
-        return clinicRights;
-    }
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = ClinicRightEntity.class)
+	@JoinTable(name = "role_right", catalog = "cliniccore_db", joinColumns = {
+			@JoinColumn(name = "role_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "clinic_right_id", nullable = false, updatable = false) })
+	@JsonIgnore
+	private List<ClinicRightEntity> clinicRights = new ArrayList<ClinicRightEntity>();
 
-    public void setClinicRights(List<ClinicRightEntity> clinicRights) {
-        this.clinicRights = clinicRights;
-    }
-    
+	public List<ClinicRightEntity> getClinicRights() {
+		return clinicRights;
+	}
+
+	public void setClinicRights(List<ClinicRightEntity> clinicRights) {
+		this.clinicRights = clinicRights;
+	}
+
 }

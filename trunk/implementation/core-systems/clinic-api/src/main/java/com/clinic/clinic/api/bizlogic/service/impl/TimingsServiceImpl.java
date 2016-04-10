@@ -139,8 +139,8 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 		final List<AccountBlockTimeEntity> blockTimes = accBlockTimeRepo.getBlockTime(accountId, startDay.atStartOfDay(), endDay.atStartOfDay());
 		blockTimes.sort(AccountBlockTimeEntity::compareTo);
 		
-		final List<AppointmentBookingEntity> approvedAppointments = appointmentBookingRepo.getApprovedBooking(accountId, startDay, endDay);
-		approvedAppointments.sort(AppointmentBookingEntity::compareTo);
+		final List<AppointmentBookingEntity> activeAppointments = appointmentBookingRepo.getActiveAppointments(accountId, startDay, endDay);
+		activeAppointments.sort(AppointmentBookingEntity::compareTo);
 		
 		final List<AccountCustomTimingsEntity> listCustomTimings = accCustomTimingsRepo.getCustomTimings(accountId, startDay, endDay);
 		final TreeMap<LocalDate, TreeMap<Integer, AccountCustomTimingsEntity>> customTimings = new TreeMap<>();
@@ -162,7 +162,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 					TimingsSlotDto slot = new TimingsSlotDto();
 					slot.setTime(t.getBeginTime() + slotOffset * IConstants.SLOT_TIME);
 					slot.setAvailable(isTimeAvailable(date, slot.getTime(), slot.getTime() + IConstants.SLOT_TIME,
-							blockTimes, approvedAppointments));
+							blockTimes, activeAppointments));
 					slot.setType(t.getType());
 					return slot;
 				});
@@ -179,14 +179,14 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 	@Override
 	public boolean isTimeAvailable(LocalDate date, int begin, int end,
 			final List<AccountBlockTimeEntity> blockTimes, 
-			final List<AppointmentBookingEntity> approvedAppointments) {
+			final List<AppointmentBookingEntity> activeAppointments) {
 
-		boolean result = approvedAppointments.stream().allMatch((ab) -> {
+		boolean result = activeAppointments.stream().allMatch((ab) -> {
 			if (ab.getDate().compareTo(date) == 0) {
-				return ((begin < ab.getTime() && end < ab.getTime()) || begin > ab.getEnd());
+				return ((begin < ab.getTime() && end <= ab.getTime()) || begin >= ab.getEnd());
 			}
 			
-			return false;
+			return true;
 		});
 		
 		if (!result) {

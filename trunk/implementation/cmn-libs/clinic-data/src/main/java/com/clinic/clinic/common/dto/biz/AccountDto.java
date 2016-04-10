@@ -94,8 +94,6 @@ public class AccountDto extends TraceDto implements Serializable {
 	
 	private CostDto cost;
 	
-	private List<CalendarDto> calendars = new ArrayList<CalendarDto>();
-	
 	private List<AccountDto> patients = new ArrayList<AccountDto>();
 	
 	private List<AccountDto> medicars = new ArrayList<AccountDto>();
@@ -306,14 +304,6 @@ public class AccountDto extends TraceDto implements Serializable {
 
     public void setCost(CostDto cost) {
         this.cost = cost;
-    }
-
-    public List<CalendarDto> getCalendars() {
-        return calendars;
-    }
-
-    public void setCalendars(List<CalendarDto> calendars) {
-        this.calendars = calendars;
     }
 
     public List<AccountDto> getPatients() {
