@@ -23,8 +23,6 @@
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.repository.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.clinic.clinic.api.persistence.entity.RateTraceEntity;
@@ -42,5 +40,5 @@ import com.clinic.clinic.api.persistence.repository.IRateTraceRepository;
 @Repository
 public class RateTraceRepositoryImpl extends AbsRepositoryImpl<RateTraceEntity, Integer> implements IRateTraceRepository {
     /** Logging property. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(RateTraceRepositoryImpl.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(RateTraceRepositoryImpl.class);
 }

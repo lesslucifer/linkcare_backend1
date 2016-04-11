@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.clinic.clinic.common.consts.IConstants;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public class TimingsDayDto implements Serializable {
 
 	/**

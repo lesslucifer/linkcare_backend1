@@ -23,8 +23,6 @@
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.repository.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.clinic.clinic.api.persistence.entity.StatusEntity;
@@ -42,5 +40,5 @@ import com.clinic.clinic.api.persistence.repository.IStatusRepository;
 @Repository
 public class StatusRepositoryImpl extends AbsRepositoryImpl<StatusEntity, Integer> implements IStatusRepository {
     /** Logging property. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatusRepositoryImpl.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(StatusRepositoryImpl.class);
 }

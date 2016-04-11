@@ -27,11 +27,9 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
-import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
 
 /**

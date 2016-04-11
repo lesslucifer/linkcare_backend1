@@ -25,8 +25,6 @@ package com.clinic.clinic.api.bizlogic.service;
 
 import java.util.Set;
 
-import com.clinic.clinic.common.dto.biz.AccountDto;
-import com.clinic.clinic.common.dto.biz.ClinicRightDto;
 import com.clinic.clinic.common.exception.BizlogicException;
 
 /**

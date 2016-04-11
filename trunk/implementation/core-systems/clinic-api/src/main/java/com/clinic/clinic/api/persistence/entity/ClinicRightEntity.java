@@ -23,12 +23,7 @@
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.clinic.clinic.api.persistence.entity.RoleEntity;
-
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 /**
