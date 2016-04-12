@@ -65,5 +65,7 @@ public interface IAuthService {
     Set<String> authRights(Integer accountId, String[] requiredRights, String[] optionalRights) throws BizlogicException;
     
     String login(final String loginName, final String password) throws BizlogicException;
+    
+    Boolean logout(final String sess) throws BizlogicException;
 
 }
