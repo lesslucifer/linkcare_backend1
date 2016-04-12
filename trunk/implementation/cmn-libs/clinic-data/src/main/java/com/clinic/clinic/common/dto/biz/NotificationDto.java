@@ -1,0 +1,63 @@
+package com.clinic.clinic.common.dto.biz;
+
+import com.clinic.clinic.common.dto.IdDto;
+import com.clinic.clinic.common.dto.TraceDto;
+
+import net.sf.oval.constraint.NotNull;
+
+public class NotificationDto extends IdDto {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7537560744782710751L;
+
+	private TraceDto sender;
+	
+	@NotNull
+	private String content;
+	
+	private int type;
+	
+	private boolean isRead;
+
+	public TraceDto getOwner() {
+		return owner;
+	}
+
+	public void setOwner(TraceDto owner) {
+		this.owner = owner;
+	}
+
+	public TraceDto getSender() {
+		return sender;
+	}
+
+	public void setSender(TraceDto sender) {
+		this.sender = sender;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public boolean isRead() {
+		return isRead;
+	}
+
+	public void setRead(boolean isRead) {
+		this.isRead = isRead;
+	}
+}

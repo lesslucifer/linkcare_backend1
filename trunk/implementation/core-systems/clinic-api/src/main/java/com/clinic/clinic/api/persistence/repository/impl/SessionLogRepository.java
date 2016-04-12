@@ -70,7 +70,7 @@ public class SessionLogRepository extends AbsRepositoryImpl<SessionLogEntity, In
                     return cb.equal(root.get("sessionId"), session);
                 }
             };
-            SessionLogEntity ent = findOne(spec);
+            SessionLogEntity ent = findOne(spec, false);
             ret = ent.getAccount().getId();
         } catch (Exception e) {
             LOGGER.error("error", e);
