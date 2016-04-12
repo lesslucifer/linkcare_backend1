@@ -21,14 +21,6 @@ public class NotificationDto extends IdDto {
 	
 	private boolean isRead;
 
-	public TraceDto getOwner() {
-		return owner;
-	}
-
-	public void setOwner(TraceDto owner) {
-		this.owner = owner;
-	}
-
 	public TraceDto getSender() {
 		return sender;
 	}
