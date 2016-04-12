@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -18,7 +20,8 @@ import com.clinic.clinic.common.utils.Utils;
 @Component
 public class BizLogicResponseAdvice implements ResponseBodyAdvice<Object>{
 
-	@Override
+	@SuppressWarnings({"unchecked"})
+    @Override
 	public Object beforeBodyWrite(Object body, MethodParameter retType, MediaType contentType,
 			Class<? extends HttpMessageConverter<?>> converter, ServerHttpRequest req, ServerHttpResponse resp) {
 		if (body == null) {
@@ -29,11 +32,18 @@ public class BizLogicResponseAdvice implements ResponseBodyAdvice<Object>{
 			if (dataBody.containsKey("error")) { // there's error, response as error format
 				return Utils.mkMap(
 						"status", false,
-						"error", dataBody.get("error")
-						);
+						"error", dataBody.get("error"));
 			}
+		} else if (body instanceof PageImpl) {
+            Page<Object> dataBody = (PageImpl<Object>) body;
+	        return Utils.mkMap(
+                    "status", true,
+                    "data", dataBody.getContent(),
+                    "sort", dataBody.getSort(),
+                    "totalPage", dataBody.getTotalPages(),
+                    "numberOfElements", dataBody.getNumberOfElements(),
+                    "indexPage", dataBody.getNumber());
 		}
-		
 		// success, response as success format
 		return Utils.mkMap(
 				"status", true,

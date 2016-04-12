@@ -73,32 +73,32 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         try {
             AccountEntity accountEnt = accountRepo.findAccountByLoginName(loginName);
             if(null != accountEnt) {
-                UUID uuid = UUID.randomUUID();
-                String sessionId = uuid.toString();
-                retValue = sessionId;
-                SessionLogEntity sessEnt = sessionRepo.findSessionLogByAccountId(accountEnt.getId());
-                if(null == sessEnt) {
-                	SessionLogEntity sessionEnt = new SessionLogEntity();
-                	sessionEnt.setAccount(accountEnt);
-                	sessionEnt.setCreatedBy(accountEnt.getId());
-                	sessionEnt.setLoginTime(System.currentTimeMillis());
-                	sessionEnt.setCreatedDatetime(System.currentTimeMillis());
-                	sessionEnt.setLastUpdated(System.currentTimeMillis());
-                	sessionEnt.setLastUpdatedBy(accountEnt.getId());
-                	sessionEnt.setExpiredTime(sessionEnt.getLastUpdated() + IConstants.DURABLE_SESSION);
-                    sessionEnt.setSessionId(sessionId); 
-                    sessionRepo.save(sessionEnt);
+                if(accountEnt.getHashedPassword().equals(this.getHashedText(password))) {
+                    UUID uuid = UUID.randomUUID();
+                    String sessionId = uuid.toString();
+                    retValue = sessionId;
+                    SessionLogEntity sessEnt = sessionRepo.findSessionLogByAccountId(accountEnt.getId());
+                    if(null == sessEnt) {
+                    	SessionLogEntity sessionEnt = new SessionLogEntity();
+                    	sessionEnt.setAccount(accountEnt);
+                    	sessionEnt.setCreatedBy(accountEnt.getId());
+                    	sessionEnt.setLoginTime(System.currentTimeMillis());
+                    	sessionEnt.setCreatedDatetime(System.currentTimeMillis());
+                    	sessionEnt.setLastUpdated(System.currentTimeMillis());
+                    	sessionEnt.setLastUpdatedBy(accountEnt.getId());
+                    	sessionEnt.setExpiredTime(sessionEnt.getLastUpdated() + IConstants.DURABLE_SESSION);
+                        sessionEnt.setSessionId(sessionId); 
+                        sessionRepo.save(sessionEnt);
+                    } else {
+                        sessEnt.setSessionId(sessionId);
+                        sessionRepo.save(sessEnt);
+                    }
                 } else {
-                    sessEnt.setSessionId(sessionId);
-                    sessionRepo.save(sessEnt);
+                    throwBizlogicException(401, IBizErrorCode.WRONG_PASSWORD, "password invalid");
                 }
             } else {
-            	throwBizlogicException(401, IBizErrorCode.WRONG_USERNAME_OR_PASSWORD, "User or password invalid");
+                throwBizlogicException(401, IBizErrorCode.WRONG_USERNAME, "Username invalid");
             }
-        } catch (BizlogicException be) {
-            LOGGER.error("error", be);
-        } catch (Exception e) {
-            LOGGER.error("error", e);
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
