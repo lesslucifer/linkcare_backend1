@@ -40,6 +40,7 @@ import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.ISessionLogRepository;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
+import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.exception.BizlogicException;
 
 /**
@@ -73,32 +74,32 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         try {
             AccountEntity accountEnt = accountRepo.findAccountByLoginName(loginName);
             if(null != accountEnt) {
-                UUID uuid = UUID.randomUUID();
-                String sessionId = uuid.toString();
-                retValue = sessionId;
-                SessionLogEntity sessEnt = sessionRepo.findSessionLogByAccountId(accountEnt.getId());
-                if(null == sessEnt) {
-                	SessionLogEntity sessionEnt = new SessionLogEntity();
-                	sessionEnt.setAccount(accountEnt);
-                	sessionEnt.setCreatedBy(accountEnt.getId());
-                	sessionEnt.setLoginTime(System.currentTimeMillis());
-                	sessionEnt.setCreatedDatetime(System.currentTimeMillis());
-                	sessionEnt.setLastUpdated(System.currentTimeMillis());
-                	sessionEnt.setLastUpdatedBy(accountEnt.getId());
-                	sessionEnt.setExpiredTime(sessionEnt.getLastUpdated() + IConstants.DURABLE_SESSION);
-                    sessionEnt.setSessionId(sessionId); 
-                    sessionRepo.save(sessionEnt);
+                if(accountEnt.getHashedPassword().equals(this.getHashedText(password))) {
+                    UUID uuid = UUID.randomUUID();
+                    String sessionId = uuid.toString();
+                    retValue = sessionId;
+                    SessionLogEntity sessEnt = sessionRepo.findSessionLogByAccountId(accountEnt.getId());
+                    if(null == sessEnt) {
+                    	SessionLogEntity sessionEnt = new SessionLogEntity();
+                    	sessionEnt.setAccount(accountEnt);
+                    	sessionEnt.setCreatedBy(accountEnt.getId());
+                    	sessionEnt.setLoginTime(System.currentTimeMillis());
+                    	sessionEnt.setCreatedDatetime(System.currentTimeMillis());
+                    	sessionEnt.setLastUpdated(System.currentTimeMillis());
+                    	sessionEnt.setLastUpdatedBy(accountEnt.getId());
+                    	sessionEnt.setExpiredTime(sessionEnt.getLastUpdated() + IConstants.DURABLE_SESSION);
+                        sessionEnt.setSessionId(sessionId); 
+                        sessionRepo.save(sessionEnt);
+                    } else {
+                        sessEnt.setSessionId(sessionId);
+                        sessionRepo.save(sessEnt);
+                    }
                 } else {
-                    sessEnt.setSessionId(sessionId);
-                    sessionRepo.save(sessEnt);
+                    throwBizlogicException(401, IBizErrorCode.WRONG_PASSWORD, "password invalid");
                 }
             } else {
-            	throwBizlogicException(401, IBizErrorCode.WRONG_USERNAME_OR_PASSWORD, "User or password invalid");
+                throwBizlogicException(401, IBizErrorCode.WRONG_USERNAME, "Username invalid");
             }
-        } catch (BizlogicException be) {
-            LOGGER.error("error", be);
-        } catch (Exception e) {
-            LOGGER.error("error", e);
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
@@ -106,13 +107,39 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         }
         return retValue;
     }
+    
+    /* (non-Javadoc)
+     * @see com.clinic.clinic.api.bizlogic.service.IAuthService#logout(java.lang.String)
+     */
+    @Override
+    public Boolean logout(String sess) throws BizlogicException {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        Boolean ret = false;
+        try {
+            SessionLogEntity sessEnt = sessionRepo.findFirstEntity("sessionId", sess, IDbConstants.FALSE);
+            sessEnt.setLastUpdated(System.currentTimeMillis());
+            sessEnt.setLogoutTime(System.currentTimeMillis());
+            sessEnt.setSessionId(null);
+            sessionRepo.save(sessEnt);
+            ret = true;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+           throwBizlogicException(500, IBizErrorCode.UNKNOWN_ERROR, e.getMessage());  
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return ret;
+    }
 
 	@Override
 	public Integer authSession(String sessionId) throws BizlogicException {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        
         try {
         	Integer retValue = sessionRepo.getAccountIdForSession(sessionId);
         	if (retValue == null) {
@@ -202,7 +229,6 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
-        
         return retVal;
 	}
 }

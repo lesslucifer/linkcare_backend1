@@ -37,6 +37,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -189,5 +190,22 @@ public class AccountRestApi extends AbsRestApi {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
+    }
+    
+    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_ACCOUNT_LOGOUT, method = RequestMethod.PUT, produces = {
+    "application/json" })
+    public Object logout(@RequestHeader("sess") String sess) {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        try {
+            boolean message = auth().logout(sess);
+            return Utils.mkMap("message", message);
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+
     }
 }

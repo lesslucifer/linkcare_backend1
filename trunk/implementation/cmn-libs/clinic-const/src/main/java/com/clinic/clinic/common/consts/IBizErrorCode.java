@@ -10,7 +10,8 @@ public interface IBizErrorCode {
 	// # Authenticate (-101 -> -199)
 	static final int INVALID_SESSION = -101;
 	static final int MISSING_RIGHT = -102;
-	static final int WRONG_USERNAME_OR_PASSWORD = -103;
+	static final int WRONG_USERNAME = -103;
+	static final int WRONG_PASSWORD = -104;
 	
 	// # Reserve (-201 -> -999)
 	

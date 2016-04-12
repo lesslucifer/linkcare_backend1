@@ -23,11 +23,17 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service.impl;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
 import com.clinic.clinic.common.consts.IBizErrorCode;
+import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.exception.BizlogicException;
 
 /**
@@ -40,7 +46,7 @@ import com.clinic.clinic.common.exception.BizlogicException;
  */
 public abstract class AbsService {
     /** Logging property. */
-//    private static final Logger LOGGER = LoggerFactory.getLogger(AbsService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbsService.class);
     
     /**
      * <p>Create a new business logic exception and throws it to caller.</p>
@@ -70,4 +76,37 @@ public abstract class AbsService {
     String getUUID() {
         return UUID.randomUUID().toString();
     }
+    
+    protected String getHashedText(String plainText) throws BizlogicException {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        String retVal = null;
+        try {
+            MessageDigest m;
+            m = MessageDigest.getInstance("MD5");
+            m.reset();
+            m.update(plainText.getBytes());
+            byte[] digest = m.digest();
+            BigInteger bigInt = new BigInteger(1, digest);
+            String hashText = bigInt.toString(16);
+
+            // zero pad to have the full 32 chars.
+            StringBuilder sb = new StringBuilder();
+            sb.append(hashText);
+            while (sb.length() < 32) {
+                sb.insert(0, "0");
+            }
+            retVal = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.error("Exception", e);
+            throwBizlogicException(500, IBizErrorCode.UNKNOWN_ERROR, e.getMessage());
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return retVal;
+    }
+
 }

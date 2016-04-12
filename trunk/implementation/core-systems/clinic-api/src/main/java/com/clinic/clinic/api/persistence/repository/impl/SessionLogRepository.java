@@ -133,4 +133,32 @@ public class SessionLogRepository extends AbsRepositoryImpl<SessionLogEntity, In
         }
         return ret;
     }
+
+    /* (non-Javadoc)
+     * @see com.clinic.clinic.api.persistence.repository.ISessionLogRepository#findAccountEntBySessionId(java.lang.String)
+     */
+    @Override
+    public AccountEntity findAccountEntBySessionId(String sess) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        AccountEntity ret = null;
+        try {
+            Specification<SessionLogEntity> spec = new Specification<SessionLogEntity>() {
+                @Override
+                public Predicate toPredicate(Root<SessionLogEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return cb.equal(root.get("sessionId"), sess);
+                }
+            };
+            SessionLogEntity ent = findOne(spec);
+            ret = ent.getAccount();
+        } catch (Exception e) {
+            LOGGER.error("error", e);
+        } finally {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return ret;
+    }
 }

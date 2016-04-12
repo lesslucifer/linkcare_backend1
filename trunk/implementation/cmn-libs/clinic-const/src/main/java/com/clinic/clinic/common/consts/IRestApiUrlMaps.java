@@ -30,6 +30,7 @@ public interface IRestApiUrlMaps {
     static final String REST_API_BIZ_ACCOUNT_SUBCATEGORY_SUBCATEGORYID = "/account/subcategory/{subcategoryId}";
     static final String REST_API_BIZ_ACCOUNT_FILTER = "/account/filter";
     static final String REST_API_BIZ_ACCOUNT_LOGIN = "/account/login";
+    static final String REST_API_BIZ_ACCOUNT_LOGOUT = "/account/logout";
     
     // ### Timings
     static final String REST_API_BIZ_TIMINGS = "/timings";
