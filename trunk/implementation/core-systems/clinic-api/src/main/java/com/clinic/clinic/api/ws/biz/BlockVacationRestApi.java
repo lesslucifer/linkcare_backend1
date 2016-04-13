@@ -73,7 +73,7 @@ public class BlockVacationRestApi extends AbsRestApi {
 		return blockVacationsServ.getBlockVacations(accountId, ids);
     }
 	
-	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_BLOCK_VACATIONS_SINGLE, method = RequestMethod.DELETE, produces = {
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_BLOCK_VACATIONS_SINGLE_DELETE, method = RequestMethod.PUT, produces = {
     "application/json" })
     public Object deleteBlockVacation(@RequestHeader("sess") String session,
     		@PathVariable("block_vacation_id") Integer id,

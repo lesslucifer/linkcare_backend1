@@ -171,6 +171,16 @@ public class AccountEntity extends TraceEntity {
 	public void setMidleName(String midleName) {
 		this.midleName = midleName;
 	}
+	
+	public void getFullName(StringBuilder sb) {
+		sb.append(lastName).append(" ");
+		
+		if (midleName != null && !midleName.isEmpty()) {
+			sb.append(midleName).append(" ");
+		}
+		
+		sb.append(firstName);
+	}
 
 	public Integer getGender() {
 		return gender;

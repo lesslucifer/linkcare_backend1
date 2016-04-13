@@ -58,7 +58,7 @@ public class AppointmentRestApi extends AbsRestApi {
 	
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_APPOINTMENTS_APPROVE, method = RequestMethod.PUT, produces = {
     "application/json" })
-	public void approveAppointment(@RequestHeader("sess") String session,
+	public Object approveAppointment(@RequestHeader("sess") String session,
     		@PathVariable Integer appointment_id,
     		HttpServletResponse response) {
 		validate(appointment_id);
@@ -66,24 +66,24 @@ public class AppointmentRestApi extends AbsRestApi {
 		auth().authRight(medicar, IDbConstants.RIGHT_APPROVE_APPOINTMENT);
 
 		appServ.approveAppointment(medicar, appointment_id);
-		return204(response);
+		return Utils.mkMap();
 	}
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_APPOINTMENTS_REJECT, method = RequestMethod.PUT, produces = {
     "application/json" })
-	public void rejectAppointment(@RequestHeader("sess") String session,
+	public Object rejectAppointment(@RequestHeader("sess") String session,
 			@PathVariable Integer appointment_id,
     		HttpServletResponse response) {
 		Integer medicar = auth().authSession(session);
 		auth().authRight(medicar, IDbConstants.RIGHT_REJECT_APPOINTMENT);
 		
 		appServ.rejectAppointment(medicar, appointment_id);
-		return204(response);
+		return Utils.mkMap();
 	}
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_APPOINTMENTS_CANCEL, method = RequestMethod.PUT, produces = {
     "application/json" })
-	public void cancelAppointment(@RequestHeader("sess") String session,
+	public Object cancelAppointment(@RequestHeader("sess") String session,
     		@PathVariable Integer appointment_id,
     		HttpServletResponse response) {
 		validate(appointment_id);
@@ -91,12 +91,12 @@ public class AppointmentRestApi extends AbsRestApi {
 		auth().authRight(canceller, IDbConstants.RIGHT_CANCEL_APPOINTMENT);
 		
 		appServ.cancelAppointment(canceller, appointment_id);
-		return204(response);
+		return Utils.mkMap();
 	}
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_APPOINTMENTS_START, method = RequestMethod.PUT, produces = {
     "application/json" })
-	public void startAppointment(@RequestHeader("sess") String session,
+	public Object startAppointment(@RequestHeader("sess") String session,
     		@PathVariable Integer appointment_id,
     		HttpServletResponse response) {
 		validate(appointment_id);
@@ -104,7 +104,7 @@ public class AppointmentRestApi extends AbsRestApi {
 		auth().authRight(medicar, IDbConstants.RIGHT_START_APPOINTMENT);
 		
 		appServ.startAppointment(medicar, appointment_id);
-		return204(response);
+		return Utils.mkMap();
 	}
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_APPOINTMENTS_DATE, method = RequestMethod.GET, produces = {

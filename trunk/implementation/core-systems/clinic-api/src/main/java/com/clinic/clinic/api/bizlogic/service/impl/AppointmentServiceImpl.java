@@ -13,15 +13,18 @@ import org.springframework.http.HttpStatus;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IAppointmentService;
+import com.clinic.clinic.api.bizlogic.service.INotificationService;
 import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
+import com.clinic.clinic.api.persistence.entity.MedicarProfileEntity;
 import com.clinic.clinic.api.persistence.entity.TimingsEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
 import com.clinic.clinic.api.persistence.repository.IAppointmentPatientRepository;
+import com.clinic.clinic.api.persistence.repository.IMedicarProfileRepository;
 import com.clinic.clinic.api.persistence.repository.ITimingsRepository;
 import com.clinic.clinic.api.translator.impl.AppointmentBookingTranslator;
 import com.clinic.clinic.api.translator.impl.TraceTranslatorImpl;
@@ -30,6 +33,7 @@ import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.dto.TraceDto;
 import com.clinic.clinic.common.dto.biz.AppointmentBookingDto;
 import com.clinic.clinic.common.dto.biz.AppointmentBookingRequestDto;
+import com.clinic.clinic.common.utils.DateTimeFormatters;
 import com.clinic.clinic.common.utils.Utils;
 
 @ApplicationService
@@ -49,6 +53,11 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	
 	@Autowired
 	private IAppointmentPatientRepository appPatientRepo;
+	
+	@Autowired IMedicarProfileRepository medicarProfileRepo;
+	
+	@Autowired
+	private INotificationService notifServ;
 	
 	@Override
 	public List<AppointmentBookingDto> getAppointments(Integer requester, List<Integer> appointmentIds) {
@@ -76,6 +85,12 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		if (medicar.getSubcategory().getId() != dto.getSubCategory()) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_SUB_CATEGORY_MISMATCH, "Medicar sub category mismatch!",
 					medicar.getSubcategory().getId(), dto.getSubCategory());
+		}
+		
+		MedicarProfileEntity medicarProfile = medicarProfileRepo.getByAccountId(dto.getMedicar());
+		if (medicarProfile == null) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_MEDICAR_PROFILE,
+					"Medicar profile not validated!");
 		}
 		
 		TimingsEntity timings = timingsRepo.getTimingsAtTime(dto.getMedicar(), dto.getTime());
@@ -110,12 +125,41 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Conflict with another appointment!");
 		}
 		
-		AddressEntity address = (dto.isAtHome()) ? (accRepo.findOne(booker).getAddress()) : (medicar.getAddress());
+		boolean hasRecentAppointment = appBookingRepo.isPatientHaveRecentWaitingAppointment(booker, System.currentTimeMillis());
+		if (hasRecentAppointment) {
+			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_PATIENT_ALREADY_BOOKED_RECENT_APPOINTMENT,
+					"Patient already booked a recent appointment!");
+		}
 		
-		AppointmentBookingEntity appBooking = appBookingRepo.addAppointment(booker, address, appointmentStartTime, duration, dto);
-		appPatientRepo.addNewPatientAppointment(appBooking, dto.getPatient());
+		AddressEntity address = (dto.isAtHome()) ? (accRepo.findOne(booker).getAddress()) : (medicar.getAddress());
+		int cost = (dto.isAtHome() == false) ? medicarProfile.getClinicPrice() : medicarProfile.getPatientHomePrice();
+		
+		AppointmentBookingEntity entity = new AppointmentBookingEntity();
+		entity.setBooker(accRepo.getReference(AccountEntity.class, booker));
+		entity.setMedicar(accRepo.getReference(AccountEntity.class, dto.getMedicar()));
+		entity.setAtHome(dto.isAtHome());
+		entity.setAddress(address);
+		entity.setDate(dto.getDate());
+		entity.setTime(appointmentStartTime);
+		entity.setDuration(duration);
+		entity.setCost(cost);
+		entity.setStatus(0);
+		entity = appBookingRepo.save(entity);
+		
+		appPatientRepo.addNewPatientAppointment(entity, dto.getPatient());
+		
+		// send notification
+		AccountEntity bookerEntity = accRepo.getOne(booker);
+		StringBuilder content = new StringBuilder();
+		content.append("Bệnh nhân ");
+		bookerEntity.getFullName(content);
+		content.append(" đã đặt một lịch khám vào lúc ");
+		content.append(startDateTime.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
+		content.append(" ngày ");
+		content.append(startDateTime.format(DateTimeFormatters.DATE_FORMATTER));
+		notifServ.sendMessage(null, medicar.getId(), content.toString());
 
-		return AppointmentBookingTranslator.INST.getDto(appBooking);
+		return AppointmentBookingTranslator.INST.getDto(entity);
 	}
 	
 	@Override
@@ -136,7 +180,8 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		}
 
 		LocalDateTime now = LocalDateTime.now();
-		if (now.compareTo(Utils.toDateTime(appBooking.getDate(), appBooking.getTime())) >= 0) {
+		LocalDateTime time = Utils.toDateTime(appBooking.getDate(), appBooking.getTime());
+		if (now.compareTo(time) >= 0) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_APPROVE_TIME, "Cannot approve over appointment",
 					now);
 		}
@@ -147,11 +192,22 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		
 		appBooking.setStatus(AppointmentBookingEntity.STATUS_APPROVED);
 		appBookingRepo.save(appBooking);
+		
+		// send notification
+		AccountEntity bookerEnt = appBooking.getBooker();
+		AccountEntity medicarEnt = appBooking.getMedicar();
+		StringBuilder content = new StringBuilder();
+		content.append("Bác sĩ ");
+		medicarEnt.getFullName(content);
+		content.append(" đã chấp nhận cuộc hẹn bạn đặt vào lúc ");
+		content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
+		content.append(" ngày ");
+		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
+		notifServ.sendMessage(null, bookerEnt.getId(), content.toString());
 	}
 
 	@Override
 	public void rejectAppointment(Integer medicar, Integer appointmentId) {
-		// TODO Auto-generated method stub
 		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
 		if (appBooking == null) {
 			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Appointment not found!", appointmentId);
@@ -169,6 +225,19 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		
 		appBooking.setStatus(AppointmentBookingEntity.STATUS_REJECTED);
 		appBookingRepo.save(appBooking);
+		
+		// send notification
+		AccountEntity bookerEnt = appBooking.getBooker();
+		AccountEntity medicarEnt = appBooking.getMedicar();
+		LocalDateTime time = Utils.toDateTime(appBooking.getDate(), appBooking.getTime());
+		StringBuilder content = new StringBuilder();
+		content.append("Bác sĩ ");
+		medicarEnt.getFullName(content);
+		content.append(" đã từ chối cuộc hẹn bạn đặt vào lúc ");
+		content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
+		content.append(" ngày ");
+		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
+		notifServ.sendMessage(null, bookerEnt.getId(), content.toString());
 	}
 
 	@Override
@@ -190,6 +259,23 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		
 		appBooking.setStatus(AppointmentBookingEntity.STATUS_CANCELLED);
 		appBookingRepo.save(appBooking);
+		
+		// send notification
+		AccountEntity bookerEnt = appBooking.getBooker();
+		AccountEntity medicarEnt = appBooking.getMedicar();
+		LocalDateTime time = Utils.toDateTime(appBooking.getDate(), appBooking.getTime());
+		String title = (canceller == medicarEnt.getId()) ? "Bác sĩ" : "Bệnh nhân";
+		AccountEntity cancellerEnt = (canceller == medicarEnt.getId()) ? medicarEnt : bookerEnt;
+		AccountEntity cancelleeEnt = (canceller != medicarEnt.getId()) ? medicarEnt : bookerEnt;
+		
+		StringBuilder content = new StringBuilder();
+		content.append(title).append(" ");
+		cancellerEnt.getFullName(content);
+		content.append(" đã hủy cuộc hẹn lúc ");
+		content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
+		content.append(" ngày ");
+		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
+		notifServ.sendMessage(null, cancelleeEnt.getId(), content.toString());
 	}
 
 	@Override

@@ -170,11 +170,6 @@ public abstract class AbsRestApi {
     	return this.authService;
     }
     
-    protected void return204(HttpServletResponse resp) {
-    	// ignore, all response is set status to 200 now
-//    	resp.setStatus(HttpStatus.NO_CONTENT.value());
-    }
-    
     protected void validate(Object o) {
     	if (o == null) {
     		BizlogicException.throwEx(HttpStatus.BAD_REQUEST.value(), IBizErrorCode.INVALIDATED_OBJECT,

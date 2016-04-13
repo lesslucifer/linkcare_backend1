@@ -9,32 +9,12 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
-import com.clinic.clinic.api.persistence.entity.AccountEntity;
-import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
 import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
-import com.clinic.clinic.common.dto.biz.AppointmentBookingRequestDto;
 
 @Repository
 public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<AppointmentBookingEntity, Integer> implements IAppointmentBookingRepository {
 
-	@Override
-	public AppointmentBookingEntity addAppointment(Integer booker, AddressEntity address, int time, int dur, AppointmentBookingRequestDto dto) {
-		AppointmentBookingEntity entity = new AppointmentBookingEntity();
-		entity.setBooker(getEntityManager().getReference(AccountEntity.class, booker));
-		entity.setMedicar(getEntityManager().getReference(AccountEntity.class, dto.getMedicar()));
-		entity.setAtHome(dto.isAtHome());
-		entity.setAddress(address);
-		entity.setDate(dto.getDate());
-		entity.setTime(time);
-		entity.setDuration(dur);
-		// set cost as default
-		entity.setCost(1000);
-		entity.setStatus(0);
-
-		return getJpaRepo().save(entity);
-	}
-	
 	@Override
 	public List<AppointmentBookingEntity> getActiveAppointments(Integer medicarId, LocalDate date) {
 		// TODO Auto-generated method stub
@@ -131,9 +111,8 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date = :date AND ");
 		sb.append("NOT (");
-		sb.append("(ab.time < :timeFrom AND ");
-		sb.append("ab.time + ab.duration < :timeFrom) OR ");
-		sb.append("(ab.time > :timeTo)");
+		sb.append("ab.time + ab.duration <= :timeFrom OR ");
+		sb.append("ab.time >= :timeTo");
 		sb.append(") AND ");
 		sb.append("ab.status IN :active_statuses");
 		
@@ -156,9 +135,8 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date = :date AND ");
 		sb.append("NOT (");
-		sb.append("(ab.time < :timeFrom AND ");
-		sb.append("ab.time + ab.duration < :timeFrom) OR ");
-		sb.append("(ab.time > :timeTo)");
+		sb.append("ab.time + ab.duration <= :timeFrom OR ");
+		sb.append("ab.time >= :timeTo");
 		sb.append(") AND ");
 		sb.append("ab.status = :approved_status");
 		
@@ -181,9 +159,8 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date = :date AND ");
 		sb.append("NOT (");
-		sb.append("(ab.time < :timeFrom AND ");
-		sb.append("ab.time + ab.duration < :timeFrom) OR ");
-		sb.append("(ab.time > :timeTo)");
+		sb.append("ab.time + ab.duration <= :timeFrom OR ");
+		sb.append("ab.time >= :timeTo");
 		sb.append(") AND ");
 		sb.append("ab.status = :approved_status");
 		
@@ -218,7 +195,6 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 	
 	@Override
 	public boolean hasProcessingAppointment(Integer medicarId) {
-		// TODO Auto-generated method stub
 		final StringBuilder sb = new StringBuilder();
 		sb.append("SELECT 1 FROM AppointmentBookingEntity ab ");
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
@@ -227,6 +203,26 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		Query q = getEntityManager().createQuery(sb.toString());
 		q.setParameter("medicarId", medicarId);
 		q.setParameter("processing_status", AppointmentBookingEntity.STATUS_PROCESSING);
+
+		List<?> result = q.getResultList();
+		return result != null && !result.isEmpty();
+	}
+	
+	@Override
+	public boolean isPatientHaveRecentWaitingAppointment(Integer patientId, long now,
+			int recentDuration) {
+		long recentTime = now - recentDuration * 60 * 1000;
+		
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT 1 FROM AppointmentBookingEntity ab ");
+		sb.append("WHERE ab.booker.id = :patientId AND ");
+		sb.append("ab.status IN :active_statuses AND ");
+		sb.append("ab.createdDatetime >= :recentTime ");
+		
+		Query q = getEntityManager().createQuery(sb.toString());
+		q.setParameter("patientId", patientId);
+		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
+		q.setParameter("recentTime", recentTime);
 
 		List<?> result = q.getResultList();
 		return result != null && !result.isEmpty();

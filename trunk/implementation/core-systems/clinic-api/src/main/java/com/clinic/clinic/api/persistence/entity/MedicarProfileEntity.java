@@ -22,7 +22,7 @@ public class MedicarProfileEntity extends TraceEntity {
 	@JoinColumn(name = "account_id")
 	private AccountEntity account;
 	
-	@Column(length = 256)
+	@Column(name = "license_number", length = 256)
 	private String licenseNumber;
 
 	@Column(name = "graduated_school", nullable = true)

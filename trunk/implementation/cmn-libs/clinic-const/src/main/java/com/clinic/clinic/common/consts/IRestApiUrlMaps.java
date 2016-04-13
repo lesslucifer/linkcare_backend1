@@ -62,10 +62,15 @@ public interface IRestApiUrlMaps {
     // ### Block vacations
     static final String REST_API_BIZ_BLOCK_VACATIONS = "/block_vacations";
     static final String REST_API_BIZ_BLOCK_VACATIONS_SINGLE = REST_API_BIZ_BLOCK_VACATIONS + "/{block_vacation_id}";
+    static final String REST_API_BIZ_BLOCK_VACATIONS_SINGLE_DELETE = REST_API_BIZ_BLOCK_VACATIONS_SINGLE + "/delete";
 
     // ### Doctor or Nurse
     static final String REST_API_BIZ_MEDICAR_RATE = "/medicar/{medicarId}/rate";
     
     // ### Medicar profile
     static final String REST_API_MEDICAR_PROFILE_SINGLE = "/account/{account_id}/medicar_profile";
+    
+    // ### Notification
+    static final String REST_API_NOTIFICATIONS = "/notifications";
+    static final String REST_API_NOTIFICATIONS_SINGLE = "/notifications/{notif_id}";
 }

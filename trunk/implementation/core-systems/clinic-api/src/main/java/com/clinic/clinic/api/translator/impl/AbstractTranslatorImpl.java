@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
+import com.clinic.clinic.api.persistence.entity.IdEntity;
 import com.clinic.clinic.api.translator.ITranslator;
 import com.clinic.clinic.common.exception.BizlogicException;
 
@@ -123,9 +124,19 @@ public abstract class AbstractTranslatorImpl <DTO /*extends IdDto*/, ENT /*exten
         }
 
 
+        // anyway, never copy the id field if it's already have a value
+        Integer id = null;
+        if (ent instanceof IdEntity)
+        {
+        	IdEntity idEnt = (IdEntity) ent;
+        	id = idEnt.getId();
+        }
+        
         BeanUtils.copyProperties(dto, ent);
-        
-        
+        if (id != null && (ent instanceof IdEntity)) {
+        	IdEntity idEnt = (IdEntity) ent;
+        	idEnt.setId(id);
+        }
     }
 
     /*

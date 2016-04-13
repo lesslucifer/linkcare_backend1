@@ -51,6 +51,7 @@ public interface IConstants {
 
     static final String DateForMat_DDMMYYYY = "dd-MM-yyyy";
     static final String DateForMat_DDMMYYYY_HHMM = "dd-MM-yyyy HH:mm";
+    static final String DateForMat_HHMM = "HH:mm";
 
     static final String ROOT_IMAGE_URL = "E:\\\\";
     static final String PUB_RES = ROOT_IMAGE_URL + "var\\www\\html\\pub-res\\images";

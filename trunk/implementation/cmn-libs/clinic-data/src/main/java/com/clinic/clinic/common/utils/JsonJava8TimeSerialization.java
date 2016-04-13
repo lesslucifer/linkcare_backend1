@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.clinic.clinic.common.consts.IConstants;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,8 +16,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 public class JsonJava8TimeSerialization {
-	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(IConstants.DateForMat_DDMMYYYY);
-	public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern(IConstants.DateForMat_DDMMYYYY_HHMM);
+	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatters.DATE_FORMATTER;
+	public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatters.DATETIME_FORMATTER;
 	
 	public static class LocalDateSerializer extends JsonSerializer<LocalDate> {
 		

@@ -19,6 +19,7 @@ import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.consts.IRestApiUrlMaps;
 import com.clinic.clinic.common.dto.biz.AccountTimingsDto;
 import com.clinic.clinic.common.dto.biz.TimingsDayDto;
+import com.clinic.clinic.common.utils.Utils;
 
 @RestController
 @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_GROUP)
@@ -41,7 +42,7 @@ public class TimingsRestApi extends AbsRestApi {
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_TIMINGS, method = RequestMethod.POST, produces = {
     "application/json" })
-    public void setTimings(@RequestHeader("sess") String session,
+    public Object setTimings(@RequestHeader("sess") String session,
     		@RequestBody AccountTimingsDto body,
     		HttpServletResponse response) {
 		validate(body);
@@ -49,7 +50,7 @@ public class TimingsRestApi extends AbsRestApi {
 		auth().authRight(accountId, IDbConstants.RIGHT_UPDATE_TIMINGS);
 
 		timingsServ.updateAccountTimings(accountId, body);
-		return204(response);
+		return Utils.mkMap();
     }
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_TIMINGS_SLOT, method = RequestMethod.GET, produces = {

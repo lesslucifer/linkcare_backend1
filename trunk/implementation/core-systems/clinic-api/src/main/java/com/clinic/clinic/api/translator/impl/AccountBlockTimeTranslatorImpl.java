@@ -12,12 +12,14 @@ public class AccountBlockTimeTranslatorImpl extends AbstractTranslatorImpl<Accou
 	
 	@Override
 	public void entityToDto(AccountBlockTimeEntity ent, AccountBlockTimeDto dto) {
+		super.entityToDto(ent, dto);
 		dto.setBegin(ent.getBeginDateTime());
 		dto.setLength(ent.getLengthInMinutes());
 	}
 	
 	@Override
 	public void dtoToEntity(AccountBlockTimeDto dto, AccountBlockTimeEntity ent) {
+		super.dtoToEntity(dto, ent);
 		ent.setBeginDateTime(dto.getBegin());
 		ent.setLengthInMinutes(dto.getLength());
 	}
