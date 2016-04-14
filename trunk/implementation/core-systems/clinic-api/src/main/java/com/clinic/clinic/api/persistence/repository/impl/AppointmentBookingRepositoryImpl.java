@@ -44,13 +44,13 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("SELECT ab FROM AppointmentBookingEntity ab ");
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date = :date AND ");
-		sb.append("ab.home = :home AND ");
+		sb.append("ab.isAtHome = :home AND ");
 		sb.append("ab.status IN :active_statuses");
 		
 		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
 		q.setParameter("medicarId", medicarId);
 		q.setParameter("date", date);
-		q.setParameter("home", atHome ? 1 : 0);
+		q.setParameter("home", atHome);
 		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
 
 		List<AppointmentBookingEntity> result = q.getResultList();
@@ -68,21 +68,21 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("SELECT COUNT(*) FROM AppointmentBookingEntity ab ");
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date = :date AND ");
-		sb.append("ab.home = :home AND ");
+		sb.append("ab.isAtHome = :home AND ");
 		sb.append("ab.status IN :active_statuses");
 		
-		TypedQuery<Integer> q = getEntityManager().createQuery(sb.toString(), Integer.class);
+		TypedQuery<Long> q = getEntityManager().createQuery(sb.toString(), Long.class);
 		q.setParameter("medicarId", medicarId);
 		q.setParameter("date", date);
-		q.setParameter("home", atHome ? 1 : 0);
+		q.setParameter("home", atHome);
 		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
 
-		List<Integer> result = q.getResultList();
+		List<Long> result = q.getResultList();
 		if (result == null || result.isEmpty()) {
 			return 0;
 		}
 		
-		return result.get(0);
+		return result.get(0).intValue();
 	}
 	
 	@Override
