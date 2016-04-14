@@ -50,7 +50,7 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
 		q.setParameter("medicarId", medicarId);
 		q.setParameter("date", date);
-		q.setParameter("home", atHome ? 1 : 0);
+		q.setParameter("home", atHome);
 		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
 
 		List<AppointmentBookingEntity> result = q.getResultList();
@@ -74,7 +74,7 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		TypedQuery<Long> q = getEntityManager().createQuery(sb.toString(), Long.class);
 		q.setParameter("medicarId", medicarId);
 		q.setParameter("date", date);
-		q.setParameter("home", atHome ? 1 : 0);
+		q.setParameter("home", atHome);
 		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
 
 		List<Long> result = q.getResultList();
