@@ -44,7 +44,7 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("SELECT ab FROM AppointmentBookingEntity ab ");
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date = :date AND ");
-		sb.append("ab.home = :home AND ");
+		sb.append("ab.isAtHome = :home AND ");
 		sb.append("ab.status IN :active_statuses");
 		
 		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
@@ -68,7 +68,7 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("SELECT COUNT(*) FROM AppointmentBookingEntity ab ");
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.date = :date AND ");
-		sb.append("ab.home = :home AND ");
+		sb.append("ab.isAtHome = :home AND ");
 		sb.append("ab.status IN :active_statuses");
 		
 		TypedQuery<Integer> q = getEntityManager().createQuery(sb.toString(), Integer.class);
