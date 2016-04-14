@@ -23,6 +23,7 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service;
 
+import java.util.Map;
 import java.util.Set;
 
 import com.clinic.clinic.common.exception.BizlogicException;
@@ -62,7 +63,7 @@ public interface IAuthService {
     boolean authRights(Integer accountId, String... rights) throws BizlogicException;
     Set<String> authRights(Integer accountId, String[] requiredRights, String[] optionalRights) throws BizlogicException;
     
-    String login(final String loginName, final String password) throws BizlogicException;
+    Map<String, Object> login(final String loginName, final String password) throws BizlogicException;
     
     Boolean logout(final String sess) throws BizlogicException;
 

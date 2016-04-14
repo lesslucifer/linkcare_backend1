@@ -16,12 +16,14 @@
  * <p>
  * Changes History <br>
  *		Date				Person				Reason<br>
- *		Mar 20, 2016				dailq				Initial<br>
+ *		Mar 20, 2016				Vuong Do				Initial<br>
  * </p>
  *
- * @author dailq
+ * @author Vuong Do
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.repository;
+
+import java.util.List;
 
 import com.clinic.clinic.api.persistence.entity.RoleEntity;
 
@@ -30,10 +32,11 @@ import com.clinic.clinic.api.persistence.entity.RoleEntity;
  * Describe functionality of this class here.
  * </p>
  *
- * @author dailq<br>
+ * @author Vuong Do<br>
  * @version 1.0<br>
  * @see TODO
  */
 public interface IRoleRepository extends IRepository<RoleEntity, Integer> {
-	
+
+    List<RoleEntity> findRoleByAccountId(final Integer accountId);
 }

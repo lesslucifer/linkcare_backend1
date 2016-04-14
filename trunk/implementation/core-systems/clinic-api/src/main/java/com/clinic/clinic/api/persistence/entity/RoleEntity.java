@@ -61,6 +61,13 @@ public class RoleEntity extends NameCodeDescEntity {
 					@JoinColumn(name = "clinic_right_id", nullable = false, updatable = false) })
 	@JsonIgnore
 	private List<ClinicRightEntity> clinicRights = new ArrayList<ClinicRightEntity>();
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = ClinicRightEntity.class)
+    @JoinTable(name = "account_role", catalog = "cliniccore_db", joinColumns = {
+            @JoinColumn(name = "role_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+                    @JoinColumn(name = "account_id", nullable = false, updatable = false) })
+    @JsonIgnore
+    private List<AccountEntity> accounts = new ArrayList<AccountEntity>();
 
 	public List<ClinicRightEntity> getClinicRights() {
 		return clinicRights;
