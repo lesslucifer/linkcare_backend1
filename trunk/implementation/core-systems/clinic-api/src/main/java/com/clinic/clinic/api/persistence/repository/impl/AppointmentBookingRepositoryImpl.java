@@ -71,18 +71,18 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		sb.append("ab.isAtHome = :home AND ");
 		sb.append("ab.status IN :active_statuses");
 		
-		TypedQuery<Integer> q = getEntityManager().createQuery(sb.toString(), Integer.class);
+		TypedQuery<Long> q = getEntityManager().createQuery(sb.toString(), Long.class);
 		q.setParameter("medicarId", medicarId);
 		q.setParameter("date", date);
 		q.setParameter("home", atHome ? 1 : 0);
 		q.setParameter("active_statuses", AppointmentBookingEntity.ACTIVE_STATUSES);
 
-		List<Integer> result = q.getResultList();
+		List<Long> result = q.getResultList();
 		if (result == null || result.isEmpty()) {
 			return 0;
 		}
 		
-		return result.get(0);
+		return result.get(0).intValue();
 	}
 	
 	@Override
