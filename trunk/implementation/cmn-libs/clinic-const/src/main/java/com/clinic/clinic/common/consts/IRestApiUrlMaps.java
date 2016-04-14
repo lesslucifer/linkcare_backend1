@@ -35,7 +35,8 @@ public interface IRestApiUrlMaps {
     // ### Timings
     static final String REST_API_BIZ_TIMINGS = "/timings";
     static final String REST_API_BIZ_TIMINGS_SLOT = "/timings/slot/{targetId}";
-    static final String REST_API_BIZ_TIMINGS_SLOT_TYPE = "/timings/slot/{targetId}/type/{type}";
+    static final String REST_API_BIZ_TIMINGS_SLOT_TYPE = "/timings/slot/{targetId}/type/{type}{?date}";
+    static final String REST_API_BIZ_TIMINGS_SLOT_TYPE_COUNT = "/timings/slot/{targetId}/date/{date}/count";
     
     // ### Appointments
     static final String REST_API_BIZ_APPOINTMENTS = "/appointments";

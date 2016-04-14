@@ -23,6 +23,7 @@ public class TimingsRepository extends AbsRepositoryImpl<TimingsEntity, Integer>
 			entity.setAccountTimings(accTimings);
 			entity.setBeginTime(t.getBeginTime());
 			entity.setLength(t.getLength());
+			entity.setType(t.getType());
 			
 			return entity;
 		});

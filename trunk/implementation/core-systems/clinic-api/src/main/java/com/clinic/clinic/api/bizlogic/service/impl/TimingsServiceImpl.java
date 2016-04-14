@@ -79,12 +79,9 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
         	}
         	
         	AccountTimingsEntity accTimings = accTimingsRepo.updateAccountTimings(account, dto);
-        	// new Timin
-        	// timingsRepo.sa
+        	
         	/*List<TimingsEntity> timings =*/ timingsRepo.insertTimings(accTimings, dto.getTimings());
         	
-        	// Update appointments time
-
         	retValue = dto;
         } finally {
             if(LOGGER.isDebugEnabled()) {
@@ -143,18 +140,6 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 		final List<AppointmentBookingEntity> activeAppointments = appointmentBookingRepo.getActiveAppointments(accountId, startDay, endDay);
 		activeAppointments.sort(AppointmentBookingEntity::compareTo);
 		
-//		final List<AccountCustomTimingsEntity> listCustomTimings = accCustomTimingsRepo.getCustomTimings(accountId, startDay, endDay);
-//		final TreeMap<LocalDate, TreeMap<Integer, AccountCustomTimingsEntity>> customTimings = new TreeMap<>();
-//		listCustomTimings.forEach((ct) -> {
-//			TreeMap<Integer, AccountCustomTimingsEntity> subMap = customTimings.get(ct.getDate());
-//			if (subMap == null) {
-//				subMap = new TreeMap<>();
-//				customTimings.put(ct.getDate(), subMap);
-//			}
-//			
-//			subMap.put(ct.getBegin(), ct);
-//		});
-
 		return IntStream.range(0, range).mapToObj(i -> {
 			LocalDate date = startDay.plusDays(i);
 			List<TimingsSlotDto> slots = timings.stream().map(t -> {
