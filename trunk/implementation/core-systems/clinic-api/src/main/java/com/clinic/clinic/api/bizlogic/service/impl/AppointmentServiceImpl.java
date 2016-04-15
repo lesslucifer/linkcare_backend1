@@ -87,11 +87,11 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 					medicar.getSubcategory().getId(), dto.getSubCategory());
 		}
 		
-		MedicarProfileEntity medicarProfile = medicarProfileRepo.getByAccountId(dto.getMedicar());
-		if (medicarProfile == null) {
-			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_MEDICAR_PROFILE,
-					"Medicar profile not validated!");
-		}
+//		MedicarProfileEntity medicarProfile = medicarProfileRepo.getByAccountId(dto.getMedicar());
+//		if (medicarProfile == null) {
+//			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_MEDICAR_PROFILE,
+//					"Medicar profile not validated!");
+//		}
 		
 		TimingsEntity timings = timingsRepo.getTimingsAtTime(dto.getMedicar(), dto.getTime());
 		if (timings == null) {
@@ -132,7 +132,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		}
 		
 		AddressEntity address = (dto.isAtHome()) ? (accRepo.findOne(booker).getAddress()) : (medicar.getAddress());
-		int cost = (dto.isAtHome() == false) ? medicarProfile.getClinicPrice() : medicarProfile.getPatientHomePrice();
+		int cost = 200000; // (dto.isAtHome() == false) ? medicarProfile.getClinicPrice() : medicarProfile.getPatientHomePrice();
 		
 		AppointmentBookingEntity entity = new AppointmentBookingEntity();
 		entity.setBooker(accRepo.getReference(AccountEntity.class, booker));
