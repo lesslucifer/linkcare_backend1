@@ -38,6 +38,7 @@ import javax.persistence.criteria.Root;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,7 @@ import org.springframework.stereotype.Repository;
 
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
+import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
@@ -66,7 +68,6 @@ import com.clinic.clinic.common.utils.StringUtil;
 public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Integer> implements IAccountRepository {
     /** Logging property. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountRepositoryImpl.class);
-
     /* (non-Javadoc)
      * @see com.clinic.clinic.api.persistence.repository.IAccountRepository#findAccountBySubcategoryId(org.springframework.data.domain.Pageable, java.lang.Integer)
      */

@@ -183,8 +183,8 @@ public class AccountRestApi extends AbsRestApi {
                 LOGGER.debug("Debug", StringUtil.getHashedText(pass));
             }
             
-            String session = auth().login(loginName, pass);
-            return Utils.mkMap("session", session);
+            Map<String, Object> ret = auth().login(loginName, pass);
+            return ret;
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);

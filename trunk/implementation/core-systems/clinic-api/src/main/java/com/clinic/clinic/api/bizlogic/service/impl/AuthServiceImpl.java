@@ -25,6 +25,9 @@ package com.clinic.clinic.api.bizlogic.service.impl;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,8 +38,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IAuthService;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
+import com.clinic.clinic.api.persistence.entity.RoleEntity;
 import com.clinic.clinic.api.persistence.entity.SessionLogEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
+import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.api.persistence.repository.ISessionLogRepository;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
@@ -61,23 +66,26 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
     private IAccountRepository accountRepo;
     @Autowired
     private ISessionLogRepository sessionRepo;
+    @Autowired
+    private IRoleRepository roleRepo;
     
     /* (non-Javadoc)
      * @see com.clinic.clinic.api.bizlogic.service.IAuthService#login(java.lang.String, java.lang.String)
      */
     @Override
-    public String login(String loginName, String password) throws BizlogicException {
+    public Map<String, Object> login(String loginName, String password) throws BizlogicException {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        String retValue = null;
+        Map<String, Object> retValue = null;
         try {
+            retValue = new HashMap<String, Object>();
             AccountEntity accountEnt = accountRepo.findAccountByLoginName(loginName);
             if(null != accountEnt) {
                 if(accountEnt.getHashedPassword().equals(this.getHashedText(password))) {
                     UUID uuid = UUID.randomUUID();
                     String sessionId = uuid.toString();
-                    retValue = sessionId;
+                    retValue.put("session", sessionId);
                     SessionLogEntity sessEnt = sessionRepo.findSessionLogByAccountId(accountEnt.getId());
                     if(null == sessEnt) {
                     	SessionLogEntity sessionEnt = new SessionLogEntity();
@@ -94,6 +102,9 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
                         sessEnt.setSessionId(sessionId);
                         sessionRepo.save(sessEnt);
                     }
+                    List<RoleEntity> roleEnts = roleRepo.findRoleByAccountId(accountEnt.getId());
+                    retValue.put("roles", roleEnts);
+                    
                 } else {
                     throwBizlogicException(401, IBizErrorCode.WRONG_PASSWORD, "password invalid");
                 }

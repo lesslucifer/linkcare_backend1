@@ -120,7 +120,7 @@
 	<logger name="com.clinic.clinic.api.ws" level="debug">
 		<appender-ref ref="WEBSERVICESLOG"/>
 	</logger>	
-	<logger name="org.springframework" level="debug">
+	<logger name="org.springframework" level="info">
 		<appender-ref ref="WEBAPPFWKLOG"/>
 	</logger>
 	<logger name="org.springframework.beans" level="info">
