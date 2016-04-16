@@ -194,18 +194,23 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 	}
 	
 	@Override
-	public boolean hasProcessingAppointment(Integer medicarId) {
+	public Integer getProcessingAppointment(Integer medicarId) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("SELECT 1 FROM AppointmentBookingEntity ab ");
+		sb.append("SELECT ab.id FROM AppointmentBookingEntity ab ");
 		sb.append("WHERE ab.medicar.id = :medicarId AND ");
 		sb.append("ab.status = :processing_status");
 		
 		Query q = getEntityManager().createQuery(sb.toString());
 		q.setParameter("medicarId", medicarId);
 		q.setParameter("processing_status", AppointmentBookingEntity.STATUS_PROCESSING);
+		q.setMaxResults(1);
 
 		List<?> result = q.getResultList();
-		return result != null && !result.isEmpty();
+		if (result == null || result.isEmpty()) {
+			return null;
+		}
+		
+		return (Integer) result.get(0);
 	}
 	
 	@Override

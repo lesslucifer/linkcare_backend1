@@ -305,12 +305,14 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		final int acceptedDelay = 30;
 		if (timeInMinutes > appBooking.getEnd() + acceptedDelay) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Invalid appointment time, out of time",
-					now, appBooking.getTime(), appBooking.getEnd());
+					now, timeInMinutes, appBooking.getTime(), appBooking.getEnd());
 		}
 		
 		// make sure there's no unfinished appointment
-		if (appBookingRepo.hasProcessingAppointment(medicar)) {
-			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_HAVE_UNFINISHED_APPOINTMENT, "Have another unfinished appointment");
+		Integer processingAppointment = appBookingRepo.getProcessingAppointment(medicar);
+		if (processingAppointment != null) {
+			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_HAVE_UNFINISHED_APPOINTMENT,
+					"Have another unfinished appointment", processingAppointment);
 		}
 		
 		appBooking.setStatus(AppointmentBookingEntity.STATUS_PROCESSING);
