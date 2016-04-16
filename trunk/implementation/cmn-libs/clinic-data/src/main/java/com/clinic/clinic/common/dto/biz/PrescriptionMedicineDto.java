@@ -13,18 +13,24 @@ public class PrescriptionMedicineDto implements Serializable {
 
 	@NotNull
 	private String name;
+	
+	@NotNull
+	private Integer quantityTotal;
+	
+	@NotNull
+	private String instr;
 
 	@NotNull
-	private Integer quantityMorning;
+	private Double quantityMorning;
 
 	@NotNull
-	private Integer quantityNoon;
+	private Double quantityNoon;
 
 	@NotNull
-	private Integer quantityAfternoon;
+	private Double quantityAfternoon;
 
 	@NotNull
-	private Integer quantityNight;
+	private Double quantityNight;
 
 	public String getName() {
 		return name;
@@ -34,35 +40,51 @@ public class PrescriptionMedicineDto implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getQuantityMorning() {
+	public Integer getQuantityTotal() {
+		return quantityTotal;
+	}
+
+	public void setQuantityTotal(Integer quantityTotal) {
+		this.quantityTotal = quantityTotal;
+	}
+
+	public String getInstr() {
+		return instr;
+	}
+
+	public void setInstr(String instr) {
+		this.instr = instr;
+	}
+
+	public Double getQuantityMorning() {
 		return quantityMorning;
 	}
 
-	public void setQuantityMorning(Integer quantityMorning) {
+	public void setQuantityMorning(Double quantityMorning) {
 		this.quantityMorning = quantityMorning;
 	}
 
-	public Integer getQuantityNoon() {
+	public Double getQuantityNoon() {
 		return quantityNoon;
 	}
 
-	public void setQuantityNoon(Integer quantityNoon) {
+	public void setQuantityNoon(Double quantityNoon) {
 		this.quantityNoon = quantityNoon;
 	}
 
-	public Integer getQuantityAfternoon() {
+	public Double getQuantityAfternoon() {
 		return quantityAfternoon;
 	}
 
-	public void setQuantityAfternoon(Integer quantityAfternoon) {
+	public void setQuantityAfternoon(Double quantityAfternoon) {
 		this.quantityAfternoon = quantityAfternoon;
 	}
 
-	public Integer getQuantityNight() {
+	public Double getQuantityNight() {
 		return quantityNight;
 	}
 
-	public void setQuantityNight(Integer quantityNight) {
+	public void setQuantityNight(Double quantityNight) {
 		this.quantityNight = quantityNight;
 	}
 }

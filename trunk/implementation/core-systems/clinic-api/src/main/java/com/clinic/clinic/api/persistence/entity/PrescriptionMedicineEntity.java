@@ -24,18 +24,24 @@ public class PrescriptionMedicineEntity extends IdEntity {
 	
 	@Column
 	private String name;
+	
+	@Column(name = "quant_total")
+	private int quantityTotal;
+	
+	@Column
+	private String instr;
 
 	@Column(name = "quant_morning")
-	private int quantityMorning;
+	private double quantityMorning;
 	
 	@Column(name = "quant_noon")
-	private int quantityNoon;
+	private double quantityNoon;
 	
 	@Column(name = "quant_afternoon")
-	private int quantityAfternoon;
+	private double quantityAfternoon;
 
 	@Column(name = "quant_night")
-	private int quantityNight;
+	private double quantityNight;
 
 	public PrescriptionEntity getPrescription() {
 		return prescription;
@@ -53,35 +59,51 @@ public class PrescriptionMedicineEntity extends IdEntity {
 		this.name = name;
 	}
 
-	public int getQuantityMorning() {
+	public int getQuantityTotal() {
+		return quantityTotal;
+	}
+
+	public void setQuantityTotal(int quantityTotal) {
+		this.quantityTotal = quantityTotal;
+	}
+
+	public String getInstr() {
+		return instr;
+	}
+
+	public void setInstr(String instr) {
+		this.instr = instr;
+	}
+
+	public double getQuantityMorning() {
 		return quantityMorning;
 	}
 
-	public void setQuantityMorning(int quantityMorning) {
+	public void setQuantityMorning(double quantityMorning) {
 		this.quantityMorning = quantityMorning;
 	}
 
-	public int getQuantityNoon() {
+	public double getQuantityNoon() {
 		return quantityNoon;
 	}
 
-	public void setQuantityNoon(int quantityNoon) {
+	public void setQuantityNoon(double quantityNoon) {
 		this.quantityNoon = quantityNoon;
 	}
 
-	public int getQuantityAfternoon() {
+	public double getQuantityAfternoon() {
 		return quantityAfternoon;
 	}
 
-	public void setQuantityAfternoon(int quantityAfternoon) {
+	public void setQuantityAfternoon(double quantityAfternoon) {
 		this.quantityAfternoon = quantityAfternoon;
 	}
 
-	public int getQuantityNight() {
+	public double getQuantityNight() {
 		return quantityNight;
 	}
 
-	public void setQuantityNight(int quantityNight) {
+	public void setQuantityNight(double quantityNight) {
 		this.quantityNight = quantityNight;
 	}
 }

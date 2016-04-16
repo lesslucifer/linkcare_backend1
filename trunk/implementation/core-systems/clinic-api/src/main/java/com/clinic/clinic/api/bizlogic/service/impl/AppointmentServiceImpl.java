@@ -125,11 +125,11 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Conflict with another appointment!");
 		}
 		
-		boolean hasRecentAppointment = appBookingRepo.isPatientHaveRecentWaitingAppointment(booker, System.currentTimeMillis());
-		if (hasRecentAppointment) {
-			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_PATIENT_ALREADY_BOOKED_RECENT_APPOINTMENT,
-					"Patient already booked a recent appointment!");
-		}
+//		boolean hasRecentAppointment = appBookingRepo.isPatientHaveRecentWaitingAppointment(booker, System.currentTimeMillis());
+//		if (hasRecentAppointment) {
+//			throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.APPOINTMENT_PATIENT_ALREADY_BOOKED_RECENT_APPOINTMENT,
+//					"Patient already booked a recent appointment!");
+//		}
 		
 		AddressEntity address = (dto.isAtHome()) ? (accRepo.findOne(booker).getAddress()) : (medicar.getAddress());
 		int cost = 200000; // (dto.isAtHome() == false) ? medicarProfile.getClinicPrice() : medicarProfile.getPatientHomePrice();
