@@ -18,7 +18,6 @@ import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
-import com.clinic.clinic.api.persistence.entity.MedicarProfileEntity;
 import com.clinic.clinic.api.persistence.entity.TimingsEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
@@ -342,5 +341,10 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		}
 
 		return appBookingRepo.countActiveAppointmentsAtHome(medicar, date, type != 0);
+	}
+	
+	public List<TraceDto> getAppointmentByStatus(Integer medicar, Integer status) {
+		List<AppointmentBookingEntity> entities = appBookingRepo.getAppointmentsByStatus(medicar, status);
+		return TraceTranslatorImpl.INSTANCE.getDtoList(entities);
 	}
 }

@@ -232,4 +232,23 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		List<?> result = q.getResultList();
 		return result != null && !result.isEmpty();
 	}
+	
+	@Override
+	public List<AppointmentBookingEntity> getAppointmentsByStatus(Integer medicar, Integer status) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT ab FROM AppointmentBookingEntity ab ");
+		sb.append("WHERE ab.medicar.id = :medicar AND ");
+		sb.append("ab.status = :status");
+		
+		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
+		q.setParameter("medicar", medicar);
+		q.setParameter("status", status);
+
+		List<AppointmentBookingEntity> result = q.getResultList();
+		if (result == null) {
+			return Collections.emptyList();
+		}
+		
+		return result;
+	}
 }

@@ -23,4 +23,6 @@ public interface IAppointmentBookingRepository extends IRepository<AppointmentBo
 		return isPatientHaveRecentWaitingAppointment(patientId, now, 1440);
 	}
 	boolean isPatientHaveRecentWaitingAppointment(Integer patientId, long now, int recentDuration);
+	
+	List<AppointmentBookingEntity> getAppointmentsByStatus(Integer medicar, Integer status);
 }
