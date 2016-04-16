@@ -302,7 +302,8 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		}
 
 		int timeInMinutes = now.getHour() * 60 + now.getMinute();
-		if (timeInMinutes < appBooking.getTime() || timeInMinutes > appBooking.getEnd()) {
+		final int acceptedDelay = 30;
+		if (timeInMinutes > appBooking.getEnd() + acceptedDelay) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Invalid appointment time, out of time",
 					appBooking.getTime(), appBooking.getEnd());
 		}
