@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -128,6 +129,10 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 			final Predicate<Integer> typeFilter) {
 		
 		AccountTimingsEntity ent = accTimingsRepo.getLastestAccountTimings(accountId);
+		if (ent == null) {
+			return Collections.emptyList();
+		}
+		
 		ent.getTimings().size(); // get all timings
 		final List<TimingsEntity> timings = ent.getTimings().stream().filter((t) -> typeFilter.test(t.getType())).collect(Collectors.toList());
 
