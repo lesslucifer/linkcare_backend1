@@ -72,6 +72,9 @@ public class AccountEntity extends TraceEntity {
 	@Column(name = "end_active_time", nullable = false, length = 20)
 	private Long endActiveTime;
 	
+	@Column(name="device_token", nullable = true, length = 256)
+	private String deviceToken;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "annual_fee_id", nullable = false)
 	private AnnualFeeEntity annualFee;
@@ -288,6 +291,14 @@ public class AccountEntity extends TraceEntity {
 
 	public AnnualFeeEntity getAnnualFee() {
 		return annualFee;
+	}
+
+	public String getDeviceToken() {
+		return deviceToken;
+	}
+
+	public void setDeviceToken(String deviceToken) {
+		this.deviceToken = deviceToken;
 	}
 
 	public void setAnnualFee(AnnualFeeEntity annualFee) {

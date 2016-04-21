@@ -73,7 +73,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
      * @see com.clinic.clinic.api.bizlogic.service.IAuthService#login(java.lang.String, java.lang.String)
      */
     @Override
-    public Map<String, Object> login(String loginName, String password) throws BizlogicException {
+    public Map<String, Object> login(String loginName, String password, final String deviceToken) throws BizlogicException {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
@@ -104,6 +104,11 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
                     }
                     List<RoleEntity> roleEnts = roleRepo.findRoleByAccountId(accountEnt.getId());
                     retValue.put("roles", roleEnts);
+                    
+                    if (deviceToken != null) {
+                    	accountEnt.setDeviceToken(deviceToken);
+                    	accountRepo.save(accountEnt);
+                    }
                     
                 } else {
                     throwBizlogicException(401, IBizErrorCode.WRONG_PASSWORD, "password invalid");
