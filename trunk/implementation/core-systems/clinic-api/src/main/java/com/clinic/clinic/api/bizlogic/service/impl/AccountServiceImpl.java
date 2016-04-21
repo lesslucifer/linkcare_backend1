@@ -154,7 +154,7 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
         AccountDto retVal = null;
         try {
             RoleEntity entNewComer = roleRepo.findByCode(IDbConstants.ROLE_NEWCOMER, true);
-            RoleEntity roleNewcomer = roleRepo.getOne(entNewComer.getId());
+            /*RoleEntity roleNewcomer = */roleRepo.getOne(entNewComer.getId());
             
             AccountEntity accEnt = accountRepo.findFirstEntity(IDbConstants.FIELD_ACC_ACCOUNT_LOGIN_NAME, registerAccDto.getLoginName(), false);
             if(null == accEnt) {

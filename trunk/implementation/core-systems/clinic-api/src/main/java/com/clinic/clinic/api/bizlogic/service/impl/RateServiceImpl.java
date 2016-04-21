@@ -29,16 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IRateService;
-import com.clinic.clinic.api.persistence.entity.AccountTimingsEntity;
 import com.clinic.clinic.api.persistence.entity.RateEntity;
 import com.clinic.clinic.api.persistence.repository.IRateRepository;
 import com.clinic.clinic.api.translator.ITranslator;
-import com.clinic.clinic.api.translator.impl.AccountTimingsTranslator;
-import com.clinic.clinic.api.translator.impl.RateTraceTranslator;
 import com.clinic.clinic.api.translator.impl.RateTranslatorImpl;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
-import com.clinic.clinic.common.dto.biz.AccountTimingsDto;
 import com.clinic.clinic.common.dto.biz.RateDto;
 import com.clinic.clinic.common.exception.BizlogicException;
 

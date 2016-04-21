@@ -109,8 +109,6 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", subCate.name"
                     + ", cate.name"
                     + ", major.name"
-                    + ", cost.price as homePrice"
-                    + ", placeCost.price as placeCost"
                     + ", concat(address.houseNumber,', ',address.street,', ',address.ward,', ',address.district,', ',address.city) as address"
                     + ", address.longtitude"
                     + ", address.latitude"
@@ -119,10 +117,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", plcAddr.latitude"
                     + ", e.avatar FROM " + AccountEntity.class.getName() + " e ");
             summaryQuerySql.append("JOIN e.address address ");
-            summaryQuerySql.append("JOIN e.cost cost ");
             summaryQuerySql.append("JOIN e.place plc ");
             summaryQuerySql.append("JOIN plc.address plcAddr ");
-            summaryQuerySql.append("JOIN plc.cost placeCost ");
             summaryQuerySql.append("JOIN e.subcategory subCate ");
             summaryQuerySql.append("JOIN subCate.category cate ");
             summaryQuerySql.append("JOIN cate.major major ");
@@ -170,15 +166,15 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setSubcategory((String)object[5]);
                 acct.setCategory((String)object[6]);
                 acct.setMajor((String)object[7]);
-                acct.setCostHome((Double)object[8]);
-                acct.setCostClinic((Double)object[9]);
-                acct.setAddressHome((String)object[10]);
-                acct.setHomeLongtitude((Double)object[11]);
-                acct.setHomeLatitude((Double)object[12]);
-                acct.setAddressClinic((String)object[13]);
-                acct.setClinicLongtitude((Double)object[14]);
-                acct.setClinicLatitude((Double)object[15]);
-                acct.setAvatar((String)object[16]);
+                acct.setCostHome(200000.0);
+                acct.setCostClinic(200000.0);
+                acct.setAddressHome((String)object[8]);
+                acct.setHomeLongtitude((Double)object[9]);
+                acct.setHomeLatitude((Double)object[10]);
+                acct.setAddressClinic((String)object[11]);
+                acct.setClinicLongtitude((Double)object[12]);
+                acct.setClinicLatitude((Double)object[13]);
+                acct.setAvatar((String)object[14]);
                 acct.setName(acct.getFirstName(), acct.getMidleName(), acct.getLastName());
                 resultDto.add(acct);
             }
@@ -219,8 +215,6 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", subCate.name as subcateName"
                     + ", cate.name as cateName"
                     + ", major.name as majorName"
-                    + ", cost.price as homePrice"
-                    + ", placeCost.price as placeCost"
                     + ", concat(address.house_number,', ',address.street,', ',address.ward,', ',address.district,', ',address.city) as homeAddr"
                     + ", address.longtitude as homeLongtitude"
                     + ", address.latitude as homeLatitude"
@@ -231,10 +225,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) * 1000 as distance "
                     + "FROM account e ");
             summaryQuerySql.append("JOIN address address ON e.address_id = address.id ");
-            summaryQuerySql.append("JOIN cost cost ON e.cost_id = cost.id ");
             summaryQuerySql.append("JOIN place plc ON e.place_id = plc.id  ");
             summaryQuerySql.append("JOIN address plcAddr ON plc.address_id = plcAddr.id ");
-            summaryQuerySql.append("JOIN cost placeCost  ON plc.cost_id = placeCost.id ");
             summaryQuerySql.append("JOIN subcategory subCate ON e.subcategory_id = subCate.id ");
             summaryQuerySql.append("JOIN category cate ON cate.id = subCate.category_id ");
             summaryQuerySql.append("JOIN major ON major.id = cate.major_id ");
@@ -289,16 +281,16 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setSubcategory((String)object[5]);
                 acct.setCategory((String)object[6]);
                 acct.setMajor((String)object[7]);
-                acct.setCostHome((Double)object[8]);
-                acct.setCostClinic((Double)object[9]);
-                acct.setAddressHome((String)object[10]);
-                acct.setHomeLongtitude((Double)object[11]);
-                acct.setHomeLatitude((Double)object[12]);
-                acct.setAddressClinic((String)object[13]);
-                acct.setClinicLongtitude((Double)object[14]);
-                acct.setClinicLatitude((Double)object[15]);
-                acct.setAvatar((String)object[16]);
-                acct.setDistance(Double.parseDouble(object[17].toString()));
+                acct.setCostHome(200000.0);
+                acct.setCostClinic(200000.0);
+                acct.setAddressHome((String)object[8]);
+                acct.setHomeLongtitude((Double)object[9]);
+                acct.setHomeLatitude((Double)object[10]);
+                acct.setAddressClinic((String)object[11]);
+                acct.setClinicLongtitude((Double)object[12]);
+                acct.setClinicLatitude((Double)object[13]);
+                acct.setAvatar((String)object[14]);
+                acct.setDistance(Double.parseDouble(object[15].toString()));
                 acct.setName(acct.getFirstName(), acct.getMidleName(), acct.getLastName());
                 resultDto.add(acct);
             }

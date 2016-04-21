@@ -102,8 +102,9 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
                         sessEnt.setSessionId(sessionId);
                         sessionRepo.save(sessEnt);
                     }
-                    List<RoleEntity> roleEnts = roleRepo.findRoleByAccountId(accountEnt.getId());
-                    retValue.put("roles", roleEnts);
+                    
+                    accountEnt.getRoles().size();
+                    retValue.put("roles", accountEnt.getRoles());
                     
                     if (deviceToken != null) {
                     	accountEnt.setDeviceToken(deviceToken);
@@ -205,7 +206,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         	
         	if (matchedRights.size() < rights.length) {
         		String[] lackedRights = Arrays.stream(rights).filter((r) -> !matchedRights.contains(r)).toArray(String[]::new);
-        		throwBizlogicException(403, IBizErrorCode.MISSING_RIGHT, "Permission Denied", lackedRights);
+        		throwBizlogicException(403, IBizErrorCode.MISSING_RIGHT, "Permission Denied", (Object[]) lackedRights);
         	}
 
         	retVal = true;

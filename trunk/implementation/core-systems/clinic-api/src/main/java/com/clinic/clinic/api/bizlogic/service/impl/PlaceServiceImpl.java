@@ -23,9 +23,6 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 
 /**
@@ -40,6 +37,6 @@ import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 @ApplicationService
 public class PlaceServiceImpl extends AbsService {
     /** Logging property. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlaceServiceImpl.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(PlaceServiceImpl.class);
     
 }

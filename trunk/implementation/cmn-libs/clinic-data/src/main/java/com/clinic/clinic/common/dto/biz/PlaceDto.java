@@ -12,8 +12,6 @@ public class PlaceDto extends NameCodeDescDto {
 	 */
 	private static final long serialVersionUID = 3878263230877109441L;
 
-	private String node;
-
 	private String phoneNumber;
 
 	private String email;
@@ -33,14 +31,6 @@ public class PlaceDto extends NameCodeDescDto {
 	private List<AccountDto> accounts = new ArrayList<AccountDto>();
 
 	private AddressDto address;
-
-	public String getNode() {
-		return node;
-	}
-
-	public void setNode(String node) {
-		this.node = node;
-	}
 
 	public String getPhoneNumber() {
 		return phoneNumber;
