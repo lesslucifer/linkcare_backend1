@@ -60,6 +60,16 @@ public class NotificationService extends AbsService implements INotificationServ
 		return NotificationTranslatorImpl.INST.getDtoList(entities);
 	}
 	
+	@Override
+	public void setNotificationsRead(Integer accountId, List<Integer> notifs) {
+		List<NotificationEntity> notifEnts = notifRepo.getNotifications(accountId, notifs);
+		for (NotificationEntity notif : notifEnts) {
+			notif.setRead(true);
+		}
+		
+		notifRepo.save(notifEnts);
+	}
+	
 	private void sendNotification(final String deviceToken, final String content) {
 		if (deviceToken == null) {
 			return;

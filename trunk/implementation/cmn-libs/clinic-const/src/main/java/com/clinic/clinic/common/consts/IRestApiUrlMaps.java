@@ -75,4 +75,5 @@ public interface IRestApiUrlMaps {
     // ### Notification
     static final String REST_API_NOTIFICATIONS = "/notifications";
     static final String REST_API_NOTIFICATIONS_SINGLE = "/notifications/{notif_id}";
+    static final String REST_API_NOTIFICATIONS_SINGLE_READ = "/notifications/{notif_id}/read";
 }
