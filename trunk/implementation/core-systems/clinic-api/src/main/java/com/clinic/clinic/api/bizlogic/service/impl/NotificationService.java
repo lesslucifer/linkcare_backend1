@@ -77,11 +77,13 @@ public class NotificationService extends AbsService implements INotificationServ
 		
 		Sender sender = new Sender(API_KEY);
 		List<String> data = Arrays.asList(new String[] {deviceToken});
+		
+		String plainContent = content.replaceAll("(\\<[^\\>]*\\>)", "");
 
 		Message message = new Message.Builder()
 		.timeToLive(30)
 		.delayWhileIdle(true)
-		.addData("message", content)
+		.addData("message", plainContent)
 		.build();
 		
 		try {

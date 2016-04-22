@@ -99,12 +99,13 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						AccountEntity medicarEnt = appointment.getMedicar();
 						LocalDateTime time = Utils.toDateTime(appointment.getDate(), appointment.getTime());
 						StringBuilder content = new StringBuilder();
-						content.append("Bác sĩ ");
+						content.append("<b>Bác sĩ ");
 						medicarEnt.getFullName(content);
-						content.append(" đã từ chối cuộc hẹn bạn đặt vào lúc ");
+						content.append("</b> đã từ chối cuộc hẹn bạn đặt <b>vào lúc ");
 						content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
 						content.append(" ngày ");
 						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
+						content.append("</b>");
 						notifServ.sendMessage(null, bookerEnt.getId(), content.toString());
 					});
 				}
@@ -122,12 +123,13 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						AccountEntity cancelleeEnt = bookerEnt;
 						
 						StringBuilder content = new StringBuilder();
-						content.append(title).append(" ");
+						content.append("<b>").append(title).append(" ");
 						cancellerEnt.getFullName(content);
-						content.append(" đã hủy cuộc hẹn lúc ");
+						content.append("</b> đã hủy cuộc hẹn lúc <b>");
 						content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
 						content.append(" ngày ");
 						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
+						content.append("</b>");
 						notifServ.sendMessage(null, cancelleeEnt.getId(), content.toString());
 					});
 				}
