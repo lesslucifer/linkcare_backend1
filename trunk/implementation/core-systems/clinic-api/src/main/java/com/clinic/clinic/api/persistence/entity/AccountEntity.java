@@ -29,11 +29,11 @@ public class AccountEntity extends TraceEntity {
 	private static final long serialVersionUID = 3135124384140213026L;
 	@Column(name = "login_name", nullable = false, length = 45)
 	private String loginName;
-	@Column(name="code", unique = true, nullable = false, length=45)
+	@Column(name="code", unique = true, nullable = true, length=45)
     private String code;
-	@Column(name = "phone_number", nullable = false, length = 45)
+	@Column(name = "phone_number", nullable = true, length = 45)
 	private String phoneNumber;
-	@Column(name = "experience", nullable = false)
+	@Column(name = "experience", nullable = true)
 	private Double experience;
 	@Column(name = "id_card", nullable = false, length = 45)
 	private String idCard;
@@ -47,7 +47,7 @@ public class AccountEntity extends TraceEntity {
 	private String midleName;
 	@Column(name = "gender", nullable = true, length = 45)
 	private Integer gender;
-	@Column(name = "birthday", nullable = false, length = 45)
+	@Column(name = "birthday", nullable = true, length = 45)
 	private Long birthday;
 	@Column(name = "image_url", nullable = true, length = 500)
 	private String avatar;
