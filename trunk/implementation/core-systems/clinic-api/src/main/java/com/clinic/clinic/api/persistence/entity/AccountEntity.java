@@ -67,9 +67,9 @@ public class AccountEntity extends TraceEntity {
 	private Boolean needChangePWD;
 	@Column(name = "active_flag", nullable = false)
 	private Integer activeFlag = 0;
-	@Column(name = "begin_active_time", nullable = false, length = 20)
+	@Column(name = "begin_active_time", nullable = true, length = 20)
 	private Long beginActiveTime;
-	@Column(name = "end_active_time", nullable = false, length = 20)
+	@Column(name = "end_active_time", nullable = true, length = 20)
 	private Long endActiveTime;
 	
 	@Column(name="device_token", nullable = true, length = 256)
