@@ -239,12 +239,16 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             
             retDto.setSex(Short.parseShort(ent.getGender().toString()));
             
+            retDto.setPhoneNumber(ent.getPhoneNumber());
+            
             if(null != ent.getAddress()) {
                 retDto.setAddress(ent.getAddress().getHouseNumber() + ", "
                         + ent.getAddress().getStreet() + ", "
                         + ent.getAddress().getWard() + ", "
                         + ent.getAddress().getDistrict() + ", "
                         + ent.getAddress().getCity());
+                retDto.setLatitude(ent.getAddress().getLatitude());
+                retDto.setLongtitude(ent.getAddress().getLongtitude());
             }
         } catch (BizlogicException be) {
             LOGGER.error("error", be);
