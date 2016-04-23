@@ -47,6 +47,7 @@ public class UserProfileDto {
     private Short sex;
     private Double latitude;
     private Double longtitude;
+    private String phoneNumber;
     private String address;
     
     public Integer getId() {
@@ -102,5 +103,11 @@ public class UserProfileDto {
     }
     public void setLongtitude(Double longtitude) {
         this.longtitude = longtitude;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

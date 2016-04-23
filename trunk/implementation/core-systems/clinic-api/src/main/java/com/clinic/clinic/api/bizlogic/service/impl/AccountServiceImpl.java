@@ -239,6 +239,8 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             
             retDto.setSex(Short.parseShort(ent.getGender().toString()));
             
+            retDto.setPhoneNumber(ent.getPhoneNumber());
+            
             if(null != ent.getAddress()) {
                 retDto.setAddress(ent.getAddress().getHouseNumber() + ", "
                         + ent.getAddress().getStreet() + ", "
