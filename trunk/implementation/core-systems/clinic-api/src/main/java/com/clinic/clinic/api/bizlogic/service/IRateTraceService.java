@@ -23,7 +23,6 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service;
 
-import com.clinic.clinic.common.dto.biz.AppointmentBookingDto;
 import com.clinic.clinic.common.dto.biz.RateTraceDto;
 
 /**
@@ -45,5 +44,5 @@ public interface IRateTraceService {
      *
      * @author Vuong Do
      */
-    RateTraceDto rating(AppointmentBookingDto appointmentBookingDto, Double mark, String comment, Integer partientId);
+    RateTraceDto rating(Integer medicarId, Double mark, String comment, Integer partientId);
 }

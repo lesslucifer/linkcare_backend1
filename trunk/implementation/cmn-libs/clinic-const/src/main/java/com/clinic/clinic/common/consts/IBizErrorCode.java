@@ -31,6 +31,7 @@ public interface IBizErrorCode {
 	static final int APPOINTMENT_INVALID_TYPE = -2008;
 	static final int APPOINTMENT_INVALID_MEDICAR_PROFILE = -2009;
 	static final int APPOINTMENT_PATIENT_ALREADY_BOOKED_RECENT_APPOINTMENT = -2010;
+	static final int APPOINTMENT_FINSHED_NOT_FOUNT = -2011;
 
 	// # Prescription (-3001 -> -3999)
 	static final int PRESCRIPTION_APPOINTMENT_STATUS_MISMATCH = -3001;
@@ -41,10 +42,16 @@ public interface IBizErrorCode {
 	static final int RATING_NOT_FOUNT = -4001;
     static final int APPOINTMENT_NOT_FOUNT = -4002;
     static final int APPOINTMENT_NOT_FINISHED = -4003;
+    static final int RATING_OVER = -4004;
     
     // # Block Vacation (-5001 -> 5999)
     static final int BLOCK_VACATION_CONFLICT_TIME = -5001;
     static final int BLOCK_VACATION_TIME_IN_PAST = -5002;
     static final int BLOCK_VACATION_HAS_PROCESSING_APPOINTMENT = -5003;
     static final int BLOCK_VACATION_INVALID_OWNER = -5004;
+    
+    static final int ADDRESS = -6000;
+    
+    
+    
 }

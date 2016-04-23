@@ -23,6 +23,8 @@
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.repository;
 
+import java.util.List;
+
 import com.clinic.clinic.api.persistence.entity.RateTraceEntity;
 
 /**
@@ -35,5 +37,6 @@ import com.clinic.clinic.api.persistence.entity.RateTraceEntity;
  * @see TODO
  */
 public interface IRateTraceRepository extends IRepository<RateTraceEntity, Integer> {
-
+    
+    List<RateTraceEntity> findRateTraceEntityByAppointmentBookingId(List<Integer> appointmentId);
 }

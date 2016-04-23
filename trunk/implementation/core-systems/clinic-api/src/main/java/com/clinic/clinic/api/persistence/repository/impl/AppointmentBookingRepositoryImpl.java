@@ -6,11 +6,20 @@ import java.util.List;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
+import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
 import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
+import com.clinic.clinic.common.consts.IDbConstants;
 
 @Repository
 public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<AppointmentBookingEntity, Integer> implements IAppointmentBookingRepository {
@@ -251,4 +260,21 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		
 		return result;
 	}
+
+    /* (non-Javadoc)
+     * @see com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository#findAppointmentBookingByBookerAndMedicar(java.lang.Integer, java.lang.Integer)
+     */
+    @Override
+    public List<AppointmentBookingEntity> findAppointmentBookingByBookerAndMedicar(Integer medicar, Integer booker) {
+        
+        Specification<AppointmentBookingEntity> spec = new Specification<AppointmentBookingEntity>() {
+            @Override
+            public Predicate toPredicate(Root<AppointmentBookingEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Predicate prdBooker = getPredicateParentNotDeleted(root, booker, "booker", IDbConstants.FALSE);
+                Join<AppointmentBookingEntity, AccountEntity> joinMedicar = root.join("medicar");                
+                return cb.and(prdBooker, joinMedicar.in(medicar), cb.equal(root.get("status"), AppointmentBookingEntity.STATUS_FINISHED));
+            }
+        };
+        return findAll(spec);
+    }
 }

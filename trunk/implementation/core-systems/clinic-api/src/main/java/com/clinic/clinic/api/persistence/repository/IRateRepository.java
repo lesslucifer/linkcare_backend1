@@ -45,5 +45,4 @@ public interface IRateRepository extends IRepository<RateEntity, Integer> {
      * @author Vuong Do
      */
     RateEntity findRateEntityByMedicarId(Integer medicarId);
-
 }

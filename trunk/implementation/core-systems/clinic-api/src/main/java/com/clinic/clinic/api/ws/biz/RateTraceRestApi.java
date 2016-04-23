@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,7 @@ import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.consts.IRestApiUrlMaps;
 import com.clinic.clinic.common.dto.biz.AppointmentBookingDto;
 import com.clinic.clinic.common.dto.biz.RateTraceDto;
+import com.clinic.clinic.common.utils.Utils;
 
 /**
  * <p>
@@ -61,12 +63,11 @@ public class RateTraceRestApi extends AbsRestApi {
     @Autowired
     private IRateTraceService rateTraceService;
     
-    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_PARTIENT_RATING, method = RequestMethod.POST, produces = {
+    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_PARTIENT_RATING, method = RequestMethod.GET, produces = {
     "application/json" })
-    public RateTraceDto rating(@RequestHeader("sess") String sess,
+    public RateTraceDto rating(@PathVariable("medicarId") Integer medicarId, @RequestHeader("sess") String sess,
             @RequestParam(value = "mark", required = IDbConstants.TRUE) Double mark,
             @RequestParam(value = "comment", required = IDbConstants.TRUE) String comment,
-            @RequestBody AppointmentBookingDto appointmentBookingDto,
             HttpServletResponse response) {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
@@ -78,7 +79,7 @@ public class RateTraceRestApi extends AbsRestApi {
         auth().authRight(accountId, IDbConstants.RIGHT_RATING);
         RateTraceDto ret = null;
         try {
-            ret = rateTraceService.rating(appointmentBookingDto, mark, comment, accountId);
+            ret = rateTraceService.rating(medicarId, mark, comment, accountId);
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
