@@ -45,6 +45,8 @@ public class UserProfileDto {
     private Integer yearOfBirth;
     private String idCard;
     private Short sex;
+    private Double latitude;
+    private Double longtitude;
     private String address;
     
     public Integer getId() {
@@ -89,5 +91,16 @@ public class UserProfileDto {
     public void setYearOfBirth(Integer yearOfBirth) {
         this.yearOfBirth = yearOfBirth;
     }
-    
+    public Double getLatitude() {
+        return latitude;
+    }
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+    public Double getLongtitude() {
+        return longtitude;
+    }
+    public void setLongtitude(Double longtitude) {
+        this.longtitude = longtitude;
+    }
 }

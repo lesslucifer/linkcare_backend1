@@ -245,6 +245,8 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                         + ent.getAddress().getWard() + ", "
                         + ent.getAddress().getDistrict() + ", "
                         + ent.getAddress().getCity());
+                retDto.setLatitude(ent.getAddress().getLatitude());
+                retDto.setLongtitude(ent.getAddress().getLongtitude());
             }
         } catch (BizlogicException be) {
             LOGGER.error("error", be);
