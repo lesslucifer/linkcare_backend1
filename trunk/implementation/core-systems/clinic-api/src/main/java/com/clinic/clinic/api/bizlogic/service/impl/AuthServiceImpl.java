@@ -132,7 +132,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         }
         Boolean ret = false;
         try {
-            SessionLogEntity sessEnt = sessionRepo.findFirstEntity("session_id", sess, IDbConstants.FALSE);
+            SessionLogEntity sessEnt = sessionRepo.findFirstEntity("sessionId", sess, IDbConstants.FALSE);
             sessEnt.setLastUpdated(System.currentTimeMillis());
             sessEnt.setLogoutTime(System.currentTimeMillis());
             sessEnt.setSessionId(null);
