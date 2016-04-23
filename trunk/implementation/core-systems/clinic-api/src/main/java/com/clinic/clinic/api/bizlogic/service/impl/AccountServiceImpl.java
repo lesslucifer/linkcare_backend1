@@ -23,6 +23,7 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IAccountService;
@@ -40,12 +42,14 @@ import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.api.translator.ITranslator;
 import com.clinic.clinic.api.translator.impl.AccountTranslatorImpl;
+import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.consts.IMessagesConstants;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
+import com.clinic.clinic.common.dto.biz.UserProfileDto;
 import com.clinic.clinic.common.exception.BizlogicException;
 import com.clinic.clinic.common.utils.StringUtil;
 
@@ -195,6 +199,59 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             LOGGER.error("error", be);
         } catch (Exception e) {
             LOGGER.error("error", e);
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return retDto;
+    }
+
+    /* (non-Javadoc)
+     * @see com.clinic.clinic.api.bizlogic.service.IAccountService#getProfile(java.lang.String)
+     */
+    @Override
+    public UserProfileDto getProfile(Integer accountId) throws BizlogicException {
+        
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        UserProfileDto retDto = null;
+        try {
+            AccountEntity ent = accountRepo.getOne(accountId);
+            retDto = new UserProfileDto();
+            retDto.setId(ent.getId());
+            String name = ent.getFirstName() + " " + ent.getLastName();
+            if(null != ent.getMidleName()) {
+                name = ent.getFirstName() + " " + ent.getMidleName() + " " + ent.getLastName();
+            }
+            retDto.setFullName(name);
+            retDto.setIdCard(ent.getIdCard());
+            
+            Calendar caledar = Calendar.getInstance();
+            caledar.setTimeInMillis(ent.getBirthday());
+            Integer yearOfBirthday = caledar.get(Calendar.YEAR);
+            retDto.setYearOfBirth(yearOfBirthday);
+            
+            caledar.setTimeInMillis(System.currentTimeMillis());
+            Integer yearCurrent = caledar.get(Calendar.YEAR);
+            retDto.setAge(yearCurrent - yearOfBirthday);
+            
+            retDto.setSex(Short.parseShort(ent.getGender().toString()));
+            
+            if(null != ent.getAddress()) {
+                retDto.setAddress(ent.getAddress().getHouseNumber() + ", "
+                        + ent.getAddress().getStreet() + ", "
+                        + ent.getAddress().getWard() + ", "
+                        + ent.getAddress().getDistrict() + ", "
+                        + ent.getAddress().getCity());
+            }
+        } catch (BizlogicException be) {
+            LOGGER.error("error", be);
+            throwBizlogicException(500, IBizErrorCode.ADDRESS, "less one field null", be.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("error", e);
+            throwBizlogicException(500, IBizErrorCode.UNKNOWN_ERROR, e.getMessage());
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);

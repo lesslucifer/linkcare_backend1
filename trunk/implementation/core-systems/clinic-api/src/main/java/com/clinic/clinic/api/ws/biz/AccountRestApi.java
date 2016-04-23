@@ -53,6 +53,7 @@ import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
 import com.clinic.clinic.common.dto.biz.SubcategoryDto;
+import com.clinic.clinic.common.dto.biz.UserProfileDto;
 import com.clinic.clinic.common.utils.StringUtil;
 import com.clinic.clinic.common.utils.Utils;
 
@@ -207,6 +208,24 @@ public class AccountRestApi extends AbsRestApi {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
-
+    }
+    
+    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_ACCOUNT_IDCARD_PROFILE, method = RequestMethod.GET, produces = {
+    "application/json" })
+    public UserProfileDto getProfileUser(@RequestHeader("sess") String sess) {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        UserProfileDto dto = null;
+        try {
+            Integer accountId = auth().authSession(sess);
+           dto = accountService.getProfile(accountId);
+           
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return dto;
     }
 }
