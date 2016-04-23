@@ -52,7 +52,7 @@ public interface IRestApiUrlMaps {
     static final String REST_API_MEDICAR_APPOINTMENTS_TODAY = REST_API_MEDICAR_APPOINTMENTS + "/today";
     static final String REST_API_MEDICAR_APPOINTMENTS_BY_TYPE = REST_API_MEDICAR_APPOINTMENTS_DATE + "/type/{type}";
     static final String REST_API_COUNT_MEDICAR_APPOINTMENTS_BY_TYPE = REST_API_MEDICAR_APPOINTMENTS_DATE + "/type/{type}/count";
-    static final String REST_API_COUNT_APPOINTMENTS_BY_STATUS = REST_API_MEDICAR_APPOINTMENTS + "/status/{status}";
+    static final String REST_API_APPOINTMENTS_BY_STATUS = REST_API_MEDICAR_APPOINTMENTS + "/status/{status}";
 
     static final String REST_API_BIZ_PARTIENT_RATING = "/partient/rating";
     

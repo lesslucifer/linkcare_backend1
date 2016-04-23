@@ -174,7 +174,7 @@ public class AppointmentRestApi extends AbsRestApi {
 		return Utils.mkMap("count", appServ.countMedicarAppointmentsByType(medicar, localDate, type));
 	}
 
-	@RequestMapping(value = IRestApiUrlMaps.REST_API_COUNT_APPOINTMENTS_BY_STATUS, method = RequestMethod.GET, produces = {
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_APPOINTMENTS_BY_STATUS, method = RequestMethod.GET, produces = {
     "application/json" })
 	public Object getAppointmentsByStatus(@RequestHeader("sess") String session,
     		@PathVariable("status") Integer status,
