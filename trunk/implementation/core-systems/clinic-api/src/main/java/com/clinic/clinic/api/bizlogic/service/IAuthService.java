@@ -63,7 +63,7 @@ public interface IAuthService {
     boolean authRights(Integer accountId, String... rights) throws BizlogicException;
     Set<String> authRights(Integer accountId, String[] requiredRights, String[] optionalRights) throws BizlogicException;
     
-    Map<String, Object> login(final String loginName, final String password) throws BizlogicException;
+    Map<String, Object> login(final String loginName, final String password, final String deviceToken) throws BizlogicException;
     
     Boolean logout(final String sess) throws BizlogicException;
 

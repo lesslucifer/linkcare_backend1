@@ -86,13 +86,9 @@ public class AccountDto extends TraceDto implements Serializable {
 
 	private AddressDto address;
 
-	private AnnualFeeDto annualFee;
-
 	private SubcategoryDto subcategory;
 	
 	private PlaceDto place;
-	
-	private CostDto cost;
 	
 	private List<AccountDto> patients = new ArrayList<AccountDto>();
 	
@@ -265,15 +261,7 @@ public class AccountDto extends TraceDto implements Serializable {
 	public void setAddress(AddressDto address) {
 		this.address = address;
 	}
-
-	public AnnualFeeDto getAnnualFee() {
-		return annualFee;
-	}
-
-	public void setAnnualFee(AnnualFeeDto annualFee) {
-		this.annualFee = annualFee;
-	}
-
+	
     public SubcategoryDto getSubcategory() {
         return subcategory;
     }
@@ -296,14 +284,6 @@ public class AccountDto extends TraceDto implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public CostDto getCost() {
-        return cost;
-    }
-
-    public void setCost(CostDto cost) {
-        this.cost = cost;
     }
 
     public List<AccountDto> getPatients() {

@@ -29,11 +29,11 @@ public class AccountEntity extends TraceEntity {
 	private static final long serialVersionUID = 3135124384140213026L;
 	@Column(name = "login_name", nullable = false, length = 45)
 	private String loginName;
-	@Column(name="code", unique = true, nullable = false, length=45)
+	@Column(name="code", unique = true, nullable = true, length=45)
     private String code;
-	@Column(name = "phone_number", nullable = false, length = 45)
+	@Column(name = "phone_number", nullable = true, length = 45)
 	private String phoneNumber;
-	@Column(name = "experience", nullable = false)
+	@Column(name = "experience", nullable = true)
 	private Double experience;
 	@Column(name = "id_card", nullable = false, length = 45)
 	private String idCard;
@@ -47,8 +47,8 @@ public class AccountEntity extends TraceEntity {
 	private String midleName;
 	@Column(name = "gender", nullable = true, length = 45)
 	private Integer gender;
-	@Column(name = "birdthday", nullable = false, length = 45)
-	private Long birdthday;
+	@Column(name = "birthday", nullable = true, length = 45)
+	private Long birthday;
 	@Column(name = "image_url", nullable = true, length = 500)
 	private String avatar;
 	@Column(name = "email", nullable = false, length = 45)
@@ -67,14 +67,13 @@ public class AccountEntity extends TraceEntity {
 	private Boolean needChangePWD;
 	@Column(name = "active_flag", nullable = false)
 	private Integer activeFlag = 0;
-	@Column(name = "begin_active_time", nullable = false, length = 20)
+	@Column(name = "begin_active_time", nullable = true, length = 20)
 	private Long beginActiveTime;
-	@Column(name = "end_active_time", nullable = false, length = 20)
+	@Column(name = "end_active_time", nullable = true, length = 20)
 	private Long endActiveTime;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "annual_fee_id", nullable = false)
-	private AnnualFeeEntity annualFee;
+	@Column(name="device_token", nullable = true, length = 256)
+	private String deviceToken;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "subcategory_id", nullable = true)
@@ -87,10 +86,6 @@ public class AccountEntity extends TraceEntity {
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", nullable = false)
     private AddressEntity address;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cost_id", nullable = true)
-	private CostEntity cost;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "patient")
 	private List<CommentEntity> patients = new ArrayList<CommentEntity>();
@@ -190,12 +185,12 @@ public class AccountEntity extends TraceEntity {
 		this.gender = gender;
 	}
 
-	public Long getBirdthday() {
-		return birdthday;
+	public Long getBirthday() {
+		return birthday;
 	}
 
-	public void setBirdthday(Long birdthday) {
-		this.birdthday = birdthday;
+	public void setBirthday(Long birdthday) {
+		this.birthday = birdthday;
 	}
 
 	public String getAvatar() {
@@ -286,12 +281,12 @@ public class AccountEntity extends TraceEntity {
 		this.endActiveTime = endActiveTime;
 	}
 
-	public AnnualFeeEntity getAnnualFee() {
-		return annualFee;
+	public String getDeviceToken() {
+		return deviceToken;
 	}
 
-	public void setAnnualFee(AnnualFeeEntity annualFee) {
-		this.annualFee = annualFee;
+	public void setDeviceToken(String deviceToken) {
+		this.deviceToken = deviceToken;
 	}
 
     public SubcategoryEntity getSubcategory() {
@@ -324,14 +319,6 @@ public class AccountEntity extends TraceEntity {
 
     public void setAddress(AddressEntity address) {
         this.address = address;
-    }
-
-    public CostEntity getCost() {
-        return cost;
-    }
-
-    public void setCost(CostEntity cost) {
-        this.cost = cost;
     }
 
     public Double getExperience() {

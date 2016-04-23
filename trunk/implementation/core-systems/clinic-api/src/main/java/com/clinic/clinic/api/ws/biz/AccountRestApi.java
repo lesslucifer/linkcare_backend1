@@ -178,12 +178,13 @@ public class AccountRestApi extends AbsRestApi {
         try {
         	String loginName = body.get("loginName");
         	String pass = body.get("password");
+        	String token = body.get("device_token");
         	
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Debug", StringUtil.getHashedText(pass));
             }
             
-            Map<String, Object> ret = auth().login(loginName, pass);
+            Map<String, Object> ret = auth().login(loginName, pass, token);
             return ret;
         } finally {
             if(LOGGER.isDebugEnabled()) {

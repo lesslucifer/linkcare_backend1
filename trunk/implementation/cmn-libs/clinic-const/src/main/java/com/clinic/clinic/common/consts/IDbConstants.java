@@ -175,7 +175,6 @@ public interface IDbConstants {
 	static final String FIELD_FK_PLACE_COMMENT = "placeComment";
 	static final String FIELD_FK_PLACE_COMMENTS = "placeComments";
 	static final String FIELD_FK_TRACE_COIN = "traceCoin";
-	static final String FIELD_FK_CONFIGURATION_COIN = "configurationCoin";
 	static final String FIELD_FK_FEED_CATEGORY = "feedCategory";
 	static final String FIELD_FK_ARTICLE_CATEGORY = "articleCategory";
 	static final String FIELD_FK_GIFT = "gift";

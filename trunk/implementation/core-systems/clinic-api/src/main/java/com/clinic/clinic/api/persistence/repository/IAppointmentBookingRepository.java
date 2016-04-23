@@ -17,10 +17,12 @@ public interface IAppointmentBookingRepository extends IRepository<AppointmentBo
 	boolean hasApprovedBooking(Integer medicarId, LocalDate date, int timeFrom, int timeTo);
 	
 	List<AppointmentBookingEntity> getApprovedBooking(Integer medicarId, LocalDate dateFrom, LocalDate dateTo);
-	boolean hasProcessingAppointment(Integer medicarId);
+	Integer getProcessingAppointment(Integer medicarId);
 
 	default boolean isPatientHaveRecentWaitingAppointment(Integer patientId, long now) {
 		return isPatientHaveRecentWaitingAppointment(patientId, now, 1440);
 	}
 	boolean isPatientHaveRecentWaitingAppointment(Integer patientId, long now, int recentDuration);
+	
+	List<AppointmentBookingEntity> getAppointmentsByStatus(Integer medicar, Integer status);
 }

@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IRateTraceService;

@@ -73,7 +73,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
      * @see com.clinic.clinic.api.bizlogic.service.IAuthService#login(java.lang.String, java.lang.String)
      */
     @Override
-    public Map<String, Object> login(String loginName, String password) throws BizlogicException {
+    public Map<String, Object> login(String loginName, String password, final String deviceToken) throws BizlogicException {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
@@ -102,8 +102,14 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
                         sessEnt.setSessionId(sessionId);
                         sessionRepo.save(sessEnt);
                     }
-                    List<RoleEntity> roleEnts = roleRepo.findRoleByAccountId(accountEnt.getId());
-                    retValue.put("roles", roleEnts);
+                    
+                    accountEnt.getRoles().size();
+                    retValue.put("roles", accountEnt.getRoles());
+                    
+                    if (deviceToken != null) {
+                    	accountEnt.setDeviceToken(deviceToken);
+                    	accountRepo.save(accountEnt);
+                    }
                     
                 } else {
                     throwBizlogicException(401, IBizErrorCode.WRONG_PASSWORD, "password invalid");
@@ -200,7 +206,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         	
         	if (matchedRights.size() < rights.length) {
         		String[] lackedRights = Arrays.stream(rights).filter((r) -> !matchedRights.contains(r)).toArray(String[]::new);
-        		throwBizlogicException(403, IBizErrorCode.MISSING_RIGHT, "Permission Denied", lackedRights);
+        		throwBizlogicException(403, IBizErrorCode.MISSING_RIGHT, "Permission Denied", (Object[]) lackedRights);
         	}
 
         	retVal = true;

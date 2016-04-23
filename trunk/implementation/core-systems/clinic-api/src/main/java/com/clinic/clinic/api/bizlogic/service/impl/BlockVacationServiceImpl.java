@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IBlockVacationService;
+import com.clinic.clinic.api.bizlogic.service.INotificationService;
 import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
@@ -19,6 +20,8 @@ import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepositor
 import com.clinic.clinic.api.translator.impl.AccountBlockTimeTranslatorImpl;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.dto.biz.AccountBlockTimeDto;
+import com.clinic.clinic.common.utils.DateTimeFormatters;
+import com.clinic.clinic.common.utils.Utils;
 
 @ApplicationService
 public class BlockVacationServiceImpl extends AbsService implements IBlockVacationService {
@@ -31,6 +34,9 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 	
 	@Autowired
 	IAppointmentBookingRepository appBookingRepo;
+	
+	@Autowired
+	INotificationService notifServ;
 	
 	@Override
 	public List<AccountBlockTimeDto> getBlockVacations(Integer accountId, LocalDateTime start, LocalDateTime end) {
@@ -72,6 +78,8 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 				.getActiveAppointments(accountId, begin.toLocalDate(), end.toLocalDate());
 
 		if (!appointments.isEmpty()) {
+			List<Runnable> sendNotifs = new ArrayList<>(appointments.size());
+			
 			final int beginInMin = begin.getHour() * 60 + begin.getMinute();
 			final int endInMin = end.getHour() * 60 + end.getMinute();
 			List<AppointmentBookingEntity> edittedAppointments = new ArrayList<>(appointments.size());
@@ -84,12 +92,46 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 				if (appointment.getStatus() == AppointmentBookingEntity.STATUS_WAITING) {
 					appointment.setStatus(AppointmentBookingEntity.STATUS_REJECTED);
 					edittedAppointments.add(appointment);
-					// notify here
+					
+					// send notification
+					sendNotifs.add(() -> {
+						AccountEntity bookerEnt = appointment.getBooker();
+						AccountEntity medicarEnt = appointment.getMedicar();
+						LocalDateTime time = Utils.toDateTime(appointment.getDate(), appointment.getTime());
+						StringBuilder content = new StringBuilder();
+						content.append("<b>Bác sĩ ");
+						medicarEnt.getFullName(content);
+						content.append("</b> đã từ chối cuộc hẹn bạn đặt <b>vào lúc ");
+						content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
+						content.append(" ngày ");
+						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
+						content.append("</b>");
+						notifServ.sendMessage(null, bookerEnt.getId(), content.toString());
+					});
 				}
 				else if (appointment.getStatus() == AppointmentBookingEntity.STATUS_APPROVED) {
 					appointment.setStatus(AppointmentBookingEntity.STATUS_CANCELLED);
 					edittedAppointments.add(appointment);
+					
 					// notify here
+					sendNotifs.add(() -> {
+						AccountEntity bookerEnt = appointment.getBooker();
+						AccountEntity medicarEnt = appointment.getMedicar();
+						LocalDateTime time = Utils.toDateTime(appointment.getDate(), appointment.getTime());
+						String title = "Bác sĩ";
+						AccountEntity cancellerEnt = medicarEnt;
+						AccountEntity cancelleeEnt = bookerEnt;
+						
+						StringBuilder content = new StringBuilder();
+						content.append("<b>").append(title).append(" ");
+						cancellerEnt.getFullName(content);
+						content.append("</b> đã hủy cuộc hẹn lúc <b>");
+						content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
+						content.append(" ngày ");
+						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
+						content.append("</b>");
+						notifServ.sendMessage(null, cancelleeEnt.getId(), content.toString());
+					});
 				}
 				else if (appointment.getStatus() == AppointmentBookingEntity.STATUS_PROCESSING) {
 					throwBizlogicException(HttpStatus.CONFLICT, IBizErrorCode.BLOCK_VACATION_HAS_PROCESSING_APPOINTMENT,
@@ -101,6 +143,9 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 			if (!edittedAppointments.isEmpty()) {
 				appBookingRepo.save(edittedAppointments);
 			}
+			
+			// send notifications
+			sendNotifs.forEach((r) -> r.run());
 		}
 		
 		AccountBlockTimeEntity entity = AccountBlockTimeTranslatorImpl.INST.getEntity(dto);

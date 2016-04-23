@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -22,8 +21,6 @@ public class PlaceEntity extends NameCodeDescEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -5603418194352203393L;
-	@Column(name = "node", nullable = true, length = 1000)
-	private String node;
 	@Column(name = "phone_number", nullable = true)
 	private String phoneNumber;
 	@Column(name = "email", nullable = true)
@@ -47,18 +44,6 @@ public class PlaceEntity extends NameCodeDescEntity {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "address_id", nullable = false)
 	private AddressEntity address;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cost_id", nullable = true)
-	private CostEntity cost;
-
-	public String getNode() {
-		return node;
-	}
-
-	public void setNode(String node) {
-		this.node = node;
-	}
 
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -139,12 +124,4 @@ public class PlaceEntity extends NameCodeDescEntity {
 	public void setAddress(AddressEntity address) {
 		this.address = address;
 	}
-
-    public CostEntity getCost() {
-        return cost;
-    }
-
-    public void setCost(CostEntity cost) {
-        this.cost = cost;
-    }
 }

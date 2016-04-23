@@ -17,4 +17,5 @@ public interface IAppointmentService {
 	List<TraceDto> getMedicarAppointments(Integer medicar, LocalDate date);
 	List<TraceDto> getMedicarAppointmentsByType(Integer medicar, LocalDate date, int type);
 	int countMedicarAppointmentsByType(Integer medicar, LocalDate date, int type);
+	List<TraceDto> getAppointmentByStatus(Integer medicar, Integer status);
 }
