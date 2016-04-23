@@ -201,8 +201,8 @@ public class AccountRestApi extends AbsRestApi {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
         try {
-            boolean message = auth().logout(sess);
-            return Utils.mkMap("message", message);
+            auth().logout(sess);
+            return Utils.mkMap();
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);

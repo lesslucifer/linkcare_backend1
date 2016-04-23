@@ -26,7 +26,6 @@ package com.clinic.clinic.api.bizlogic.service.impl;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -38,10 +37,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IAuthService;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
-import com.clinic.clinic.api.persistence.entity.RoleEntity;
 import com.clinic.clinic.api.persistence.entity.SessionLogEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
-import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.api.persistence.repository.ISessionLogRepository;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
@@ -66,8 +63,8 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
     private IAccountRepository accountRepo;
     @Autowired
     private ISessionLogRepository sessionRepo;
-    @Autowired
-    private IRoleRepository roleRepo;
+//    @Autowired
+//    private IRoleRepository roleRepo;
     
     /* (non-Javadoc)
      * @see com.clinic.clinic.api.bizlogic.service.IAuthService#login(java.lang.String, java.lang.String)
@@ -135,11 +132,18 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
         }
         Boolean ret = false;
         try {
-            SessionLogEntity sessEnt = sessionRepo.findFirstEntity("sessionId", sess, IDbConstants.FALSE);
+            SessionLogEntity sessEnt = sessionRepo.findFirstEntity("session_id", sess, IDbConstants.FALSE);
             sessEnt.setLastUpdated(System.currentTimeMillis());
             sessEnt.setLogoutTime(System.currentTimeMillis());
             sessEnt.setSessionId(null);
             sessionRepo.save(sessEnt);
+            
+            AccountEntity acc = sessEnt.getAccount();
+            if (acc != null && acc.getDeviceToken() != null) {
+            	acc.setDeviceToken(null);
+            	accountRepo.save(acc);
+            }
+            
             ret = true;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
