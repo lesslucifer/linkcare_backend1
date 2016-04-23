@@ -37,6 +37,9 @@ public class AppointmentPatientEntity implements Serializable {
 	private LocalDate birth;
 	
 	@Column
+	private String phone;
+	
+	@Column
 	private byte gender;
 	
 	@Column
@@ -75,6 +78,14 @@ public class AppointmentPatientEntity implements Serializable {
 
 	public void setBirth(LocalDate birth) {
 		this.birth = birth;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public byte getGender() {

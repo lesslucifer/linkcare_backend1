@@ -11,6 +11,8 @@ public final class AppointmentPatientDto {
 	@NotNull
 	private LocalDate birth;
 	@NotNull
+	private String phone;
+	@NotNull
 	private Byte gender;
 	@NotNull
 	private String address;
@@ -33,6 +35,14 @@ public final class AppointmentPatientDto {
 		this.birth = birth;
 	}
 	
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public byte getGender() {
 		return gender;
 	}
