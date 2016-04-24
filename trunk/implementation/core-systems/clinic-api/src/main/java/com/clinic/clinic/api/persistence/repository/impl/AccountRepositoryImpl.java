@@ -224,7 +224,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + "FROM account e ");
             summaryQuerySql.append("JOIN address address ON e.address_id = address.id ");
             summaryQuerySql.append("LEFT JOIN place plc ON e.place_id = plc.id  ");
-            summaryQuerySql.append("JOIN address plcAddr ON plc.address_id = plcAddr.id ");
+            summaryQuerySql.append("LEFT JOIN address plcAddr ON plc.address_id = plcAddr.id ");
             summaryQuerySql.append("JOIN subcategory subCate ON e.subcategory_id = subCate.id ");
             summaryQuerySql.append("JOIN category cate ON cate.id = subCate.category_id ");
             summaryQuerySql.append("JOIN major ON major.id = cate.major_id ");
