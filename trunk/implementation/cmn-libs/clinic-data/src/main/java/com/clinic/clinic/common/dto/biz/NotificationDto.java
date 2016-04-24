@@ -1,5 +1,7 @@
 package com.clinic.clinic.common.dto.biz;
 
+import java.time.LocalDateTime;
+
 import com.clinic.clinic.common.dto.IdDto;
 import com.clinic.clinic.common.dto.TraceDto;
 
@@ -17,6 +19,8 @@ public class NotificationDto extends IdDto {
 	@NotNull
 	private String content;
 	
+	private LocalDateTime time;
+
 	private int type;
 	
 	private boolean isRead;
@@ -43,6 +47,14 @@ public class NotificationDto extends IdDto {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+	
+	public LocalDateTime getTime() {
+		return time;
+	}
+
+	public void setTime(LocalDateTime time) {
+		this.time = time;
 	}
 
 	public boolean isRead() {

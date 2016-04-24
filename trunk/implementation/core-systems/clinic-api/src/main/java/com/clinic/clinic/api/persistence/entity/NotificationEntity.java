@@ -1,5 +1,7 @@
 package com.clinic.clinic.api.persistence.entity;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,6 +36,9 @@ public class NotificationEntity extends IdEntity {
 	@Column
 	private int type;
 	
+	@Column
+	private LocalDateTime time;
+	
 	@Column(name = "is_read")
 	private boolean isRead;
 
@@ -67,6 +72,14 @@ public class NotificationEntity extends IdEntity {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public LocalDateTime getTime() {
+		return time;
+	}
+
+	public void setTime(LocalDateTime time) {
+		this.time = time;
 	}
 
 	public boolean isRead() {
