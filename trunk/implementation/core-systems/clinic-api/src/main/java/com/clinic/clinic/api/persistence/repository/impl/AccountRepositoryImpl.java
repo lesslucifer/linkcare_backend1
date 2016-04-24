@@ -38,7 +38,6 @@ import javax.persistence.criteria.Root;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +46,6 @@ import org.springframework.stereotype.Repository;
 
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
-import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;

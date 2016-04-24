@@ -143,7 +143,7 @@ public class AccountRestApi extends AbsRestApi {
             // Build "pageable" parameter from query string
             final Pageable range = buildPageableParam(viewPageNo, maxRecPerPage, sortingExp);
 
-            if(null == accountfilterDto.getLatitude() && null == accountfilterDto.getLongtitude()) {
+            if(accountfilterDto.getType() != 1) {
                 retVal = accountService.getAccountAndClinic(range, accountfilterDto);
             } else {
                 retVal = accountService.getAccountAndHome(range, accountfilterDto);
