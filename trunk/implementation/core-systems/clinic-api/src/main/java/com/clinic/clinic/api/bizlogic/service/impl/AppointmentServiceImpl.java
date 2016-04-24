@@ -3,6 +3,7 @@ package com.clinic.clinic.api.bizlogic.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -350,5 +351,45 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	public List<TraceDto> getAppointmentByStatus(Integer medicar, Integer status) {
 		List<AppointmentBookingEntity> entities = appBookingRepo.getAppointmentsByStatus(medicar, status);
 		return TraceTranslatorImpl.INSTANCE.getDtoList(entities);
+	}
+	
+	private void autoCancelWaitingAppointment(Integer medicar) {
+		List<AppointmentBookingEntity> ents = appBookingRepo.getAppointmentsByStatus(medicar,
+				AppointmentBookingEntity.STATUS_WAITING, AppointmentBookingEntity.STATUS_APPROVED);
+		List<AppointmentBookingEntity> lateBooking = new ArrayList<>(ents.size());
+		
+		LocalDateTime now = LocalDateTime.now();
+		LocalDate date = now.toLocalDate();
+		int time = now.getHour() * 60 + now.getMinute();
+		for (AppointmentBookingEntity ent : ents) {
+			int comp = ent.getDate().compareTo(date);
+			if (comp < 0) {
+				continue;
+			}
+			
+			if (comp > 0) {
+				lateBooking.add(ent);
+			}
+			
+			int dueTime = (ent.getStatus() == AppointmentBookingEntity.STATUS_WAITING) ? ent.getTime() - 30 : ent.getTime() + 30;
+			comp = Integer.compare(dueTime, time);
+			
+			if (comp > 0) {
+				lateBooking.add(ent);
+			}
+		}
+		
+		if (!lateBooking.isEmpty()) {
+			for (AppointmentBookingEntity ent : lateBooking) {
+				if (ent.getStatus() == AppointmentBookingEntity.STATUS_WAITING) {
+					ent.setStatus(AppointmentBookingEntity.STATUS_REJECTED);
+				}
+				else {
+					ent.setStatus(AppointmentBookingEntity.STATUS_CANCELLED);
+				}
+			}
+		}
+		
+		appBookingRepo.save(lateBooking);
 	}
 }

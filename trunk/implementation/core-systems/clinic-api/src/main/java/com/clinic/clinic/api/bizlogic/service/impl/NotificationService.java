@@ -1,5 +1,6 @@
 package com.clinic.clinic.api.bizlogic.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class NotificationService extends AbsService implements INotificationServ
 			entity.setOwner(receiverEnt);
 			entity.setType(NotificationEntity.TYPE_MSG);
 			entity.setContent(content);
+			entity.setTime(LocalDateTime.now());
 			notifRepo.save(entity);
 			
 			// try to send notification
