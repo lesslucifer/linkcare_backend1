@@ -226,6 +226,7 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             }
             retDto.setFullName(name);
             retDto.setIdCard(ent.getIdCard());
+            retDto.setAvatar(ent.getAvatar());
             
             Calendar caledar = Calendar.getInstance();
             caledar.setTimeInMillis(ent.getBirthday());

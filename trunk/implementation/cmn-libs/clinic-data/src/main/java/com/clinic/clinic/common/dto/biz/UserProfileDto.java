@@ -23,9 +23,6 @@
  *=============================================================================*/
 package com.clinic.clinic.common.dto.biz;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * <p>
  * Describe functionality of this class here.
@@ -37,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UserProfileDto {
     /** Logging property. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileDto.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileDto.class);
     
     private Integer id;
     private String fullName;
@@ -49,6 +46,7 @@ public class UserProfileDto {
     private Double longtitude;
     private String phoneNumber;
     private String address;
+    private String avatar;
     
     public Integer getId() {
         return id;
@@ -110,4 +108,10 @@ public class UserProfileDto {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+	public String getAvatar() {
+		return avatar;
+	}
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 }
