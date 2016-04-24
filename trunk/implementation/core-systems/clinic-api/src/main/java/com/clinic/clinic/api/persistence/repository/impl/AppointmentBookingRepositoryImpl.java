@@ -1,6 +1,7 @@
 package com.clinic.clinic.api.persistence.repository.impl;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -250,7 +251,7 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 		
 		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
 		q.setParameter("medicar", medicar);
-		q.setParameter("status", status);
+		q.setParameter("status", Arrays.asList(status));
 
 		List<AppointmentBookingEntity> result = q.getResultList();
 		if (result == null) {

@@ -363,7 +363,6 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		}
 		
 		this.autoCancelWaitingAppointment(medicar);
-
 		return appBookingRepo.countActiveAppointmentsAtHome(medicar, date, type != 0);
 	}
 	
