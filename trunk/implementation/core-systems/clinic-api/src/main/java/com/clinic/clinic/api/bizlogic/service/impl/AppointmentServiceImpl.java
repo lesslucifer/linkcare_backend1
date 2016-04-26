@@ -382,7 +382,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		LocalDate date = now.toLocalDate();
 		int time = now.getHour() * 60 + now.getMinute();
 		for (AppointmentBookingEntity ent : ents) {
-			int comp = ent.getDate().compareTo(date);
+			int comp = date.compareTo(ent.getDate());
 			if (comp < 0) {
 				continue;
 			}
@@ -392,7 +392,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 			}
 			
 			int dueTime = (ent.getStatus() == AppointmentBookingEntity.STATUS_WAITING) ? ent.getTime() - 30 : ent.getTime() + 30;
-			comp = Integer.compare(dueTime, time);
+			comp = Integer.compare(time, dueTime);
 			
 			if (comp > 0) {
 				lateBooking.add(ent);
@@ -408,8 +408,8 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 					ent.setStatus(AppointmentBookingEntity.STATUS_CANCELLED);
 				}
 			}
+			
+			appBookingRepo.save(lateBooking);
 		}
-		
-		appBookingRepo.save(lateBooking);
 	}
 }
