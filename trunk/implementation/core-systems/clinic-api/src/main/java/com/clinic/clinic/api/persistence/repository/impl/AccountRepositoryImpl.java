@@ -38,7 +38,6 @@ import javax.persistence.criteria.Root;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +46,6 @@ import org.springframework.stereotype.Repository;
 
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
-import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
@@ -225,8 +223,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) * 1000 as distance "
                     + "FROM account e ");
             summaryQuerySql.append("JOIN address address ON e.address_id = address.id ");
-            summaryQuerySql.append("JOIN place plc ON e.place_id = plc.id  ");
-            summaryQuerySql.append("JOIN address plcAddr ON plc.address_id = plcAddr.id ");
+            summaryQuerySql.append("LEFT JOIN place plc ON e.place_id = plc.id  ");
+            summaryQuerySql.append("LEFT JOIN address plcAddr ON plc.address_id = plcAddr.id ");
             summaryQuerySql.append("JOIN subcategory subCate ON e.subcategory_id = subCate.id ");
             summaryQuerySql.append("JOIN category cate ON cate.id = subCate.category_id ");
             summaryQuerySql.append("JOIN major ON major.id = cate.major_id ");

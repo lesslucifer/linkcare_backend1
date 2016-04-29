@@ -33,6 +33,8 @@ package com.clinic.clinic.common.dto.biz;
  * @see TODO
  */
 public class AccountFilterDto {
+	
+	private Integer type;
     
     private String name;
     
@@ -46,7 +48,15 @@ public class AccountFilterDto {
     
     private Double latitude;
 
-    public String getName() {
+    public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public String getName() {
         return name;
     }
 

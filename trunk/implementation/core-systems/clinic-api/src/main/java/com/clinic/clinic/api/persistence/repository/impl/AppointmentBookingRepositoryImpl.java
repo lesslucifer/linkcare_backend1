@@ -1,6 +1,7 @@
 package com.clinic.clinic.api.persistence.repository.impl;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -243,15 +243,15 @@ public class AppointmentBookingRepositoryImpl extends AbsRepositoryImpl<Appointm
 	}
 	
 	@Override
-	public List<AppointmentBookingEntity> getAppointmentsByStatus(Integer medicar, Integer status) {
+	public List<AppointmentBookingEntity> getAppointmentsByStatus(Integer medicar, Integer... status) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ab FROM AppointmentBookingEntity ab ");
 		sb.append("WHERE ab.medicar.id = :medicar AND ");
-		sb.append("ab.status = :status");
+		sb.append("ab.status IN :status");
 		
 		TypedQuery<AppointmentBookingEntity> q = getEntityManager().createQuery(sb.toString(), AppointmentBookingEntity.class);
 		q.setParameter("medicar", medicar);
-		q.setParameter("status", status);
+		q.setParameter("status", Arrays.asList(status));
 
 		List<AppointmentBookingEntity> result = q.getResultList();
 		if (result == null) {
