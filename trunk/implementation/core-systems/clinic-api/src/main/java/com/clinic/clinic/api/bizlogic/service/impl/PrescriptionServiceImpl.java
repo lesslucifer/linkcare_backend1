@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
+import com.clinic.clinic.api.bizlogic.service.INotificationService;
 import com.clinic.clinic.api.bizlogic.service.IPrescriptionService;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
+import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.entity.PrescriptionDoctorNoteEntity;
 import com.clinic.clinic.api.persistence.entity.PrescriptionEntity;
 import com.clinic.clinic.api.persistence.entity.PrescriptionMedicineEntity;
@@ -39,6 +41,9 @@ public class PrescriptionServiceImpl extends AbsService implements IPrescription
 	
 	@Autowired
 	IAppointmentBookingRepository appBookingRepo;
+	
+	@Autowired
+	INotificationService notifServ;
 	
 	@Override
 	public List<PrescriptionDto> getPrescriptions(Integer requester, List<Integer> ids) {
@@ -101,6 +106,14 @@ public class PrescriptionServiceImpl extends AbsService implements IPrescription
 		}
 		medicines = medicineRepo.save(medicines);
 		entity.setMedicines(medicines);
+		
+		// send notification to patient
+		final StringBuilder sb = new StringBuilder();
+		sb.append("Bạn vừa khám xong với bác sĩ <b>");
+		booking.getMedicar().getFullName(sb);
+		sb.append("</b>. Để gia tăng chất lượng dịch vụ, xin vui lòng cho chúng tôi biết cảm nhận của bạn.");
+		notifServ.sendMessage(null, booking.getBooker().getId(), NotificationEntity.TYPE_APPOINTMENT_FINISHED,
+				sb.toString(), booking.getId(), medicar);
 
 		// all done, save entity
 		return PrescriptionTranslatorImpl.INST.getDto(entity);
