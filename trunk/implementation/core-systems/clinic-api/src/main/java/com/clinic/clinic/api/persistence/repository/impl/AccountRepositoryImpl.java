@@ -263,8 +263,9 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 query.setParameter("latitude", accountFilterDto.getLatitude());
                 query.setParameter("longtitude", accountFilterDto.getLongtitude());
             }
-            //query.setFirstResult(range.getOffset());
-            //query.setMaxResults(range.getPageSize());
+            
+            query.setFirstResult(range.getOffset());
+            query.setMaxResults(range.getPageSize());
             
             @SuppressWarnings("unchecked")
             List<Object[]> result = query.getResultList();
