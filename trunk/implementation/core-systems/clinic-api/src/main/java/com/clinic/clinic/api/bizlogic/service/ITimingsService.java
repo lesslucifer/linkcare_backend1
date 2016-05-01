@@ -17,6 +17,8 @@ public interface ITimingsService {
 	
 	List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range,
 			Predicate<Integer> typeFilter);
+
+	Object countTimingDaySlots(Integer accountId, String day);
 	
 	boolean isTimeAvailable(LocalDate date, int begin, int end,
 			final List<AccountBlockTimeEntity> blockTimes, 

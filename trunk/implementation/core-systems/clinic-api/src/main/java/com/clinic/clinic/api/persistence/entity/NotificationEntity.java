@@ -25,7 +25,7 @@ public class NotificationEntity extends IdEntity {
 	public static final int TYPE_APPOINTMENT_APPROVED = 2; // params: [appointment_id, doctor_id]
 	public static final int TYPE_APPOINTMENT_REJECTED = 3; // params: [appointment_id, doctor_id]
 	public static final int TYPE_APPOINTMENT_CANCELLED = 4; // params: [appointment_id, canceller_id, cancellee_id]
-	public static final int TYPE_APPOINTMENT_FINISHED = 5; // params: [appointment_id, doctor_id]
+	public static final int TYPE_APPOINTMENT_FINISHED = 5; // params: [appointment_id, prescription_id, doctor_id]
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "owner")

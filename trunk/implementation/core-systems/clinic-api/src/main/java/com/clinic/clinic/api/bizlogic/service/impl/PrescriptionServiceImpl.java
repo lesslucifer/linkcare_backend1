@@ -113,7 +113,7 @@ public class PrescriptionServiceImpl extends AbsService implements IPrescription
 		booking.getMedicar().getFullName(sb);
 		sb.append("</b>. Để gia tăng chất lượng dịch vụ, xin vui lòng cho chúng tôi biết cảm nhận của bạn.");
 		notifServ.sendMessage(null, booking.getBooker().getId(), NotificationEntity.TYPE_APPOINTMENT_FINISHED,
-				sb.toString(), booking.getId(), medicar);
+				sb.toString(), booking.getId(), entity.getId(), medicar);
 
 		// all done, save entity
 		return PrescriptionTranslatorImpl.INST.getDto(entity);
