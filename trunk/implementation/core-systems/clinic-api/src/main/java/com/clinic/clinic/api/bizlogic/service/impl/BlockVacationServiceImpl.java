@@ -14,6 +14,7 @@ import com.clinic.clinic.api.bizlogic.service.INotificationService;
 import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
+import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
@@ -106,7 +107,8 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						content.append(" ngày ");
 						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
 						content.append("</b>");
-						notifServ.sendMessage(null, bookerEnt.getId(), content.toString());
+						notifServ.sendMessage(null, bookerEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_REJECTED,
+								content.toString(), appointment.getId(), appointment.getMedicar().getId());
 					});
 				}
 				else if (appointment.getStatus() == AppointmentBookingEntity.STATUS_APPROVED) {
@@ -130,7 +132,8 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						content.append(" ngày ");
 						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
 						content.append("</b>");
-						notifServ.sendMessage(null, cancelleeEnt.getId(), content.toString());
+						notifServ.sendMessage(null, cancelleeEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
+								content.toString(), appointment.getId(), appointment.getMedicar().getId(), appointment.getBooker().getId());
 					});
 				}
 				else if (appointment.getStatus() == AppointmentBookingEntity.STATUS_PROCESSING) {

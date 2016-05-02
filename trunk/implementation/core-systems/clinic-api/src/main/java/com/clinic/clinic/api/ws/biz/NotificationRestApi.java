@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.clinic.clinic.api.bizlogic.service.INotificationService;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
+import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.ws.AbsRestApi;
 import com.clinic.clinic.common.consts.IRestApiUrlMaps;
@@ -90,7 +91,7 @@ public class NotificationRestApi extends AbsRestApi {
 		
 		AccountEntity receiver = accRepo.findAccountByLoginName(dto.receiver_login_name);
 		if (receiver != null) {
-			notifServ.sendMessage(accountId, receiver.getId(), dto.content);
+			notifServ.sendMessage(accountId, receiver.getId(), NotificationEntity.TYPE_MSG, dto.content);
 		}
 		
 		return Utils.mkMap();

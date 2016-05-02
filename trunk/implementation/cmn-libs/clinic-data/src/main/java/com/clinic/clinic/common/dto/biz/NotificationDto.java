@@ -19,6 +19,8 @@ public class NotificationDto extends IdDto {
 	@NotNull
 	private String content;
 	
+	private String params;
+	
 	private LocalDateTime time;
 
 	private int type;
@@ -39,6 +41,14 @@ public class NotificationDto extends IdDto {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
 	}
 
 	public int getType() {

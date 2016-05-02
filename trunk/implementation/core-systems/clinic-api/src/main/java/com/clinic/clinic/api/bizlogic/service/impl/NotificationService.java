@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
@@ -35,23 +36,25 @@ public class NotificationService extends AbsService implements INotificationServ
 	}
 
 	@Override
-	public void sendMessage(Integer sender, Integer receiver, String content) {
+	public void sendMessage(Integer sender, Integer receiver, Integer type, String content, Object... params) {
 		NotificationEntity entity = new NotificationEntity();
 		if (sender != null) {
 			entity.setSender(accRepo.getReference(AccountEntity.class, sender));
 		}
 		
 		AccountEntity receiverEnt = accRepo.getOne(receiver);
+		String jsonParams = JSONArray.toJSONString(Arrays.asList(params));
 		if (receiverEnt != null) {
 			entity.setOwner(receiverEnt);
-			entity.setType(NotificationEntity.TYPE_MSG);
+			entity.setType(type);
 			entity.setContent(content);
+			entity.setParams(jsonParams);
 			entity.setTime(LocalDateTime.now());
 			notifRepo.save(entity);
 			
 			// try to send notification
 			if (receiverEnt.getDeviceToken() != null) {
-				this.sendNotification(receiverEnt.getDeviceToken(), content);
+				this.sendNotification(receiverEnt.getDeviceToken(), content, type, jsonParams);
 			}
 		}
 	}
@@ -72,7 +75,7 @@ public class NotificationService extends AbsService implements INotificationServ
 		notifRepo.save(notifEnts);
 	}
 	
-	private void sendNotification(final String deviceToken, final String content) {
+	private void sendNotification(final String deviceToken, final String content, final Integer type, final String params) {
 		if (deviceToken == null) {
 			return;
 		}
@@ -86,6 +89,8 @@ public class NotificationService extends AbsService implements INotificationServ
 		.timeToLive(30)
 		.delayWhileIdle(true)
 		.addData("message", plainContent)
+		.addData("type", String.valueOf(type))
+		.addData("params", params)
 		.build();
 		
 		try {

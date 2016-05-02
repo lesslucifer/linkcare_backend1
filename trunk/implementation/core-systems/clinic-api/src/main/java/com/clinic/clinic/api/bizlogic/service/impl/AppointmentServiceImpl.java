@@ -19,6 +19,7 @@ import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
+import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.entity.TimingsEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
@@ -163,7 +164,8 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		content.append(" ngày ");
 		content.append(startDateTime.format(DateTimeFormatters.DATE_FORMATTER));
 		content.append("</b>");
-		notifServ.sendMessage(null, medicar.getId(), content.toString());
+		notifServ.sendMessage(null, medicar.getId(), NotificationEntity.TYPE_APPOINTMENT_BOOKING,
+				content.toString(), entity.getId(), booker);
 
 		return AppointmentBookingTranslator.INST.getDto(entity);
 	}
@@ -212,7 +214,8 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		content.append(" ngày ");
 		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
 		content.append("</b>");
-		notifServ.sendMessage(null, bookerEnt.getId(), content.toString());
+		notifServ.sendMessage(null, bookerEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_APPROVED,
+				content.toString(), appBooking.getId(), medicar);
 	}
 
 	@Override
@@ -249,7 +252,8 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		content.append(" ngày ");
 		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
 		content.append("</b>");
-		notifServ.sendMessage(null, bookerEnt.getId(), content.toString());
+		notifServ.sendMessage(null, bookerEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_REJECTED,
+				content.toString(), appBooking.getId(), medicar);
 	}
 
 	@Override
@@ -290,7 +294,8 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		content.append(" ngày ");
 		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
 		content.append("</b>");
-		notifServ.sendMessage(null, cancelleeEnt.getId(), content.toString());
+		notifServ.sendMessage(null, cancelleeEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
+				content.toString(), canceller, cancelleeEnt.getId());
 	}
 
 	@Override

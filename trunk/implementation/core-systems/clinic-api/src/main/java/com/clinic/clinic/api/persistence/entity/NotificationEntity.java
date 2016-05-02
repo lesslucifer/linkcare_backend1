@@ -20,7 +20,12 @@ public class NotificationEntity extends IdEntity {
 	 */
 	private static final long serialVersionUID = -2670418326745850980L;
 
-	public static final int TYPE_MSG = 0;
+	public static final int TYPE_MSG = 0; // params: []
+	public static final int TYPE_APPOINTMENT_BOOKING = 1; // params: [appointment_id, patient_id]
+	public static final int TYPE_APPOINTMENT_APPROVED = 2; // params: [appointment_id, doctor_id]
+	public static final int TYPE_APPOINTMENT_REJECTED = 3; // params: [appointment_id, doctor_id]
+	public static final int TYPE_APPOINTMENT_CANCELLED = 4; // params: [appointment_id, canceller_id, cancellee_id]
+	public static final int TYPE_APPOINTMENT_FINISHED = 5; // params: [appointment_id, prescription_id, doctor_id]
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "owner")
@@ -32,6 +37,9 @@ public class NotificationEntity extends IdEntity {
 	
 	@Column
 	private String content;
+	
+	@Column
+	private String params;
 	
 	@Column
 	private int type;
@@ -64,6 +72,14 @@ public class NotificationEntity extends IdEntity {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
 	}
 
 	public int getType() {

@@ -36,6 +36,7 @@ import com.clinic.clinic.common.dto.biz.AccountTimingsDto;
 import com.clinic.clinic.common.dto.biz.TimingsDayDto;
 import com.clinic.clinic.common.dto.biz.TimingsDto;
 import com.clinic.clinic.common.dto.biz.TimingsSlotDto;
+import com.clinic.clinic.common.utils.Utils;
 
 @ApplicationService
 public final class TimingsServiceImpl extends AbsService implements ITimingsService {
@@ -165,6 +166,26 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 			
 			return timingsDay;
 		}).collect(Collectors.toList());
+	}
+	
+	@Override
+	public Object countTimingDaySlots(Integer accountId, String day) {
+		List<TimingsDayDto> dtos = this.getTimingDaySlots(accountId, day, 1, i -> true);
+		
+		int clinic = 0;
+		int patitentHome = 0;
+		for (TimingsDayDto dto : dtos) {
+			for (TimingsSlotDto slot : dto.getSlots()) {
+				if (slot.getType() == 0) {
+					++clinic;
+				}
+				else {
+					++patitentHome;
+				}
+			}
+		}
+		
+		return Utils.mkMap("0", clinic, "1", patitentHome);
 	}
 	
 	@Override
