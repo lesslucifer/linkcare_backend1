@@ -93,7 +93,8 @@ public class RateTraceServiceImpl extends AbsService implements IRateTraceServic
                 s.setLastUpdated(System.currentTimeMillis());
                 s.setLastUpdatedBy(partientId);
                 s.setMark(5.0d);
-                s.setName("create actual when booker rating because rate entity is not yet");
+                s.setCode(getUUID());
+                // s.setName("create actual when booker rating because rate entity is not yet");
                 rateEnt = rateRepo.save(s);
             }
             // AppointmentBookingEntity aptBookingEnt = aptBookingRepo.getOne(appointmentBookingDto.getId());
