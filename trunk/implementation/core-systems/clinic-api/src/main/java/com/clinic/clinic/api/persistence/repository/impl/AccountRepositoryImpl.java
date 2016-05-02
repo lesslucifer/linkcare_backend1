@@ -24,6 +24,7 @@
 package com.clinic.clinic.api.persistence.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +44,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
@@ -96,6 +98,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
         try {
             final EntityManager entityManager = getEntityManager();
             
+            List<String> nameWords = StringUtils.isEmpty(accountFilterDto.getName()) ? Collections.emptyList() : Arrays.asList(accountFilterDto.getName().split("[\\s+\\,]"));
+            nameWords = nameWords.stream().map(s -> s.trim()).filter(s -> !s.isEmpty()).collect(Collectors.toList());
             Query query = null;
             
             final StringBuilder summaryQuerySql = new StringBuilder();
@@ -122,8 +126,13 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("JOIN cate.major major ");
             
             summaryQuerySql.append("WHERE 1 = 1 ");
-            if(!StringUtil.isEmpty(accountFilterDto.getName())) {
-                summaryQuerySql.append("AND e.firstName LIKE :firstName ");
+            if(nameWords.size() > 0) {
+            	summaryQuerySql.append("AND (1 != 1 ");
+            	for (int i = 0; i < nameWords.size(); ++i) {
+            		String whereStm = String.format("OR e.firstName LIKE :nameWord%d OR e.lastName LIKE :nameWord%d ", i, i);
+                    summaryQuerySql.append(whereStm);
+            	}
+            	summaryQuerySql.append(") ");
             }
             if(accountFilterDto.getSubcategory() != null) {
                 summaryQuerySql.append("AND subCate.id=:subCate ");
@@ -136,8 +145,12 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             }
             query = entityManager.createQuery(summaryQuerySql.toString());
             // set parameter
-            if(!StringUtil.isEmpty(accountFilterDto.getName())) {
-                query.setParameter("firstName","%" + accountFilterDto.getName() + "%");
+            if(nameWords.size() > 0) {
+            	for (int i = 0; i < nameWords.size(); ++i) {
+            		String word = nameWords.get(i);
+            		String parName = String.format("nameWord%d", i);
+            		query.setParameter(parName, word);
+            	}
             }
             if(accountFilterDto.getSubcategory() != null) {
                 query.setParameter("subCate", accountFilterDto.getSubcategory());
@@ -201,7 +214,9 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
         Page<AccountCustomDto> retVal = null;
         try {
             final EntityManager entityManager = getEntityManager();
-            
+
+            List<String> nameWords = StringUtils.isEmpty(accountFilterDto.getName()) ? Collections.emptyList() : Arrays.asList(accountFilterDto.getName().split("[\\s+\\,]"));
+            nameWords = nameWords.stream().map(s -> s.trim()).filter(s -> !s.isEmpty()).collect(Collectors.toList());
             Query query = null;
             
             final StringBuilder summaryQuerySql = new StringBuilder();
@@ -230,8 +245,13 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("JOIN major ON major.id = cate.major_id ");
             
             summaryQuerySql.append("WHERE 1 = 1 ");
-            if(!StringUtil.isEmpty(accountFilterDto.getName())) {
-                summaryQuerySql.append("AND e.first_name LIKE :firstName ");
+            if(nameWords.size() > 0) {
+            	summaryQuerySql.append("AND (1 != 1 ");
+            	for (int i = 0; i < nameWords.size(); ++i) {
+            		String whereStm = String.format("OR e.first_name LIKE :nameWord%d OR e.last_name LIKE :nameWord%d ", i, i);
+                    summaryQuerySql.append(whereStm);
+            	}
+            	summaryQuerySql.append(") ");
             }
             if(accountFilterDto.getSubcategory() != null) {
                 summaryQuerySql.append("AND subCate.id=:subCate ");
@@ -247,8 +267,12 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             }
             query = entityManager.createNativeQuery(summaryQuerySql.toString());
             // set parameter
-            if(!StringUtil.isEmpty(accountFilterDto.getName())) {
-                query.setParameter("firstName","%" + accountFilterDto.getName() + "%");
+            if(nameWords.size() > 0) {
+            	for (int i = 0; i < nameWords.size(); ++i) {
+            		String word = nameWords.get(i);
+            		String parName = String.format("nameWord%d", i);
+            		query.setParameter(parName, word);
+            	}
             }
             if(accountFilterDto.getSubcategory() != null) {
                 query.setParameter("subCate", accountFilterDto.getSubcategory());
