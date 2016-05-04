@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IAppointmentService;
@@ -257,7 +258,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 
 	@Override
-	public void cancelAppointment(Integer canceller, Integer appointmentId) {
+	public void cancelAppointment(Integer canceller, Integer appointmentId, String reason) {
 		this.autoCancelWaitingAppointment(canceller);
 		
 		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
@@ -294,6 +295,10 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		content.append(" ngày ");
 		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
 		content.append("</b>");
+		if (!StringUtils.isEmpty(reason)) {
+			content.append(". Lý do: ");
+			content.append(reason);
+		}
 		notifServ.sendMessage(null, cancelleeEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
 				content.toString(), canceller, cancelleeEnt.getId());
 	}

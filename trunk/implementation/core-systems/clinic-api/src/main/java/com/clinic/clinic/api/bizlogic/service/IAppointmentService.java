@@ -12,7 +12,7 @@ public interface IAppointmentService {
 	AppointmentBookingDto bookAppointment(Integer booker, AppointmentBookingRequestDto dto);
 	void approveAppointment(Integer medicar, Integer appointmentId);
 	void rejectAppointment(Integer medicar, Integer appointmentId);
-	void cancelAppointment(Integer medicar, Integer appointmentId);
+	void cancelAppointment(Integer medicar, Integer appointmentId, String reason);
 	void startAppointment(Integer medicar, Integer appointmentId);
 	List<TraceDto> getMedicarAppointments(Integer medicar, LocalDate date);
 	List<TraceDto> getMedicarAppointmentsByType(Integer medicar, LocalDate date, int type);

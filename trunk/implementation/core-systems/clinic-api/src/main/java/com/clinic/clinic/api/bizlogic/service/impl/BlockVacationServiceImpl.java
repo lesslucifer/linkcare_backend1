@@ -131,7 +131,7 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
 						content.append(" ngày ");
 						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
-						content.append("</b>");
+						content.append("</b>. Lý do: Bác sĩ có việc bận.");
 						notifServ.sendMessage(null, cancelleeEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
 								content.toString(), appointment.getId(), appointment.getMedicar().getId(), appointment.getBooker().getId());
 					});

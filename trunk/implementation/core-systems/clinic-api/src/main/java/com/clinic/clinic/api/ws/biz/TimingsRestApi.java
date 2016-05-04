@@ -83,7 +83,12 @@ public class TimingsRestApi extends AbsRestApi {
     		HttpServletResponse response) {
 		Integer medicar = auth().authSession(session);
 
-		return timingsServ.getTimingDaySlots(medicar, date, 1, i -> true).get(0);
+		List<TimingsDayDto> daySlots = timingsServ.getTimingDaySlots(medicar, date, 1, i -> true);
+		if (daySlots == null || daySlots.isEmpty()) {
+			return new TimingsDayDto();
+		}
+		
+		return daySlots.get(0);
     }
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_MEDICAR_TIMINGS_SLOT_COUNT, method = RequestMethod.GET, produces = {

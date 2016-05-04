@@ -2,6 +2,7 @@ package com.clinic.clinic.common.dto.biz;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 public class TimingsDayDto implements Serializable {
@@ -11,8 +12,8 @@ public class TimingsDayDto implements Serializable {
 	 */
 	private static final long serialVersionUID = -7787376247510465631L;
 	
-	private LocalDate day;
-	private List<TimingsSlotDto> slots;
+	private LocalDate day = LocalDate.now();
+	private List<TimingsSlotDto> slots = Collections.emptyList();
 
 	public LocalDate getDay() {
 		return day;

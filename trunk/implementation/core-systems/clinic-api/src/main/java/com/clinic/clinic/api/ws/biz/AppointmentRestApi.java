@@ -3,6 +3,7 @@
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
@@ -85,12 +86,13 @@ public class AppointmentRestApi extends AbsRestApi {
     "application/json" })
 	public Object cancelAppointment(@RequestHeader("sess") String session,
     		@PathVariable Integer appointment_id,
+    		@RequestBody Map<String, String> body,
     		HttpServletResponse response) {
 		validate(appointment_id);
 		Integer canceller = auth().authSession(session);
 		auth().authRight(canceller, IDbConstants.RIGHT_CANCEL_APPOINTMENT);
 		
-		appServ.cancelAppointment(canceller, appointment_id);
+		appServ.cancelAppointment(canceller, appointment_id, body.get("reason"));
 		return Utils.mkMap();
 	}
 
