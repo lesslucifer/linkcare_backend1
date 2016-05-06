@@ -27,11 +27,11 @@ public class MedicarProfileRestApi extends AbsRestApi {
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_PROFILE_SINGLE, method = RequestMethod.GET, produces = {
     "application/json" })
 	public Object getMedicarProfile(@RequestHeader("sess") String session,
-			@PathVariable("account_id") Integer accountId,
+			@PathVariable("account_id") String _accountId,
     		HttpServletResponse response) {
-		validate(accountId);
+		Integer requester = auth().authSession(session);
 		
-		/*Integer requester =*/ auth().authSession(session);
+		Integer accountId = "me".equals(_accountId) ? requester : Integer.parseInt(_accountId);
 		auth().authRight(accountId, IDbConstants.RIGHT_HAS_MEDICAR_PROFILE);
 		
 		return medicarProfileServ.getMedicarProfile(accountId);

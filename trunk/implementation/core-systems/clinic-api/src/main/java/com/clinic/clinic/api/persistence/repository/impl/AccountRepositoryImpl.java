@@ -53,7 +53,6 @@ import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
 import com.clinic.clinic.common.exception.BizlogicException;
-import com.clinic.clinic.common.utils.StringUtil;
 
 /**
  * <p>
@@ -117,13 +116,15 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", concat(plcAddr.houseNumber,', ',plcAddr.street,', ', plcAddr.ward,', ', plcAddr.district,', ', plcAddr.city) as plcAddr"
                     + ", plcAddr.longtitude"
                     + ", plcAddr.latitude"
-                    + ", e.avatar FROM " + AccountEntity.class.getName() + " e ");
+                    + ", e.avatar"
+                    + ", rate.mark FROM " + AccountEntity.class.getName() + " e ");
             summaryQuerySql.append("JOIN e.address address ");
             summaryQuerySql.append("JOIN e.place plc ");
             summaryQuerySql.append("JOIN plc.address plcAddr ");
             summaryQuerySql.append("JOIN e.subcategory subCate ");
             summaryQuerySql.append("JOIN subCate.category cate ");
             summaryQuerySql.append("JOIN cate.major major ");
+            summaryQuerySql.append("LEFT JOIN e.rate rate ");
             
             summaryQuerySql.append("WHERE 1 = 1 ");
             if(nameWords.size() > 0) {
@@ -187,6 +188,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setClinicLatitude((Double)object[13]);
                 acct.setAvatar((String)object[14]);
                 acct.setName(acct.getFirstName(), acct.getMidleName(), acct.getLastName());
+                acct.setMark(object[15] == null ? 0 : Double.parseDouble(object[15].toString()));
                 resultDto.add(acct);
             }
             
@@ -236,6 +238,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", plcAddr.latitude as placeLatitude"
                     + ", e.image_url"
                     + ", GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) * 1000 as distance "
+                    + ", rate.mark as mark "
                     + "FROM account e ");
             summaryQuerySql.append("JOIN address address ON e.address_id = address.id ");
             summaryQuerySql.append("LEFT JOIN place plc ON e.place_id = plc.id  ");
@@ -243,6 +246,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("JOIN subcategory subCate ON e.subcategory_id = subCate.id ");
             summaryQuerySql.append("JOIN category cate ON cate.id = subCate.category_id ");
             summaryQuerySql.append("JOIN major ON major.id = cate.major_id ");
+            summaryQuerySql.append("LEFT JOIN rate rate ON rate.medicar_id = e.id ");
             
             summaryQuerySql.append("WHERE 1 = 1 ");
             if(nameWords.size() > 0) {
@@ -315,6 +319,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setAvatar((String)object[14]);
                 acct.setDistance(Double.parseDouble(object[15].toString()));
                 acct.setName(acct.getFirstName(), acct.getMidleName(), acct.getLastName());
+                acct.setMark(object[16] == null ? 0 : Double.parseDouble(object[16].toString()));
                 resultDto.add(acct);
             }
             

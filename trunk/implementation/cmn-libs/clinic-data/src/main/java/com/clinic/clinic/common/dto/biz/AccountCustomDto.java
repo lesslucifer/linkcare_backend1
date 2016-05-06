@@ -74,6 +74,8 @@ public class AccountCustomDto extends IdDto {
     private Double clinicLatitude;
     
     private Double distance;
+    
+    private Double mark;
 
     public String getAvatar() {
         return avatar;
@@ -224,4 +226,12 @@ public class AccountCustomDto extends IdDto {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+	public Double getMark() {
+		return mark;
+	}
+
+	public void setMark(Double mark) {
+		this.mark = mark;
+	}
 }
