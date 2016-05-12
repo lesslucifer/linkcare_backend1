@@ -29,7 +29,9 @@ import org.springframework.data.domain.Pageable;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
+import com.clinic.clinic.common.dto.biz.UserCallBackDto;
 import com.clinic.clinic.common.dto.biz.UserProfileDto;
+import com.clinic.clinic.common.dto.biz.UserRegisterDto;
 import com.clinic.clinic.common.exception.BizlogicException;
 
 /**
@@ -78,4 +80,14 @@ public interface IAccountService {
      * @author Vuong Do
      */
     UserProfileDto getProfile(Integer accountId) throws BizlogicException;
+
+    /**
+     * <p>Patient register</p>
+     *
+     * @param userRegister
+     * @return
+     *
+     * @author Vuong Do
+     */
+    UserCallBackDto userRegister(UserRegisterDto userRegister) throws BizlogicException;
 }

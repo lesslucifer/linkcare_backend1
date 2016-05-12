@@ -33,7 +33,7 @@ public final class AppointmentBookingEntity extends TraceEntity implements Compa
 			Arrays.asList(STATUS_REJECTED, STATUS_CANCELLED, STATUS_FINISHED, STATUS_RATED));
 	
 	/**
-	 * 
+	 *         
 	 */
 	private static final long serialVersionUID = 3534479390240276585L;
 

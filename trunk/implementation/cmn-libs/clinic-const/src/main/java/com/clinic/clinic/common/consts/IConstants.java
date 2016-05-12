@@ -55,4 +55,7 @@ public interface IConstants {
 
     static final String ROOT_IMAGE_URL = "E:\\\\";
     static final String PUB_RES = ROOT_IMAGE_URL + "var\\www\\html\\pub-res\\images";
+    
+    static final Integer ACCOUNT_ACTIVED_FLAG = 1;
+    static final Integer ACCOUNT_UNACTIVED_FLAG = 1;
 }

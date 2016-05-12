@@ -12,6 +12,12 @@ public interface IBizErrorCode {
 	static final int MISSING_RIGHT = -102;
 	static final int WRONG_USERNAME = -103;
 	static final int WRONG_PASSWORD = -104;
+	static final int ACCOUNT_EXISTS = -105;
+	
+	// # User Register
+	static final int ACCOUNT_PATIENT_REGISTER = -150;
+	static final int ROLE_PATIENT_NOT_EXISTS = -151;
+	static final int ACCOUNT_EMAIL_EXISTS = -152;
 	
 	// # Reserve (-201 -> -999)
 	
@@ -51,7 +57,4 @@ public interface IBizErrorCode {
     static final int BLOCK_VACATION_INVALID_OWNER = -5004;
     
     static final int ADDRESS = -6000;
-    
-    
-    
 }

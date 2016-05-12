@@ -23,6 +23,7 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -36,8 +37,10 @@ import org.springframework.data.domain.Pageable;
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.IAccountService;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
+import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.RoleEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
+import com.clinic.clinic.api.persistence.repository.IAddressRepository;
 import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.api.translator.ITranslator;
 import com.clinic.clinic.api.translator.impl.AccountTranslatorImpl;
@@ -48,7 +51,9 @@ import com.clinic.clinic.common.consts.IMessagesConstants;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
+import com.clinic.clinic.common.dto.biz.UserCallBackDto;
 import com.clinic.clinic.common.dto.biz.UserProfileDto;
+import com.clinic.clinic.common.dto.biz.UserRegisterDto;
 import com.clinic.clinic.common.exception.BizlogicException;
 import com.clinic.clinic.common.utils.StringUtil;
 
@@ -70,6 +75,8 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
     private IAccountRepository accountRepo;
     @Autowired
     private IRoleRepository roleRepo;
+    @Autowired
+    private IAddressRepository addressRepo;
     
     private ITranslator<AccountDto, AccountEntity> accountTrans = new AccountTranslatorImpl();
 
@@ -262,5 +269,103 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             }
         }
         return retDto;
+    }
+
+    /* (non-Javadoc)
+     * @see com.clinic.clinic.api.bizlogic.service.IAccountService#userRegister(com.clinic.clinic.common.dto.biz.UserRegisterDto)
+     */
+    @SuppressWarnings("unused")
+    @Override
+    public UserCallBackDto userRegister(UserRegisterDto userRegister) throws BizlogicException {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        UserCallBackDto dto = null;
+        try {
+            AccountEntity a = accountRepo.findAccountByIdCard(userRegister.getIdCard());
+            if(a == null) {
+                AccountEntity a2 = accountRepo.findAccountByEmail(userRegister.getEmail());
+                if(a2 == null){
+                    AccountEntity accountEnt = new AccountEntity();
+                    // LoginName
+                    accountEnt.setLoginName(userRegister.getIdCard());
+                    accountEnt.setCode(getUUID());
+                    // Email
+                    accountEnt.setEmail(userRegister.getEmail());
+                    accountEnt.setActiveFlag(IConstants.ACCOUNT_ACTIVED_FLAG);
+                    // Name
+                    accountEnt.setFirstName(userRegister.getFirstName());
+                    accountEnt.setLastName(userRegister.getLastName());
+                    accountEnt.setMidleName(userRegister.getMidleName());
+                    accountEnt.setGender(userRegister.getGender());
+                    accountEnt.setBirthday(12L);
+                    accountEnt.setIdCard(userRegister.getIdCard());
+                    if(null != userRegister.getPassport() && !userRegister.getPassport().isEmpty()) {
+                        accountEnt.setPassport(userRegister.getPassport());
+                    }
+                    accountEnt.setHashedPassword(StringUtil.getHashedText(userRegister.getPassword()));
+                    
+                    accountEnt.setIsDeleted(IDbConstants.FALSE);
+                    
+                    accountEnt.setBeginActiveTime(System.currentTimeMillis());
+                    
+                    accountEnt.setCreatedDatetime(System.currentTimeMillis());
+                    accountEnt.setLastUpdated(System.currentTimeMillis());
+                    
+                    AddressEntity addressEnt = new AddressEntity();
+                    if(null != addressEnt.getHouseNumber()) {
+                        addressEnt.setHouseNumber(userRegister.getAddressHouseNumber());
+                    } 
+                    if(null != addressEnt.getStreet()) {
+                        addressEnt.setStreet(userRegister.getAddressStreet());
+                    } 
+                    if(null != addressEnt.getWard()) {
+                        addressEnt.setWard(userRegister.getAddressWard());
+                    }
+                    if(null != userRegister.getAddressCity()) {
+                        addressEnt.setDistrict(userRegister.getAddressDistrict());
+                    }
+                    if(null != userRegister.getAddressCity()) {
+                        addressEnt.setCity(userRegister.getAddressCity());
+                    }
+                    if(null != userRegister.getLatitude()) {
+                        addressEnt.setLatitude(userRegister.getLatitude());
+                    }
+                    if(null != userRegister.getLongtitude()) {
+                        addressEnt.setLongtitude(userRegister.getLongtitude());
+                    }
+                    AddressEntity add = addressRepo.save(addressEnt);
+                    
+                    accountEnt.setAddress(add);
+                    
+                    RoleEntity roleEnt = roleRepo.findByCode(IDbConstants.ACCOUNT_PATIENT_ROLE, IDbConstants.FALSE);
+                    
+                    if(!roleRepo.exists(roleEnt.getId())) {
+                        throwBizlogicException(500, IBizErrorCode.ACCOUNT_EXISTS, "Not role patient");
+                    }
+                    
+                    List<RoleEntity> ls = new ArrayList<RoleEntity>();
+                    
+                    ls.add(roleEnt);
+                    accountEnt.setRoles(ls);
+                    
+                    accountRepo.save(accountEnt);
+                } else {
+                    throwBizlogicException(500, IBizErrorCode.ACCOUNT_EMAIL_EXISTS, "Email exists", userRegister.getEmail());
+                }
+            } else {
+                throwBizlogicException(500, IBizErrorCode.ACCOUNT_EXISTS, "IdCard exists", userRegister.getIdCard());
+            }
+            
+        } catch (BizlogicException be) {
+            throwBizlogicException(500, IBizErrorCode.ACCOUNT_PATIENT_REGISTER, be.toString());
+        } catch (Exception e) {
+            throwBizlogicException(500, IBizErrorCode.UNKNOWN_ERROR, "Unknown error", e.toString());
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return dto;
     }
 }

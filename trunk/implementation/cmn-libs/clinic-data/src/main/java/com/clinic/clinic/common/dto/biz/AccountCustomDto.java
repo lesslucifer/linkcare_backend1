@@ -34,6 +34,15 @@ import com.clinic.clinic.common.dto.IdDto;
  * @version 1.0<br>
  * @see TODO
  */
+/**
+ * <p>
+ * Describe functionality of this class here.
+ * </p>
+ *
+ * @author Vuong Do<br>
+ * @version 1.0<br>
+ * @see TODO
+ */
 public class AccountCustomDto extends IdDto {
 
     /**
@@ -74,6 +83,8 @@ public class AccountCustomDto extends IdDto {
     private Double clinicLatitude;
     
     private Double distance;
+    
+    private Double mark;
 
     public String getAvatar() {
         return avatar;
@@ -224,4 +235,14 @@ public class AccountCustomDto extends IdDto {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+    public Double getMark() {
+        return mark;
+    }
+
+    public void setMark(Double mark) {
+        this.mark = mark;
+    }
+    
+    
 }

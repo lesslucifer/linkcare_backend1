@@ -53,7 +53,9 @@ import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
 import com.clinic.clinic.common.dto.biz.SubcategoryDto;
+import com.clinic.clinic.common.dto.biz.UserCallBackDto;
 import com.clinic.clinic.common.dto.biz.UserProfileDto;
+import com.clinic.clinic.common.dto.biz.UserRegisterDto;
 import com.clinic.clinic.common.utils.StringUtil;
 import com.clinic.clinic.common.utils.Utils;
 
@@ -227,5 +229,31 @@ public class AccountRestApi extends AbsRestApi {
             }
         }
         return dto;
+    }
+    
+    /**
+     * <p>User(patient) register</p>
+     *
+     * @param sess
+     * @param userRegister
+     * @return
+     *
+     * @author Vuong Do
+     */
+    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_ACCOUNT_REGISTER, method = RequestMethod.POST, produces = {
+    "application/json" })
+    public Object resgister(@RequestHeader("sess") String sess, @RequestBody UserRegisterDto userRegister) {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        UserCallBackDto us = null;
+        try {
+            us =  accountService.userRegister(userRegister);
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return Utils.mkMap(us);
     }
 }

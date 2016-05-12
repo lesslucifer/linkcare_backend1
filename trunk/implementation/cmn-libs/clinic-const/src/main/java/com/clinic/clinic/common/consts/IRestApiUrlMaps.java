@@ -32,6 +32,7 @@ public interface IRestApiUrlMaps {
     static final String REST_API_BIZ_ACCOUNT_LOGIN = "/account/login";
     static final String REST_API_BIZ_ACCOUNT_LOGOUT = "/account/logout";
     static final String REST_API_BIZ_ACCOUNT_IDCARD_PROFILE = "/account/profile";
+    static final String REST_API_BIZ_ACCOUNT_REGISTER = "/account/patient/register";
     
     // ### Timings
     static final String REST_API_BIZ_TIMINGS = "/timings";

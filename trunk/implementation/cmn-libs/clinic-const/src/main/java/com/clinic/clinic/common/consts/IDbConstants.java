@@ -341,4 +341,7 @@ public interface IDbConstants {
 
 	static final String FIELD_SESSION_LOGOUT_TIME = "logoutTime";
 	static final String RIGHT_RATING = "RIGHT_RATING";
+	
+    static final String ACCOUNT_PATIENT_ROLE = "PATIENT_ROLE";
+    static final String FIELD_ACC_ID_CARD = "idCard";
 }

@@ -236,6 +236,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", plcAddr.latitude as placeLatitude"
                     + ", e.image_url"
                     + ", GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) * 1000 as distance "
+                    + ", coalesce(rate.mark, 0) as mark_medicar "
                     + "FROM account e ");
             summaryQuerySql.append("JOIN address address ON e.address_id = address.id ");
             summaryQuerySql.append("LEFT JOIN place plc ON e.place_id = plc.id  ");
@@ -243,6 +244,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("JOIN subcategory subCate ON e.subcategory_id = subCate.id ");
             summaryQuerySql.append("JOIN category cate ON cate.id = subCate.category_id ");
             summaryQuerySql.append("JOIN major ON major.id = cate.major_id ");
+            summaryQuerySql.append("JOIN rate on rate.medicar = e.id ");
             
             summaryQuerySql.append("WHERE 1 = 1 ");
             if(nameWords.size() > 0) {
@@ -459,4 +461,62 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
 		}
 		return ent;
 	}
+
+    /* (non-Javadoc)
+     * @see com.clinic.clinic.api.persistence.repository.IAccountRepository#findAccountByIdCard(java.lang.String)
+     */
+    @Override
+    public AccountEntity findAccountByIdCard(String idCard) {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        AccountEntity ent = null;
+        try {
+            Specification<AccountEntity> spec = new Specification<AccountEntity>() {
+                @Override
+                public Predicate toPredicate(Root<AccountEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return cb.equal(root.get(IDbConstants.FIELD_ACC_ID_CARD), idCard);
+                }
+            };
+            ent = findOne(spec);
+        } catch (BizlogicException be) {
+            LOGGER.error("Error", be);
+        } catch (Exception e) {
+            LOGGER.error("Error", e);
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return ent;
+    }
+
+    /* (non-Javadoc)
+     * @see com.clinic.clinic.api.persistence.repository.IAccountRepository#findAccountByEmail(java.lang.String)
+     */
+    @Override
+    public AccountEntity findAccountByEmail(String email) {
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug(IConstants.BEGIN_METHOD);
+        }
+        AccountEntity ent = null;
+        try {
+            Specification<AccountEntity> spec = new Specification<AccountEntity>() {
+                @Override
+                public Predicate toPredicate(Root<AccountEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return cb.equal(root.get(IDbConstants.FIELD_ACC_EMAIL), email);
+                }
+            };
+            ent = findOne(spec);
+        } catch (BizlogicException be) {
+            LOGGER.error("Error", be);
+        } catch (Exception e) {
+            LOGGER.error("Error", e);
+        } finally {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug(IConstants.END_METHOD);
+            }
+        }
+        return ent;
+    }
 }
