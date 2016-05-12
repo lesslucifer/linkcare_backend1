@@ -112,7 +112,7 @@ public class AuthServiceImpl extends AbsService implements IAuthService {
                     throwBizlogicException(401, IBizErrorCode.WRONG_PASSWORD, "password invalid");
                 }
             } else {
-                throwBizlogicException(401, IBizErrorCode.WRONG_USERNAME, "Username invalid");
+                throwBizlogicException(401, IBizErrorCode.WRONG_USERNAME, "Username invalid", loginName);
             }
         } finally {
             if(LOGGER.isDebugEnabled()) {
