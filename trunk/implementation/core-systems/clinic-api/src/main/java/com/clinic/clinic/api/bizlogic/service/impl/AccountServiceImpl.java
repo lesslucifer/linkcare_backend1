@@ -293,11 +293,14 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                     // Email
                     accountEnt.setEmail(userRegister.getEmail());
                     accountEnt.setActiveFlag(IConstants.ACCOUNT_ACTIVED_FLAG);
+                    // Phone number
+                    accountEnt.setPhoneNumber(userRegister.getPhoneNumber());
                     // Name
                     accountEnt.setFirstName(userRegister.getFirstName());
                     accountEnt.setLastName(userRegister.getLastName());
                     accountEnt.setMidleName(userRegister.getMidleName());
                     accountEnt.setGender(userRegister.getGender());
+                    // Todo Convert Birthday
                     accountEnt.setBirthday(12L);
                     accountEnt.setIdCard(userRegister.getIdCard());
                     if(null != userRegister.getPassport() && !userRegister.getPassport().isEmpty()) {
@@ -313,16 +316,16 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                     accountEnt.setLastUpdated(System.currentTimeMillis());
                     
                     AddressEntity addressEnt = new AddressEntity();
-                    if(null != addressEnt.getHouseNumber()) {
+                    if(null != userRegister.getAddressHouseNumber()) {
                         addressEnt.setHouseNumber(userRegister.getAddressHouseNumber());
                     } 
-                    if(null != addressEnt.getStreet()) {
+                    if(null != userRegister.getAddressStreet()) {
                         addressEnt.setStreet(userRegister.getAddressStreet());
                     } 
-                    if(null != addressEnt.getWard()) {
+                    if(null != userRegister.getAddressWard()) {
                         addressEnt.setWard(userRegister.getAddressWard());
                     }
-                    if(null != userRegister.getAddressCity()) {
+                    if(null != userRegister.getAddressDistrict()) {
                         addressEnt.setDistrict(userRegister.getAddressDistrict());
                     }
                     if(null != userRegister.getAddressCity()) {
@@ -334,9 +337,9 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                     if(null != userRegister.getLongtitude()) {
                         addressEnt.setLongtitude(userRegister.getLongtitude());
                     }
-                    AddressEntity add = addressRepo.save(addressEnt);
+                    addressEnt = addressRepo.save(addressEnt);
                     
-                    accountEnt.setAddress(add);
+                    accountEnt.setAddress(addressEnt);
                     
                     RoleEntity roleEnt = roleRepo.findByCode(IDbConstants.ACCOUNT_PATIENT_ROLE, IDbConstants.FALSE);
                     

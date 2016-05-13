@@ -249,11 +249,14 @@ public class AccountRestApi extends AbsRestApi {
         UserCallBackDto us = null;
         try {
             us =  accountService.userRegister(userRegister);
+            if(us!= null) {
+                return true;
+            }
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
-        return Utils.mkMap(us);
+        return false;
     }
 }
