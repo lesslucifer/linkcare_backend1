@@ -243,6 +243,4 @@ public class AccountCustomDto extends IdDto {
     public void setMark(Double mark) {
         this.mark = mark;
     }
-    
-    
 }
