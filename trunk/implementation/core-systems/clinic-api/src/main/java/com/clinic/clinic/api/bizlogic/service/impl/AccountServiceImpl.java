@@ -23,8 +23,12 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service.impl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -303,11 +307,11 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                     accountEnt.setGender(userRegister.getGender());
                     // Todo Convert Birthday
                     if(null == userRegister.getBirthday()) {
-                        throwBizlogicException(500, IBizErrorCode.BIRTHDAY_NULL, "Birthday");
+                        throwBizlogicException(500, IBizErrorCode.BIRTHDAY_NULL, "Birthday is not null");
                     }
-                    Long birthdayInLong = DatetimeUtils.parsesDatetime(userRegister.getBirthday());
+                    Long birthdayInLong = this.parsesDatetime(userRegister.getBirthday());
                     if(birthdayInLong == null) {
-                        throwBizlogicException(500, IBizErrorCode.BIRTHDAY_WRONG, "Birthday", "dd-MM-yyyy");
+                        throwBizlogicException(500, IBizErrorCode.BIRTHDAY_WRONG, "Birthday error format", "dd-MM-yyyy");
                     }
                     accountEnt.setBirthday(birthdayInLong);
                     accountEnt.setIdCard(userRegister.getIdCard());
@@ -378,5 +382,18 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             }
         }
         return dto;
+    }
+    
+    private Long parsesDatetime(String birthday) {
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = null;
+        try {
+            date = formatter.parse(birthday);
+        } catch (ParseException e) {
+            LOGGER.error("Exception", e);
+            throwBizlogicException(500, IBizErrorCode.BIRTHDAY_WRONG, "Birthday error format", "dd-MM-yyyy");
+        }
+        long dateInLong = date.getTime();
+        return dateInLong;
     }
 }
