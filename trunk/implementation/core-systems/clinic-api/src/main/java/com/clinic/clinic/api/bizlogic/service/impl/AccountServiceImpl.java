@@ -44,6 +44,7 @@ import com.clinic.clinic.api.persistence.repository.IAddressRepository;
 import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.api.translator.ITranslator;
 import com.clinic.clinic.api.translator.impl.AccountTranslatorImpl;
+import com.clinic.clinic.api.util.DatetimeUtils;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
@@ -301,7 +302,14 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                     accountEnt.setMidleName(userRegister.getMidleName());
                     accountEnt.setGender(userRegister.getGender());
                     // Todo Convert Birthday
-                    accountEnt.setBirthday(12L);
+                    if(null == userRegister.getBirthday()) {
+                        throwBizlogicException(500, IBizErrorCode.BIRTHDAY_NULL, "Birthday");
+                    }
+                    Long birthdayInLong = DatetimeUtils.parsesDatetime(userRegister.getBirthday());
+                    if(birthdayInLong == null) {
+                        throwBizlogicException(500, IBizErrorCode.BIRTHDAY_WRONG, "Birthday", "dd-MM-yyyy");
+                    }
+                    accountEnt.setBirthday(birthdayInLong);
                     accountEnt.setIdCard(userRegister.getIdCard());
                     if(null != userRegister.getPassport() && !userRegister.getPassport().isEmpty()) {
                         accountEnt.setPassport(userRegister.getPassport());
