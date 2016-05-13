@@ -242,7 +242,7 @@ public class AccountRestApi extends AbsRestApi {
      */
     @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_ACCOUNT_REGISTER, method = RequestMethod.POST, produces = {
     "application/json" })
-    public Object resgister(@RequestHeader("sess") String sess, @RequestBody UserRegisterDto userRegister) {
+    public Object resgister(@RequestBody UserRegisterDto userRegister) {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
