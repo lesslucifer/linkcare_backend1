@@ -23,6 +23,8 @@
  *=============================================================================*/
 package com.clinic.clinic.api.bizlogic.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -43,4 +45,6 @@ public interface ISubcategoryService {
     Page<SubcategoryDto> getSubcategoryByCateId(Pageable range, Integer cateId) throws BizlogicException;
     
     Page<SubcategoryDto> getSubcategoryByMajorId(Pageable range, Integer major) throws BizlogicException;
+    
+    List<SubcategoryDto> getAllSubcategories();
 }

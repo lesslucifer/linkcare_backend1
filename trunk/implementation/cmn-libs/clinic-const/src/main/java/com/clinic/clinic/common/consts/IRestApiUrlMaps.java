@@ -25,6 +25,7 @@ public interface IRestApiUrlMaps {
     // ### Sub-category
     static final String REST_API_BIZ_SUBCATEGORY_CATEGORY_ID = "/subcategories/category/{categoryId}";
     static final String REST_API_BIZ_SUBCATEGORY_MAJOR_ID = "/subcategories/major/{majorId}";
+    static final String REST_API_BIZ_SUBCATEGORIES = "/subcategories";
     
     // ### Account
     static final String REST_API_BIZ_ACCOUNT_SUBCATEGORY_SUBCATEGORYID = "/account/subcategory/{subcategoryId}";

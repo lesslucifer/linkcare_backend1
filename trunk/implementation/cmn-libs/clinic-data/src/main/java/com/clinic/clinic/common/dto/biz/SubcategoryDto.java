@@ -23,9 +23,6 @@
  *=============================================================================*/
 package com.clinic.clinic.common.dto.biz;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.clinic.clinic.common.dto.NameCodeDescDto;
 
 /**
@@ -44,13 +41,14 @@ public class SubcategoryDto extends NameCodeDescDto {
      */
     private static final long serialVersionUID = -818112078097765800L;
     
-    private List<AccountDto> accounts = new ArrayList<AccountDto>();
-
-    public List<AccountDto> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<AccountDto> accounts) {
-        this.accounts = accounts;
-    }
+//    private List<AccountDto> accounts = new ArrayList<AccountDto>();
+//
+//    public List<AccountDto> getAccounts() {
+//        return accounts;
+//    }
+//
+//    public void setAccounts(List<AccountDto> accounts) {
+//        this.accounts = accounts;
+//    }
+ 
 }

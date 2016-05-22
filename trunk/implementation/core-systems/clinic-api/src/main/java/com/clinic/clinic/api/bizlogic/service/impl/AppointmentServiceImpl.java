@@ -324,8 +324,8 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		
 		LocalDateTime now = LocalDateTime.now();
 		if (now.toLocalDate().compareTo(appBooking.getDate()) != 0) {
-			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Invalid appointment time, wrong day",
-					appBooking);
+//			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Invalid appointment time, wrong day",
+//					appBooking);
 		}
 
 		int timeInMinutes = now.getHour() * 60 + now.getMinute();
