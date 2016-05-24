@@ -107,10 +107,8 @@ public class SubcategoryServiceImpl extends AbsService implements ISubcategorySe
         return pageDto;
     }
 	@Override
-	public List<SubcategoryDto> getAllSubcategories() {
-		List<SubcategoryEntity> entities = subcategoryRepo.findAll();
-		entities.size(); // buffering
-		
+	public List<SubcategoryDto> getAllSubcategories(Integer majorId) {
+		List<SubcategoryEntity> entities = subcategoryRepo.getAllSubcategoryByMajor(majorId);
 		return subcategoryTrans.getDtoList(entities);
 	}
 }

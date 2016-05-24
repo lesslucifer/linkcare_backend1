@@ -20,6 +20,9 @@
  */
 package com.clinic.clinic.api.persistence.repository.impl;
 
+import java.util.List;
+
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -113,5 +116,17 @@ public class SubcategoryRepositoryImpl extends AbsRepositoryImpl<SubcategoryEnti
             }
         }
         return retVal;
+    }
+    
+    @Override
+    public List<SubcategoryEntity> getAllSubcategoryByMajor(Integer major) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT subcate.* FROM `SubcategoryEntity` as subcate ");
+		sb.append("WHERE subcate.category.major.id = :majorId");
+		
+		TypedQuery<SubcategoryEntity> q = getEntityManager().createQuery(sb.toString(), SubcategoryEntity.class);
+		q.setParameter("major", major);
+
+		return q.getResultList();
     }
 }

@@ -23,6 +23,8 @@
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -42,4 +44,6 @@ public interface ISubcategoryRepository extends IRepository<SubcategoryEntity, I
     Page<SubcategoryEntity> findSubcategoryByCateId(final Pageable range,final Integer cateId);
     
     Page<SubcategoryEntity> findSubcategoryByMajor(final Pageable range, final Integer majorId);
+    
+    List<SubcategoryEntity> getAllSubcategoryByMajor(Integer majorId);
 }

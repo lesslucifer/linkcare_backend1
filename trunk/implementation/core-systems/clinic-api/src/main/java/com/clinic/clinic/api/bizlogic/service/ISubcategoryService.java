@@ -46,5 +46,5 @@ public interface ISubcategoryService {
     
     Page<SubcategoryDto> getSubcategoryByMajorId(Pageable range, Integer major) throws BizlogicException;
     
-    List<SubcategoryDto> getAllSubcategories();
+    List<SubcategoryDto> getAllSubcategories(Integer majorId);
 }

@@ -149,9 +149,9 @@ public class SubcategoryRestApi extends AbsRestApi {
         return retVal;
     }
 
-    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_SUBCATEGORIES, method = RequestMethod.GET, produces = {
+    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_SUBCATEGORY_MAJOR_ID_FULL, method = RequestMethod.GET, produces = {
     "application/json" })
-    public List<SubcategoryDto> getSubcategories() {
-    	return subcateService.getAllSubcategories();
+    public List<SubcategoryDto> getSubcategories(@PathVariable("majorId") Integer majorId) {
+    	return subcateService.getAllSubcategories(majorId);
     }
 }
