@@ -146,6 +146,9 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 		final List<AppointmentBookingEntity> activeAppointments = appointmentBookingRepo.getActiveAppointments(accountId, startDay, endDay);
 		activeAppointments.sort(AppointmentBookingEntity::compareTo);
 		
+		final LocalDate toDay = LocalDate.now();
+		final LocalTime now = LocalTime.now();
+		final int timeNow = now.getHour() * 60 + now.getMinute();
 		return IntStream.range(0, range).mapToObj(i -> {
 			LocalDate date = startDay.plusDays(i);
 			List<TimingsSlotDto> slots = timings.stream().map(t -> {
@@ -153,8 +156,9 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 				return IntStream.range(0, nSlot).mapToObj(slotOffset -> {
 					TimingsSlotDto slot = new TimingsSlotDto();
 					slot.setTime(t.getBeginTime() + slotOffset * IConstants.SLOT_TIME);
-					slot.setAvailable(isTimeAvailable(date, slot.getTime(), slot.getTime() + IConstants.SLOT_TIME,
-							blockTimes, activeAppointments));
+					boolean isAvail = date.compareTo(toDay) >= 0 && slot.getTime() >= timeNow && isTimeAvailable(date, slot.getTime(), slot.getTime() + IConstants.SLOT_TIME,
+							blockTimes, activeAppointments);
+					slot.setAvailable(isAvail);
 					slot.setType(t.getType());
 					return slot;
 				});
