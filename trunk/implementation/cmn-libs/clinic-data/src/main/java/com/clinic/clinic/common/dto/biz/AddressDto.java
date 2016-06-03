@@ -27,7 +27,6 @@ package com.clinic.clinic.common.dto.biz;
 import java.io.Serializable;
 
 import com.clinic.clinic.common.dto.TraceDto;
-import com.clinic.clinic.common.utils.StringUtil;
 
 /**
  * <p>
@@ -48,122 +47,20 @@ public class AddressDto extends TraceDto implements Serializable {
     public AddressDto() {
         super();
     }
-    private String houseNumber;
-
-    private String street;
-
-    private String hamlet;
-
-    private String ward;
-
-    private String district;
-
-    private String city;
+    
+    private String address;
 
     private Double longtitude;
     
     private Double latitude;
     
-    private AccountDto account;
-    
-    /**
-     * <p>
-     * Returns current value of house_number attribute.
-     * </p>
-     */
-    public String getHouseNumber() {
-        return houseNumber;
-    }
-    /**
-     * <p>
-     * Sets value of house_number attribute.
-     * </p>
-     */
-    public void setHouseNumber(final String houseNumber) {
-        this.houseNumber = houseNumber;
-    }
-    /**
-     * <p>
-     * Returns current value of street attribute.
-     * </p>
-     */
-    public String getStreet() {
-        return street;
-    }
-    /**
-     * <p>
-     * Sets value of street attribute.
-     * </p>
-     */
-    public void setStreet(final String street) {
-        this.street = street;
-    }
-    /**
-     * <p>
-     * Returns current value of hamlet attribute.
-     * </p>
-     */
-    public String getHamlet() {
-        return hamlet;
-    }
-    /**
-     * <p>
-     * Sets value of hamlet attribute.
-     * </p>
-     */
-    public void setHamlet(final String hamlet) {
-        this.hamlet = hamlet;
-    }
-    /**
-     * <p>
-     * Returns current value of ward attribute.
-     * </p>
-     */
-    public String getWard() {
-        return ward;
-    }
-    /**
-     * <p>
-     * Sets value of ward attribute.
-     * </p>
-     */
-    public void setWard(final String ward) {
-        this.ward = ward;
-    }
-    /**
-     * <p>
-     * Returns current value of district attribute.
-     * </p>
-     */
-    public String getDistrict() {
-        return district;
-    }
-    /**
-     * <p>
-     * Sets value of district attribute.
-     * </p>
-     */
-    public void setDistrict(final String district) {
-        this.district = district;
-    }
-    /**
-     * <p>
-     * Returns current value of city attribute.
-     * </p>
-     */
-    public String getCity() {
-        return city;
-    }
-    /**
-     * <p>
-     * Sets value of city attribute.
-     * </p>
-     */
-    public void setCity(final String city) {
-        this.city = city;
-    }
-    
-    public Double getLongtitude() {
+    public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public Double getLongtitude() {
         return longtitude;
     }
     public void setLongtitude(Double longtitude) {
@@ -175,25 +72,4 @@ public class AddressDto extends TraceDto implements Serializable {
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
-    
-    public AccountDto getAccount() {
-        return account;
-    }
-    public void setAccount(AccountDto account) {
-        this.account = account;
-    }
-    /* (non-Javadoc)
-     * @see com.clinic.clinic.common.dto.TraceDto#toUpercaseFirstChar()
-     */
-    @Override
-    public void toUpercaseFirstChar() {
-        houseNumber = StringUtil.toUpercaseFirstChar(houseNumber);
-        street = StringUtil.toUpercaseFirstChar(street);
-        hamlet = StringUtil.toUpercaseFirstChar(hamlet);
-        ward = StringUtil.toUpercaseFirstChar(ward);
-        district = StringUtil.toUpercaseFirstChar(district);
-        city = StringUtil.toUpercaseFirstChar(city);
-        
-    }
-
 }

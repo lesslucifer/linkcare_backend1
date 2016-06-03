@@ -15,72 +15,20 @@ public class AddressEntity extends TraceEntity {
 	 */
 	private static final long serialVersionUID = -1088997403290097984L;
 
-	@Column(name = "house_number", length = 45)
-	private String houseNumber;
-	@Column(name = "street", length = 200)
-	private String street;
-	@Column(name = "hamlet", length = 45)
-	private String hamlet;
-	@Column(name = "ward", length = 45)
-	private String ward;
-	@Column(name = "district", length = 45)
-	private String district;
-	@Column(name = "city", length = 45)
-	private String city;
+	@Column(name = "address")
+	private String address;
 
 	@Column(name = "longtitude", nullable = true)
 	private Double longtitude;
     @Column(name = "latitude", nullable = true)
     private Double latitude;
-    
-    
 
-	public String getHouseNumber() {
-		return houseNumber;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setHouseNumber(String houseNumber) {
-		this.houseNumber = houseNumber;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getHamlet() {
-		return hamlet;
-	}
-
-	public void setHamlet(String hamlet) {
-		this.hamlet = hamlet;
-	}
-
-	public String getWard() {
-		return ward;
-	}
-
-	public void setWard(String ward) {
-		this.ward = ward;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public Double getLongtitude() {

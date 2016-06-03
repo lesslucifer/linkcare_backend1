@@ -48,7 +48,6 @@ import com.clinic.clinic.api.persistence.repository.IAddressRepository;
 import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.api.translator.ITranslator;
 import com.clinic.clinic.api.translator.impl.AccountTranslatorImpl;
-import com.clinic.clinic.api.util.DatetimeUtils;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
@@ -56,7 +55,6 @@ import com.clinic.clinic.common.consts.IMessagesConstants;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
-import com.clinic.clinic.common.dto.biz.UserCallBackDto;
 import com.clinic.clinic.common.dto.biz.UserProfileDto;
 import com.clinic.clinic.common.dto.biz.UserRegisterDto;
 import com.clinic.clinic.common.exception.BizlogicException;
@@ -254,11 +252,7 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             retDto.setPhoneNumber(ent.getPhoneNumber());
             
             if(null != ent.getAddress()) {
-                retDto.setAddress(ent.getAddress().getHouseNumber() + ", "
-                        + ent.getAddress().getStreet() + ", "
-                        + ent.getAddress().getWard() + ", "
-                        + ent.getAddress().getDistrict() + ", "
-                        + ent.getAddress().getCity());
+                retDto.setAddress(ent.getAddress().getAddress());
                 retDto.setLatitude(ent.getAddress().getLatitude());
                 retDto.setLongtitude(ent.getAddress().getLongtitude());
             }
@@ -279,13 +273,11 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
     /* (non-Javadoc)
      * @see com.clinic.clinic.api.bizlogic.service.IAccountService#userRegister(com.clinic.clinic.common.dto.biz.UserRegisterDto)
      */
-    @SuppressWarnings("unused")
     @Override
-    public UserCallBackDto userRegister(UserRegisterDto userRegister) throws BizlogicException {
+    public void userRegister(UserRegisterDto userRegister) throws BizlogicException {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        UserCallBackDto dto = null;
         try {
             AccountEntity a = accountRepo.findAccountByIdCard(userRegister.getIdCard());
             if(a == null) {
@@ -328,20 +320,8 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                     accountEnt.setLastUpdated(System.currentTimeMillis());
                     
                     AddressEntity addressEnt = new AddressEntity();
-                    if(null != userRegister.getAddressHouseNumber()) {
-                        addressEnt.setHouseNumber(userRegister.getAddressHouseNumber());
-                    } 
-                    if(null != userRegister.getAddressStreet()) {
-                        addressEnt.setStreet(userRegister.getAddressStreet());
-                    } 
-                    if(null != userRegister.getAddressWard()) {
-                        addressEnt.setWard(userRegister.getAddressWard());
-                    }
-                    if(null != userRegister.getAddressDistrict()) {
-                        addressEnt.setDistrict(userRegister.getAddressDistrict());
-                    }
-                    if(null != userRegister.getAddressCity()) {
-                        addressEnt.setCity(userRegister.getAddressCity());
+                    if(null != userRegister.getAddress()) {
+                        addressEnt.setAddress(userRegister.getAddress());
                     }
                     if(null != userRegister.getLatitude()) {
                         addressEnt.setLatitude(userRegister.getLatitude());
@@ -381,7 +361,6 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
-        return dto;
     }
     
     private Long parsesDatetime(String birthday) {

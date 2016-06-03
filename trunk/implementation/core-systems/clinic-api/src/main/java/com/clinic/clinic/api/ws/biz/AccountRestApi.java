@@ -53,7 +53,6 @@ import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
 import com.clinic.clinic.common.dto.biz.SubcategoryDto;
-import com.clinic.clinic.common.dto.biz.UserCallBackDto;
 import com.clinic.clinic.common.dto.biz.UserProfileDto;
 import com.clinic.clinic.common.dto.biz.UserRegisterDto;
 import com.clinic.clinic.common.utils.StringUtil;
@@ -246,17 +245,13 @@ public class AccountRestApi extends AbsRestApi {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
-        UserCallBackDto us = null;
         try {
-            us =  accountService.userRegister(userRegister);
-            if(us!= null) {
-                return true;
-            }
+        	accountService.userRegister(userRegister);
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
-        return false;
+        return Utils.mkMap();
     }
 }

@@ -15,6 +15,7 @@ import com.clinic.clinic.api.ws.AbsRestApi;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.consts.IRestApiUrlMaps;
 import com.clinic.clinic.common.dto.biz.MedicarProfileDto;
+import com.clinic.clinic.common.dto.biz.MedicarRegisterDto;
 import com.clinic.clinic.common.utils.Utils;
 
 @RestController
@@ -23,6 +24,17 @@ public class MedicarProfileRestApi extends AbsRestApi {
 
 	@Autowired
 	IMedicarProfileService medicarProfileServ;
+	
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_REGISTER, method = RequestMethod.POST, produces = {
+    "application/json" })
+	public Object registerMedicar(@RequestHeader("sess") String session,
+			@RequestBody MedicarRegisterDto body) {
+		Integer requester = auth().authSession("session");
+		auth().authRight(requester, IDbConstants.RIGHT_UPDATE_MEDICAR_PROFILE);
+		
+		return Utils.mkMap();
+	}
+	
 	
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_PROFILE_SINGLE, method = RequestMethod.GET, produces = {
     "application/json" })

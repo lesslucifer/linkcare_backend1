@@ -46,11 +46,7 @@ public class UserRegisterDto {
     private String phoneNumber;
     private String password;
     
-    private String addressHouseNumber;
-    private String addressStreet;
-    private String addressWard;
-    private String addressDistrict;
-    private String addressCity;
+    private String address;
     
     private Double longtitude;
     private Double latitude;
@@ -115,37 +111,13 @@ public class UserRegisterDto {
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getAddressHouseNumber() {
-        return addressHouseNumber;
-    }
-    public void setAddressHouseNumber(String addressHouseNumber) {
-        this.addressHouseNumber = addressHouseNumber;
-    }
-    public String getAddressStreet() {
-        return addressStreet;
-    }
-    public void setAddressStreet(String addressStreet) {
-        this.addressStreet = addressStreet;
-    }
-    public String getAddressWard() {
-        return addressWard;
-    }
-    public void setAddressWard(String addressWard) {
-        this.addressWard = addressWard;
-    }
-    public String getAddressDistrict() {
-        return addressDistrict;
-    }
-    public void setAddressDistrict(String addressDistrict) {
-        this.addressDistrict = addressDistrict;
-    }
-    public String getAddressCity() {
-        return addressCity;
-    }
-    public void setAddressCity(String addressCity) {
-        this.addressCity = addressCity;
-    }
-    public Double getLongtitude() {
+    public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public Double getLongtitude() {
         return longtitude;
     }
     public void setLongtitude(Double longtitude) {

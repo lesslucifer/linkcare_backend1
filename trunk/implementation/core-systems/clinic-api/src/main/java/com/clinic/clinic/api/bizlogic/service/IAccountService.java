@@ -89,5 +89,5 @@ public interface IAccountService {
      *
      * @author Vuong Do
      */
-    UserCallBackDto userRegister(UserRegisterDto userRegister) throws BizlogicException;
+    void userRegister(UserRegisterDto userRegister) throws BizlogicException;
 }
