@@ -156,7 +156,8 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 				return IntStream.range(0, nSlot).mapToObj(slotOffset -> {
 					TimingsSlotDto slot = new TimingsSlotDto();
 					slot.setTime(t.getBeginTime() + slotOffset * IConstants.SLOT_TIME);
-					boolean isAvail = date.compareTo(toDay) >= 0 && slot.getTime() >= timeNow && isTimeAvailable(date, slot.getTime(), slot.getTime() + IConstants.SLOT_TIME,
+					int dateCompare = date.compareTo(toDay);
+					boolean isAvail = (dateCompare > 0 || (dateCompare == 0 && slot.getTime() >= timeNow)) && isTimeAvailable(date, slot.getTime(), slot.getTime() + IConstants.SLOT_TIME,
 							blockTimes, activeAppointments);
 					slot.setAvailable(isAvail);
 					slot.setType(t.getType());
