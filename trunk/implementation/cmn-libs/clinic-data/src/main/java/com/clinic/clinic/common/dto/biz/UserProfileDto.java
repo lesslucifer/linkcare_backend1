@@ -23,6 +23,8 @@
  *=============================================================================*/
 package com.clinic.clinic.common.dto.biz;
 
+import java.time.LocalDate;
+
 /**
  * <p>
  * Describe functionality of this class here.
@@ -38,8 +40,7 @@ public class UserProfileDto {
     
     private Integer id;
     private String fullName;
-    private Integer age;
-    private Integer yearOfBirth;
+    private LocalDate birthDay;
     private String idCard;
     private Short sex;
     private Double latitude;
@@ -60,13 +61,13 @@ public class UserProfileDto {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-    public Integer getAge() {
-        return age;
-    }
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-    public String getIdCard() {
+    public LocalDate getBirthDay() {
+		return birthDay;
+	}
+	public void setBirthDay(LocalDate birthDay) {
+		this.birthDay = birthDay;
+	}
+	public String getIdCard() {
         return idCard;
     }
     public void setIdCard(String idCard) {
@@ -83,12 +84,6 @@ public class UserProfileDto {
     }
     public void setAddress(String address) {
         this.address = address;
-    }
-    public Integer getYearOfBirth() {
-        return yearOfBirth;
-    }
-    public void setYearOfBirth(Integer yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
     }
     public Double getLatitude() {
         return latitude;

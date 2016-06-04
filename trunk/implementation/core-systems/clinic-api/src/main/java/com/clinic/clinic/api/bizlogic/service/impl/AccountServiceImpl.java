@@ -26,10 +26,14 @@ package com.clinic.clinic.api.bizlogic.service.impl;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -238,14 +242,8 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             retDto.setIdCard(ent.getIdCard());
             retDto.setAvatar(ent.getAvatar());
             
-            Calendar caledar = Calendar.getInstance();
-            caledar.setTimeInMillis(ent.getBirthday());
-            Integer yearOfBirthday = caledar.get(Calendar.YEAR);
-            retDto.setYearOfBirth(yearOfBirthday);
-            
-            caledar.setTimeInMillis(System.currentTimeMillis());
-            Integer yearCurrent = caledar.get(Calendar.YEAR);
-            retDto.setAge(yearCurrent - yearOfBirthday);
+            retDto.setBirthDay(LocalDateTime.ofInstant(Instant.ofEpochSecond(ent.getBirthday()), TimeZone
+                    .getDefault().toZoneId()).toLocalDate());
             
             retDto.setSex(Short.parseShort(ent.getGender().toString()));
             
