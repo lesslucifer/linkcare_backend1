@@ -242,7 +242,7 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             retDto.setIdCard(ent.getIdCard());
             retDto.setAvatar(ent.getAvatar());
             
-            retDto.setBirthDay(LocalDateTime.ofInstant(Instant.ofEpochSecond(ent.getBirthday()), TimeZone
+            retDto.setBirthDay(LocalDateTime.ofInstant(Instant.ofEpochMilli(ent.getBirthday()), TimeZone
                     .getDefault().toZoneId()).toLocalDate());
             
             retDto.setSex(Short.parseShort(ent.getGender().toString()));
