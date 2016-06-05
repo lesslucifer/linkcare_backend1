@@ -63,12 +63,13 @@ public class RateTraceRestApi extends AbsRestApi {
     @Autowired
     private IRateTraceService rateTraceService;
     
-    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_PARTIENT_RATING, method = RequestMethod.GET, produces = {
+    @RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_PARTIENT_RATING, method = RequestMethod.POST, produces = {
     "application/json" })
     public RateTraceDto rating(@PathVariable("medicarId") Integer medicarId, @RequestHeader("sess") String sess,
-            @RequestParam(value = "mark", required = IDbConstants.TRUE) Double mark,
-            @RequestParam(value = "comment", required = IDbConstants.TRUE) String comment,
+    		@RequestBody RateTraceDto dto,
             HttpServletResponse response) {
+		validate(dto);
+		
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
@@ -79,7 +80,7 @@ public class RateTraceRestApi extends AbsRestApi {
         auth().authRight(accountId, IDbConstants.RIGHT_RATING);
         RateTraceDto ret = null;
         try {
-            ret = rateTraceService.rating(medicarId, mark, comment, accountId);
+            ret = rateTraceService.rating(medicarId, dto.getMark(), dto.getComment(), accountId);
         } finally {
             if(LOGGER.isDebugEnabled()) {
                 LOGGER.debug(IConstants.END_METHOD);

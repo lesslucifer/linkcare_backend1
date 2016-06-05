@@ -25,6 +25,8 @@ package com.clinic.clinic.common.dto.biz;
 
 import com.clinic.clinic.common.dto.TraceDto;
 
+import net.sf.oval.constraint.NotNull;
+
 /**
  * <p>
  * Describe functionality of this class here.
@@ -40,8 +42,11 @@ public class RateTraceDto extends TraceDto {
      */
     private static final long serialVersionUID = -7060891016195309464L;
     
+    @NotNull
     private Double mark;
+    @NotNull
     private String comment;
+    
     public Double getMark() {
         return mark;
     }
