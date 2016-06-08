@@ -100,10 +100,10 @@ public class AccountCustomDto extends IdDto {
 
     public void setName(String firstName, String midleName, String lastName) {
         if(firstName != null && midleName != null && lastName != null) {
-            this.name = firstName + " " + midleName + " " + lastName;
+            this.name = lastName + " " + midleName + " " + firstName;
         } else {
             if(midleName == null) {
-                this.name = firstName + " " + lastName;
+                this.name = lastName + " " + firstName;
             }
         }
     }

@@ -127,7 +127,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 	
 	@Override
 	public List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range,
-			final Predicate<Integer> typeFilter) {
+			final Predicate<Integer> typeFilter, int durSlot) {
 		
 		AccountTimingsEntity ent = accTimingsRepo.getLastestAccountTimings(accountId);
 		if (ent == null) {
@@ -157,7 +157,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 					TimingsSlotDto slot = new TimingsSlotDto();
 					slot.setTime(t.getBeginTime() + slotOffset * IConstants.SLOT_TIME);
 					int dateCompare = date.compareTo(toDay);
-					boolean isAvail = (dateCompare > 0 || (dateCompare == 0 && slot.getTime() >= timeNow)) && isTimeAvailable(date, slot.getTime(), slot.getTime() + IConstants.SLOT_TIME,
+					boolean isAvail = (dateCompare > 0 || (dateCompare == 0 && slot.getTime() >= timeNow)) && isTimeAvailable(date, slot.getTime(), slot.getTime() + durSlot * IConstants.SLOT_TIME,
 							blockTimes, activeAppointments);
 					slot.setAvailable(isAvail);
 					slot.setType(t.getType());
@@ -175,7 +175,7 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 	
 	@Override
 	public Object countTimingDaySlots(Integer accountId, String day) {
-		List<TimingsDayDto> dtos = this.getTimingDaySlots(accountId, day, 1, i -> true);
+		List<TimingsDayDto> dtos = this.getTimingDaySlots(accountId, day, 1, i -> true, 1);
 		
 		int clinic = 0;
 		int patitentHome = 0;
@@ -210,8 +210,8 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 			return false;
 		}
 
-		final LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(end / 60, end % 60));
-		final LocalDateTime endDateTime = startDateTime.plusMinutes(IConstants.SLOT_TIME);
+		final LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(begin / 60, begin % 60));
+		final LocalDateTime endDateTime = LocalDateTime.of(date, LocalTime.of(end / 60, end % 60));
 		return blockTimes.stream().allMatch((bt) -> {
 			if (startDateTime.compareTo(bt.getEndDateTime()) > 0) {
 				return true;

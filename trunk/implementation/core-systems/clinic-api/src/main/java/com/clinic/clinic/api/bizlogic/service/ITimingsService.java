@@ -16,7 +16,7 @@ public interface ITimingsService {
 	AccountTimingsDto updateAccountTimings(Integer accountId, AccountTimingsDto dto);
 	
 	List<TimingsDayDto> getTimingDaySlots(Integer accountId, String day, int range,
-			Predicate<Integer> typeFilter);
+			Predicate<Integer> typeFilter, int durSlot);
 
 	Object countTimingDaySlots(Integer accountId, String day);
 	

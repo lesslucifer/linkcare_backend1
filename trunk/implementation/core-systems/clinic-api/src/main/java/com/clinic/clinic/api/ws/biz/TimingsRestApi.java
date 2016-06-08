@@ -61,7 +61,7 @@ public class TimingsRestApi extends AbsRestApi {
     		HttpServletResponse response) {
 		auth().authSession(session);
 
-		return timingsServ.getTimingDaySlots(targetId, date, 30, i -> true);
+		return timingsServ.getTimingDaySlots(targetId, date, 30, i -> true, 1);
     }
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_TIMINGS_SLOT_TYPE, method = RequestMethod.GET, produces = {
@@ -73,7 +73,8 @@ public class TimingsRestApi extends AbsRestApi {
     		HttpServletResponse response) {
 		auth().authSession(session);
 
-		return timingsServ.getTimingDaySlots(targetId, date, 30, i -> i == type);
+		int dur = (type == 0) ? 1 : 3;
+		return timingsServ.getTimingDaySlots(targetId, date, 30, i -> i == type, dur);
     }
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_MEDICAR_TIMINGS_SLOT, method = RequestMethod.GET, produces = {
@@ -83,7 +84,7 @@ public class TimingsRestApi extends AbsRestApi {
     		HttpServletResponse response) {
 		Integer medicar = auth().authSession(session);
 
-		List<TimingsDayDto> daySlots = timingsServ.getTimingDaySlots(medicar, date, 1, i -> true);
+		List<TimingsDayDto> daySlots = timingsServ.getTimingDaySlots(medicar, date, 1, i -> true, 1);
 		if (daySlots == null || daySlots.isEmpty()) {
 			return new TimingsDayDto();
 		}
