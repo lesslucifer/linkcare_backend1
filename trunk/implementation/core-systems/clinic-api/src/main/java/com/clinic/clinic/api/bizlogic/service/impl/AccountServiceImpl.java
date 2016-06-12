@@ -270,7 +270,7 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
      * @see com.clinic.clinic.api.bizlogic.service.IAccountService#userRegister(com.clinic.clinic.common.dto.biz.UserRegisterDto)
      */
     @Override
-    public void userRegister(UserRegisterDto userRegister) throws BizlogicException {
+    public AccountEntity userRegister(UserRegisterDto userRegister) throws BizlogicException {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
@@ -340,7 +340,7 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                     ls.add(roleEnt);
                     accountEnt.setRoles(ls);
                     
-                    accountRepo.save(accountEnt);
+                    return accountRepo.save(accountEnt);
                 } else {
                     throwBizlogicException(500, IBizErrorCode.ACCOUNT_EMAIL_EXISTS, "Email exists", userRegister.getEmail());
                 }
@@ -357,6 +357,8 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                 LOGGER.debug(IConstants.END_METHOD);
             }
         }
+        
+        return null;
     }
     
     private Long parsesDatetime(String birthday) {

@@ -25,12 +25,30 @@ public class MedicarProfileRestApi extends AbsRestApi {
 	@Autowired
 	IMedicarProfileService medicarProfileServ;
 	
-	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_REGISTER, method = RequestMethod.POST, produces = {
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_REGISTER_DOCTOR, method = RequestMethod.POST, produces = {
     "application/json" })
-	public Object registerMedicar(@RequestHeader("sess") String session,
+	public Object registerDoctor(@RequestHeader("sess") String session,
 			@RequestBody MedicarRegisterDto body) {
-		Integer requester = auth().authSession("session");
+		validate(body);
+		
+		Integer requester = auth().authSession(session);
 		auth().authRight(requester, IDbConstants.RIGHT_UPDATE_MEDICAR_PROFILE);
+		
+		medicarProfileServ.registerMedicar("DOCTOR_ROLE", body);
+		
+		return Utils.mkMap();
+	}
+	
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_REGISTER_NURSE, method = RequestMethod.POST, produces = {
+    "application/json" })
+	public Object registerNurse(@RequestHeader("sess") String session,
+			@RequestBody MedicarRegisterDto body) {
+		validate(body);
+		
+		Integer requester = auth().authSession(session);
+		auth().authRight(requester, IDbConstants.RIGHT_UPDATE_MEDICAR_PROFILE);
+		
+		medicarProfileServ.registerMedicar("NURSE_ROLE", body);
 		
 		return Utils.mkMap();
 	}

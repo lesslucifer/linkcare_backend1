@@ -26,10 +26,10 @@ package com.clinic.clinic.api.bizlogic.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
-import com.clinic.clinic.common.dto.biz.UserCallBackDto;
 import com.clinic.clinic.common.dto.biz.UserProfileDto;
 import com.clinic.clinic.common.dto.biz.UserRegisterDto;
 import com.clinic.clinic.common.exception.BizlogicException;
@@ -89,5 +89,5 @@ public interface IAccountService {
      *
      * @author Vuong Do
      */
-    void userRegister(UserRegisterDto userRegister) throws BizlogicException;
+    AccountEntity userRegister(UserRegisterDto userRegister) throws BizlogicException;
 }

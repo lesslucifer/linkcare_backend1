@@ -76,7 +76,8 @@ public interface IRestApiUrlMaps {
     static final String REST_API_BIZ_MEDICAR_RATE = "/medicar/{medicarId}/rate";
     
     // ### Medicar profile
-    static final String REST_API_MEDICAR_REGISTER = "/account/medicars";
+    static final String REST_API_MEDICAR_REGISTER_DOCTOR = "/account/medicars/doctors";
+    static final String REST_API_MEDICAR_REGISTER_NURSE = "/account/medicars/nurses";
     static final String REST_API_MEDICAR_PROFILE_SINGLE = "/account/{account_id}/medicar_profile";
     
     // ### Notification

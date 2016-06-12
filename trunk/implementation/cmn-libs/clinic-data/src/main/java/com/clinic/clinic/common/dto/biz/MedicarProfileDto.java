@@ -2,13 +2,16 @@ package com.clinic.clinic.common.dto.biz;
 
 import com.clinic.clinic.common.dto.TraceDto;
 
+import net.sf.oval.constraint.NotNull;
+
 public class MedicarProfileDto extends TraceDto {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4994991275299643198L;
-	
+
+	@NotNull
 	private String licenseNumber = "";
 	
 	private String graduatedSchool = "";
@@ -36,11 +39,14 @@ public class MedicarProfileDto extends TraceDto {
 	private String otherSpecialistSpec = "";
 
 	private String otherTraining = "";
-	
+
+	@NotNull
 	private int level = 0;
-	
+
+	@NotNull
 	private int clinicPrice = 0;
-	
+
+	@NotNull
 	private int patientHomePrice = 0;
 
 	public String getLicenseNumber() {

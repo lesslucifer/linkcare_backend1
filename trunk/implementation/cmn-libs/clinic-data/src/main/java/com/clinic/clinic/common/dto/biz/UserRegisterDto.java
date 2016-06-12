@@ -23,6 +23,8 @@
  *=============================================================================*/
 package com.clinic.clinic.common.dto.biz;
 
+import net.sf.oval.constraint.NotNull;
+
 /**
  * <p>
  * Dto to user(patient) register.
@@ -33,22 +35,39 @@ package com.clinic.clinic.common.dto.biz;
  * @see TODO
  */
 public class UserRegisterDto {
-    
+
+	@NotNull
     private String firstName;
+
+	@NotNull
     private String lastName;
+	
     private String midleName;
+
+	@NotNull
     private Integer gender;
+
+	@NotNull
     private String birthday;
+
+	@NotNull
     private String idCard;
+	
     private String passport;
     
     private String email;
     private String phoneNumber;
+
+	@NotNull
     private String password;
-    
+
+	@NotNull
     private String address;
-    
+
+	@NotNull
     private Double longtitude;
+	
+	@NotNull
     private Double latitude;
     
     public String getFirstName() {
