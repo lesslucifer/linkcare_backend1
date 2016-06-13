@@ -182,7 +182,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		
 		if (appBooking.getMedicar().getId() != medicar) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_MISMATCH, "Medicar mismatch!",
-					medicar);
+					medicar, appBooking.getMedicar().getId());
 		}
 		
 		if (appBooking.getStatus() != AppointmentBookingEntity.STATUS_WAITING) {
