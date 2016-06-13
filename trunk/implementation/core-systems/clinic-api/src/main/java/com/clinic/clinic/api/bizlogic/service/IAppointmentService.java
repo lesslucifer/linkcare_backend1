@@ -8,14 +8,14 @@ import com.clinic.clinic.common.dto.biz.AppointmentBookingDto;
 import com.clinic.clinic.common.dto.biz.AppointmentBookingRequestDto;
 
 public interface IAppointmentService {
-	List<AppointmentBookingDto> getAppointments(Integer requester, List<Integer> appointmentIds);
-	AppointmentBookingDto bookAppointment(Integer booker, AppointmentBookingRequestDto dto);
-	void approveAppointment(Integer medicar, Integer appointmentId);
-	void rejectAppointment(Integer medicar, Integer appointmentId);
-	void cancelAppointment(Integer medicar, Integer appointmentId, String reason);
-	void startAppointment(Integer medicar, Integer appointmentId);
-	List<TraceDto> getMedicarAppointments(Integer medicar, LocalDate date);
-	List<TraceDto> getMedicarAppointmentsByType(Integer medicar, LocalDate date, int type);
-	int countMedicarAppointmentsByType(Integer medicar, LocalDate date, int type);
-	List<TraceDto> getAppointmentByStatus(Integer medicar, Integer status);
+	List<AppointmentBookingDto> getAppointments(int requester, List<Integer> appointmentIds);
+	AppointmentBookingDto bookAppointment(int booker, AppointmentBookingRequestDto dto);
+	void approveAppointment(int medicar, int appointmentId);
+	void rejectAppointment(int medicar, int appointmentId);
+	void cancelAppointment(int medicar, int appointmentId, String reason);
+	void startAppointment(int medicar, int appointmentId);
+	List<TraceDto> getMedicarAppointments(int medicar, LocalDate date);
+	List<TraceDto> getMedicarAppointmentsByType(int medicar, LocalDate date, int type);
+	int countMedicarAppointmentsByType(int medicar, LocalDate date, int type);
+	List<TraceDto> getAppointmentByStatus(int medicar, int status);
 }

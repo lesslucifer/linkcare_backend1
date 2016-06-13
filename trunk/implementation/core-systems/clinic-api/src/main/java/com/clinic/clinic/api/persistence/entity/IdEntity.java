@@ -47,14 +47,14 @@ public abstract class IdEntity implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
     
     /**
      * <p>Returns current value of id attribute.</p>
      *
      * @return the id
      */
-    public Integer getId() {
+    public int getId() {
         return id;
     }
     /**

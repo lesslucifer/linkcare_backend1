@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -62,17 +61,13 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	private INotificationService notifServ;
 	
 	@Override
-	public List<AppointmentBookingDto> getAppointments(Integer requester, List<Integer> appointmentIds) {
-		if (requester == null) {
-			return Collections.emptyList();
-		}
-
+	public List<AppointmentBookingDto> getAppointments(int requester, List<Integer> appointmentIds) {
 		this.autoCancelWaitingAppointment(requester);
 		
 		List<AppointmentBookingEntity> entities = appBookingRepo.findAll(appointmentIds);
 		
 		Predicate<AppointmentBookingEntity> hasPermission = (ab) -> {
-			return requester.equals(ab.getBooker().getId()) || requester.equals(ab.getMedicar().getId());
+			return requester == ab.getBooker().getId() || requester == ab.getMedicar().getId();
 		};
 		entities = entities.stream().filter(hasPermission).collect(Collectors.toList());
 		
@@ -80,7 +75,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 	
 	@Override
-	public AppointmentBookingDto bookAppointment(Integer booker, AppointmentBookingRequestDto dto) {
+	public AppointmentBookingDto bookAppointment(int booker, AppointmentBookingRequestDto dto) {
 		AccountEntity medicar = accRepo.findOne(dto.getMedicar(), true);
 		if (medicar == null) {
 			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Medicar not found!", dto.getMedicar());
@@ -172,7 +167,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 	
 	@Override
-	public void approveAppointment(Integer medicar, Integer appointmentId) {
+	public void approveAppointment(int medicar, int appointmentId) {
 		this.autoCancelWaitingAppointment(medicar);
 		
 		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
@@ -182,7 +177,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		
 		if (appBooking.getMedicar().getId() != medicar) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_MISMATCH, "Medicar mismatch!",
-					medicar, appBooking.getMedicar().getId());
+					medicar);
 		}
 		
 		if (appBooking.getStatus() != AppointmentBookingEntity.STATUS_WAITING) {
@@ -220,7 +215,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 
 	@Override
-	public void rejectAppointment(Integer medicar, Integer appointmentId) {
+	public void rejectAppointment(int medicar, int appointmentId) {
 		this.autoCancelWaitingAppointment(medicar);
 		
 		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
@@ -258,7 +253,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 
 	@Override
-	public void cancelAppointment(Integer canceller, Integer appointmentId, String reason) {
+	public void cancelAppointment(int canceller, int appointmentId, String reason) {
 		this.autoCancelWaitingAppointment(canceller);
 		
 		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
@@ -304,7 +299,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 
 	@Override
-	public void startAppointment(Integer medicar, Integer appointmentId) {
+	public void startAppointment(int medicar, int appointmentId) {
 		this.autoCancelWaitingAppointment(medicar);
 		
 		AppointmentBookingEntity appBooking = appBookingRepo.findOne(appointmentId);
@@ -347,7 +342,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 	
 	@Override
-	public List<TraceDto> getMedicarAppointments(Integer medicar, LocalDate date) {
+	public List<TraceDto> getMedicarAppointments(int medicar, LocalDate date) {
 		this.autoCancelWaitingAppointment(medicar);
 		
 		List<AppointmentBookingEntity> entities = appBookingRepo.getActiveAppointments(medicar, date);
@@ -355,7 +350,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 	
 	@Override
-	public List<TraceDto> getMedicarAppointmentsByType(Integer medicar, LocalDate date, int type) {
+	public List<TraceDto> getMedicarAppointmentsByType(int medicar, LocalDate date, int type) {
 		if (type != 0 && type !=1) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TYPE, "Invalid appointment type", type);
 		}
@@ -367,7 +362,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	}
 	
 	@Override
-	public int countMedicarAppointmentsByType(Integer medicar, LocalDate date, int type) {
+	public int countMedicarAppointmentsByType(int medicar, LocalDate date, int type) {
 		if (type != 0 && type !=1) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TYPE, "Invalid appointment type", type);
 		}
@@ -376,14 +371,14 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		return appBookingRepo.countActiveAppointmentsAtHome(medicar, date, type != 0);
 	}
 	
-	public List<TraceDto> getAppointmentByStatus(Integer medicar, Integer status) {
+	public List<TraceDto> getAppointmentByStatus(int medicar, int status) {
 		this.autoCancelWaitingAppointment(medicar);
 		
 		List<AppointmentBookingEntity> entities = appBookingRepo.getAppointmentsByStatus(medicar, status);
 		return TraceTranslatorImpl.INSTANCE.getDtoList(entities);
 	}
 	
-	private void autoCancelWaitingAppointment(Integer medicar) {
+	private void autoCancelWaitingAppointment(int medicar) {
 		List<AppointmentBookingEntity> ents = appBookingRepo.getAppointmentsByStatus(medicar,
 				AppointmentBookingEntity.STATUS_WAITING, AppointmentBookingEntity.STATUS_APPROVED);
 		List<AppointmentBookingEntity> lateBooking = new ArrayList<>(ents.size());
