@@ -18,10 +18,11 @@ public class NotificationRepository extends AbsRepositoryImpl<NotificationEntity
 	public List<Integer> getNotifications(Integer accountId) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ne.id FROM NotificationEntity ne ");
-		sb.append("WHERE ne.owner.id = :accountId");
+		sb.append("WHERE ne.owner.id = :accountId ORDER BY ne.id DESC");
 		
 		TypedQuery<Integer> q = getEntityManager().createQuery(sb.toString(), Integer.class);
 		q.setParameter("accountId", accountId);
+		q.setMaxResults(50);
 
 		List<Integer> result = q.getResultList();
 		if (result == null) {
