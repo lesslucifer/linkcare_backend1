@@ -122,7 +122,7 @@ public class SubcategoryRepositoryImpl extends AbsRepositoryImpl<SubcategoryEnti
     public List<SubcategoryEntity> getAllSubcategoryByMajor(Integer major) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("SELECT subcate FROM SubcategoryEntity as subcate ");
-		sb.append("WHERE subcate.category.major.id = :majorId ODER BY subcate.name ASC");
+		sb.append("WHERE subcate.category.major.id = :majorId ORDER BY subcate.name ASC");
 		
 		TypedQuery<SubcategoryEntity> q = getEntityManager().createQuery(sb.toString(), SubcategoryEntity.class);
 		q.setParameter("majorId", major);
