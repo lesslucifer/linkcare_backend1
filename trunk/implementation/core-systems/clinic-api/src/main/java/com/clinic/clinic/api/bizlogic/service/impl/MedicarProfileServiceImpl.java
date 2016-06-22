@@ -64,7 +64,7 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 		
 		if (entity == null) {
 			entity = new MedicarProfileEntity();
-			entity.setAccount(accRepo.getReference(AccountEntity.class, accountId));
+			entity.setAccount(accRepo.findOne(accountId));
 		}
 		
 		MedicarProfileTranslatorImpl.INST.dtoToEntity(dto, entity);

@@ -132,7 +132,7 @@ public abstract class AbstractTranslatorImpl <DTO /*extends IdDto*/, ENT /*exten
         	id = idEnt.getId();
         }
         
-        BeanUtils.copyProperties(dto, ent);
+        BeanUtils.copyProperties(dto, ent, "id");
         if (id != null && (ent instanceof IdEntity)) {
         	IdEntity idEnt = (IdEntity) ent;
         	idEnt.setId(id);
