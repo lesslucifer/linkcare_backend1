@@ -75,6 +75,8 @@ public class NotificationRestApi extends AbsRestApi {
 		public String receiver_login_name;
 		@NotNull
 		public String content;
+		@NotNull
+		public String app;
 	}
 	
 	@Autowired
@@ -91,7 +93,7 @@ public class NotificationRestApi extends AbsRestApi {
 		
 		AccountEntity receiver = accRepo.findAccountByLoginName(dto.receiver_login_name);
 		if (receiver != null) {
-			notifServ.sendMessage(accountId, receiver.getId(), NotificationEntity.TYPE_MSG, dto.content);
+			notifServ.sendMessage(dto.app, accountId, receiver.getId(), NotificationEntity.TYPE_MSG, dto.content);
 		}
 		
 		return Utils.mkMap();

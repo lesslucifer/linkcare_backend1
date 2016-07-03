@@ -289,7 +289,7 @@ public class AccountEntity extends TraceEntity {
 		this.deviceToken = deviceToken;
 	}
 
-    public SubcategoryEntity getSubcategory() {
+	public SubcategoryEntity getSubcategory() {
         return subcategory;
     }
 

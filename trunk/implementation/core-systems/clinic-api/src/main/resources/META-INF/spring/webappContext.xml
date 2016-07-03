@@ -58,5 +58,6 @@
 	
 	<bean id="restApiConf" class="com.clinic.clinic.api.conf.RestApiConf">
     	<property name="rootPathPublishResources" value="${rootPathPublishResources}" />
+    	<property name="apnsP12Dir" value="${apnsP12Dir}" />
     </bean>
 </beans>

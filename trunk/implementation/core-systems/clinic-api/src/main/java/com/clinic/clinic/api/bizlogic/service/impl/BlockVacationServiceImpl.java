@@ -107,7 +107,7 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						content.append(" ngày ");
 						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
 						content.append("</b>");
-						notifServ.sendMessage(null, bookerEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_REJECTED,
+						notifServ.sendMessage(INotificationService.USER_APP, null, bookerEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_REJECTED,
 								content.toString(), appointment.getId(), appointment.getMedicar().getId());
 					});
 				}
@@ -132,7 +132,7 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						content.append(" ngày ");
 						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
 						content.append("</b>. Lý do: Bác sĩ có việc bận.");
-						notifServ.sendMessage(null, cancelleeEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
+						notifServ.sendMessage(INotificationService.USER_APP, null, cancelleeEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
 								content.toString(), appointment.getId(), appointment.getMedicar().getId(), appointment.getBooker().getId());
 					});
 				}

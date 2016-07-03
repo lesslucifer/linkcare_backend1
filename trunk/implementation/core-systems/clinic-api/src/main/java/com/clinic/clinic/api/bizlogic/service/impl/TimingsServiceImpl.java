@@ -197,6 +197,12 @@ public final class TimingsServiceImpl extends AbsService implements ITimingsServ
 	public boolean isTimeAvailable(LocalDate date, int begin, int end,
 			final List<AccountBlockTimeEntity> blockTimes, 
 			final List<AppointmentBookingEntity> activeAppointments) {
+		
+		// if time is not valid -> not avail
+		final int MINUTES_PER_DAY = 60 * 24;
+		if (begin >= MINUTES_PER_DAY || end >= MINUTES_PER_DAY) {
+			return false;
+		}
 
 		boolean result = activeAppointments.stream().allMatch((ab) -> {
 			if (ab.getDate().compareTo(date) == 0) {

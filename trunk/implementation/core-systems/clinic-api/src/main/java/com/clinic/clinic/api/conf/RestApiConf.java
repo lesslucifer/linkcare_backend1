@@ -11,6 +11,7 @@ package com.clinic.clinic.api.conf;
  */
 public class RestApiConf {
     private String rootPathPublishResources;
+    private String apnsP12Dir;
     
     private static RestApiConf instance;
     
@@ -48,7 +49,15 @@ public class RestApiConf {
         this.rootPathPublishResources = rootPathPublishResources;
     }
     
-    /*
+    public String getApnsP12Dir() {
+		return apnsP12Dir;
+	}
+
+	public void setApnsP12Dir(String apnsP12Dir) {
+		this.apnsP12Dir = apnsP12Dir;
+	}
+
+	/*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
      */
