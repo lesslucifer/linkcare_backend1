@@ -48,6 +48,7 @@ public class UserProfileDto {
     private String phoneNumber;
     private String address;
     private String avatar;
+    private String email;
     
     public Integer getId() {
         return id;
@@ -108,5 +109,11 @@ public class UserProfileDto {
 	}
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }
