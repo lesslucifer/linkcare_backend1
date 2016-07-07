@@ -138,8 +138,9 @@ public class NotificationService extends AbsService implements INotificationServ
 			ApnsService service =
 				    APNS.newService()
 				    .withCert(p12Path, "c0nc0ndotVN")
-				    .withSandboxDestination()
+				    .withAppleDestination(!RestApiConf.getInstance().isApnsSandbox())
 				    .build();
+			
 			String payload = APNS.newPayload().alertBody(plainContent)
 					.customField("type", type)
 					.customField("params", params)

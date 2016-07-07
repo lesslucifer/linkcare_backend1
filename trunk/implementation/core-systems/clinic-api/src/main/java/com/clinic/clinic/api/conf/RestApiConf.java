@@ -12,6 +12,7 @@ package com.clinic.clinic.api.conf;
 public class RestApiConf {
     private String rootPathPublishResources;
     private String apnsP12Dir;
+    private String apnsMode;
     
     private static RestApiConf instance;
     
@@ -55,6 +56,18 @@ public class RestApiConf {
 
 	public void setApnsP12Dir(String apnsP12Dir) {
 		this.apnsP12Dir = apnsP12Dir;
+	}
+
+	public String getApnsMode() {
+		return apnsMode;
+	}
+
+	public void setApnsMode(String apnsMode) {
+		this.apnsMode = apnsMode;
+	}
+	
+	public boolean isApnsSandbox() {
+		return this.apnsMode.equals("sandbox");
 	}
 
 	/*
