@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.json.simple.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
@@ -17,6 +19,7 @@ import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IDeviceRepository;
 import com.clinic.clinic.api.persistence.repository.INotificationRepository;
+import com.clinic.clinic.api.persistence.repository.impl.AccountRepositoryImpl;
 import com.clinic.clinic.api.translator.impl.NotificationTranslatorImpl;
 import com.clinic.clinic.common.dto.biz.NotificationDto;
 import com.google.android.gcm.server.Message;
@@ -27,6 +30,8 @@ import com.notnoop.apns.ApnsService;
 
 @ApplicationService
 public class NotificationService extends AbsService implements INotificationService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationService.class);
 	
 //	private static final String GCM_API_KEY = "AIzaSyASHqd2szI4Uqhzfr783KnfJONtrjoAat4";
 	private static final String GCM_API_KEY = "AIzaSyC1gVSLQMuGFFo2IUtBJpSALWTw3BJVM2Y";
@@ -114,6 +119,7 @@ public class NotificationService extends AbsService implements INotificationServ
 			// use this for multicast messages.  The second parameter
 			// of sender.send() will need to be an array of register ids.
 			MulticastResult result = sender.send(message, data, 1);
+			LOGGER.debug(String.format("GCM total: %d; success: %d; failure: %d", result.getTotal(), result.getSuccess(), result.getFailure()));
 			
 			if (result.getResults() != null) {
 				int canonicalRegId = result.getCanonicalIds();
@@ -122,6 +128,7 @@ public class NotificationService extends AbsService implements INotificationServ
 				}
 			} else {
 				int error = result.getFailure();
+				
 				System.out.println("Broadcast failure: " + error);
 			}
 			
