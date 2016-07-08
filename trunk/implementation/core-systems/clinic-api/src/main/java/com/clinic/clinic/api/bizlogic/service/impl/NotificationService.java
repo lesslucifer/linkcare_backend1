@@ -28,7 +28,8 @@ import com.notnoop.apns.ApnsService;
 @ApplicationService
 public class NotificationService extends AbsService implements INotificationService {
 	
-	private static final String CGM_API_KEY = "AIzaSyASHqd2szI4Uqhzfr783KnfJONtrjoAat4";
+//	private static final String GCM_API_KEY = "AIzaSyASHqd2szI4Uqhzfr783KnfJONtrjoAat4";
+	private static final String GCM_API_KEY = "AIzaSyC1gVSLQMuGFFo2IUtBJpSALWTw3BJVM2Y";
 
 	@Autowired
 	INotificationRepository notifRepo;
@@ -84,19 +85,19 @@ public class NotificationService extends AbsService implements INotificationServ
 	
 	private void sendNotification(final String app, final Integer receiver, final String content, final Integer type, final String params) {
 		List<DeviceEntity> devices = deviceRepo.getDevicesOfUser(receiver, app);
-		List<DeviceEntity> cgmDevices = devices.stream().filter(d -> {return "CGM".equals(d.getType());}).collect(Collectors.toList());
+		List<DeviceEntity> gcmDevices = devices.stream().filter(d -> {return "GCM".equals(d.getType());}).collect(Collectors.toList());
 		List<DeviceEntity> apnsDevices = devices.stream().filter(d -> {return "APNS".equals(d.getType());}).collect(Collectors.toList());
 		
-		this.sendCGMNotification(cgmDevices, content, type, params);
+		this.sendGCMNotification(gcmDevices, content, type, params);
 		this.sendAPNSNotification(apnsDevices, app, content, type, params);
  	}
 	
-	private void sendCGMNotification(List<DeviceEntity> devices, String content, Integer type, String params) {
+	private void sendGCMNotification(List<DeviceEntity> devices, String content, Integer type, String params) {
 		if (devices.isEmpty()) {
 			return;
 		}
 		
-		Sender sender = new Sender(CGM_API_KEY);
+		Sender sender = new Sender(GCM_API_KEY);
 		List<String> data = devices.stream().map(d -> d.getDeviceToken()).collect(Collectors.toList());
 		
 		String plainContent = content.replaceAll("(\\<[^\\>]*\\>)", "");
