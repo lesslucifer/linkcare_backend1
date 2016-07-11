@@ -25,47 +25,29 @@ public class MedicarProfileEntity extends TraceEntity {
 	@Column(name = "license_number", length = 256)
 	private String licenseNumber;
 
-	@Column(name = "graduated_school", nullable = true)
+	@Column(name = "graduated_school", nullable = false)
 	private String graduatedSchool;
 
-	@Column(name = "graduated_year", nullable = true)
+	@Column(name = "graduated_year", nullable = false)
 	private Integer graduatedYear;
+
+	@Column(name = "graduated_level", nullable = false)
+	private Integer graduatedLevel;
+
+	@Column(name = "master_school", nullable = true)
+	private String masterSchool;
 
 	@Column(name = "master_year", nullable = true)
 	private Integer masterYear;
 
-	@Column(name = "master_spec", nullable = true)
-	private String masterSpec;
+	@Column(name = "master_type", nullable = true)
+	private Integer masterType;
 
-	@Column(name = "doctor_year", nullable = true)
-	private Integer doctorYear;
+	@Column(name = "working_place", nullable = true)
+	private String workingPlace;
 
-	@Column(name = "doctor_spec", nullable = true)
-	private String doctorSpec;
-
-	@Column(name = "specialist_1_year", nullable = true)
-	private Integer specialist1Year;
-
-	@Column(name = "specialist_1_spec", nullable = true)
-	private String specialist1Spec;
-
-	@Column(name = "specialist_2_year", nullable = true)
-	private Integer specialist2Year;
-
-	@Column(name = "specialist_2_spec", nullable = true)
-	private String specialist2Spec;
-
-	@Column(name = "other_specialist_year", nullable = true)
-	private Integer otherSpecialistYear;
-
-	@Column(name = "other_specialist_spec", nullable = true)
-	private String otherSpecialistSpec;
-
-	@Column(name = "other_training", nullable = true)
-	private String otherTraining;
-	
-	@Column(name = "level")
-	private int level;
+	@Column(name = "study", nullable = true)
+	private String study;
 	
 	@Column(name = "clinic_price")
 	private int clinicPrice;
@@ -113,92 +95,44 @@ public class MedicarProfileEntity extends TraceEntity {
 		this.masterYear = masterYear;
 	}
 
-	public String getMasterSpec() {
-		return masterSpec;
+	public Integer getGraduatedLevel() {
+		return graduatedLevel;
 	}
 
-	public void setMasterSpec(String masterSpec) {
-		this.masterSpec = masterSpec;
+	public void setGraduatedLevel(Integer graduatedLevel) {
+		this.graduatedLevel = graduatedLevel;
 	}
 
-	public Integer getDoctorYear() {
-		return doctorYear;
+	public String getMasterSchool() {
+		return masterSchool;
 	}
 
-	public void setDoctorYear(Integer doctorYear) {
-		this.doctorYear = doctorYear;
+	public void setMasterSchool(String masterSchool) {
+		this.masterSchool = masterSchool;
 	}
 
-	public String getDoctorSpec() {
-		return doctorSpec;
+	public Integer getMasterType() {
+		return masterType;
 	}
 
-	public void setDoctorSpec(String doctorSpec) {
-		this.doctorSpec = doctorSpec;
+	public void setMasterType(Integer masterType) {
+		this.masterType = masterType;
 	}
 
-	public Integer getSpecialist1Year() {
-		return specialist1Year;
+	public String getWorkingPlace() {
+		return workingPlace;
 	}
 
-	public void setSpecialist1Year(Integer specialist1Year) {
-		this.specialist1Year = specialist1Year;
+	public void setWorkingPlace(String workingPlace) {
+		this.workingPlace = workingPlace;
 	}
 
-	public String getSpecialist1Spec() {
-		return specialist1Spec;
+	public String getStudy() {
+		return study;
 	}
 
-	public void setSpecialist1Spec(String specialist1Spec) {
-		this.specialist1Spec = specialist1Spec;
-	}
-
-	public Integer getSpecialist2Year() {
-		return specialist2Year;
-	}
-
-	public void setSpecialist2Year(Integer specialist2Year) {
-		this.specialist2Year = specialist2Year;
-	}
-
-	public String getSpecialist2Spec() {
-		return specialist2Spec;
-	}
-
-	public void setSpecialist2Spec(String specialist2Spec) {
-		this.specialist2Spec = specialist2Spec;
-	}
-
-	public Integer getOtherSpecialistYear() {
-		return otherSpecialistYear;
-	}
-
-	public void setOtherSpecialistYear(Integer otherSpecialistYear) {
-		this.otherSpecialistYear = otherSpecialistYear;
-	}
-
-	public String getOtherSpecialistSpec() {
-		return otherSpecialistSpec;
-	}
-
-	public void setOtherSpecialistSpec(String otherSpecialistSpec) {
-		this.otherSpecialistSpec = otherSpecialistSpec;
-	}
-
-	public String getOtherTraining() {
-		return otherTraining;
-	}
-
-	public void setOtherTraining(String otherTraining) {
-		this.otherTraining = otherTraining;
-	}
-
-	public int getLevel() {
-		return level;
-	}
-
-	public void setLevel(int level) {
-		this.level = level;
+	public void setStudy(String study) {
+		this.study = study;
 	}
 
 	public int getClinicPrice() {

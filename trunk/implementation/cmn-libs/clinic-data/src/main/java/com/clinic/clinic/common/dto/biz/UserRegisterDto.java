@@ -35,6 +35,9 @@ import net.sf.oval.constraint.NotNull;
  * @see TODO
  */
 public class UserRegisterDto {
+	
+	@NotNull
+	private String loginName;
 
 	@NotNull
     private String firstName;
@@ -50,7 +53,6 @@ public class UserRegisterDto {
 	@NotNull
     private String birthday;
 
-	@NotNull
     private String idCard;
 	
     private String passport;
@@ -70,7 +72,13 @@ public class UserRegisterDto {
 	@NotNull
     private Double latitude;
     
-    public String getFirstName() {
+    public String getLoginName() {
+		return loginName;
+	}
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
+	public String getFirstName() {
         return firstName;
     }
     public void setFirstName(String firstName) {

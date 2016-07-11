@@ -19,7 +19,6 @@ import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IDeviceRepository;
 import com.clinic.clinic.api.persistence.repository.INotificationRepository;
-import com.clinic.clinic.api.persistence.repository.impl.AccountRepositoryImpl;
 import com.clinic.clinic.api.translator.impl.NotificationTranslatorImpl;
 import com.clinic.clinic.common.dto.biz.NotificationDto;
 import com.google.android.gcm.server.Message;

@@ -53,7 +53,6 @@ import com.clinic.clinic.api.translator.impl.AccountTranslatorImpl;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.consts.IConstants;
 import com.clinic.clinic.common.consts.IDbConstants;
-import com.clinic.clinic.common.consts.IMessagesConstants;
 import com.clinic.clinic.common.dto.biz.AccountCustomDto;
 import com.clinic.clinic.common.dto.biz.AccountDto;
 import com.clinic.clinic.common.dto.biz.AccountFilterDto;
@@ -159,37 +158,6 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
     }
 
     /* (non-Javadoc)
-     * @see com.clinic.clinic.api.bizlogic.service.IAccountService#createAccount(java.lang.Integer, com.clinic.clinic.common.dto.biz.AccountDto)
-     */
-    @Override
-    public AccountDto createAccount(Integer loginId, AccountDto registerAccDto) throws BizlogicException {
-        if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug(IConstants.BEGIN_METHOD);
-        }
-        AccountDto retVal = null;
-        try {
-            RoleEntity entNewComer = roleRepo.findByCode(IDbConstants.ROLE_NEWCOMER, true);
-            /*RoleEntity roleNewcomer = */roleRepo.getOne(entNewComer.getId());
-            
-            AccountEntity accEnt = accountRepo.findFirstEntity(IDbConstants.FIELD_ACC_ACCOUNT_LOGIN_NAME, registerAccDto.getLoginName(), false);
-            if(null == accEnt) {
-                throwBizlogicException(IMessagesConstants.MESSAGE_ERROR_ACCOUNT_LOGINNAME_DUPLICATE, registerAccDto.getLoginName());
-            }
-            
-            
-        } catch (BizlogicException be) {
-            LOGGER.error("error", be);
-        } catch (Exception e) {
-            LOGGER.error("error", e);
-        } finally {
-            if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug(IConstants.END_METHOD);
-            }
-        }
-        return retVal;
-    }
-
-    /* (non-Javadoc)
      * @see com.clinic.clinic.api.bizlogic.service.IAccountService#login(com.clinic.clinic.common.dto.biz.AccountDto)
      */
     @Override
@@ -276,13 +244,13 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
         try {
-            AccountEntity a = accountRepo.findAccountByIdCard(userRegister.getIdCard());
+            AccountEntity a = accountRepo.findAccountByLoginName(userRegister.getLoginName());
             if(a == null) {
                 AccountEntity a2 = accountRepo.findAccountByEmail(userRegister.getEmail());
                 if(a2 == null){
                     AccountEntity accountEnt = new AccountEntity();
                     // LoginName
-                    accountEnt.setLoginName(userRegister.getIdCard());
+                    accountEnt.setLoginName(userRegister.getLoginName());
                     accountEnt.setCode(getUUID());
                     // Email
                     accountEnt.setEmail(userRegister.getEmail());
@@ -346,7 +314,7 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                     throwBizlogicException(500, IBizErrorCode.ACCOUNT_EMAIL_EXISTS, "Email exists", userRegister.getEmail());
                 }
             } else {
-                throwBizlogicException(500, IBizErrorCode.ACCOUNT_EXISTS, "IdCard exists", userRegister.getIdCard());
+                throwBizlogicException(500, IBizErrorCode.ACCOUNT_EXISTS, "Login name exists", userRegister.getLoginName());
             }
             
         } catch (BizlogicException be) {

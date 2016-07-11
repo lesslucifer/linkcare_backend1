@@ -67,7 +67,7 @@ public interface IAccountService {
      */
     Page<AccountCustomDto> getAccountAndHome(Pageable range, AccountFilterDto accountfilterDto) throws BizlogicException;
     
-    AccountDto createAccount(Integer loginId, AccountDto account) throws BizlogicException;
+//    AccountDto createAccount(Integer loginId, AccountDto account) throws BizlogicException;
     
     AccountDto login(String loginName, String password) throws BizlogicException;
 
