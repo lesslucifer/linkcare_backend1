@@ -141,6 +141,7 @@ public class NotificationService extends AbsService implements INotificationServ
 		try {
 			final String p12FileName = app + ".p12";
 			final String p12Path = RestApiConf.getInstance().getApnsP12Dir() + p12FileName;
+			LOGGER.error(String.format("SEND APNS for %s; P12 File: %s", devices.toString(), p12Path));
 
 			ApnsService service =
 				    APNS.newService()
@@ -159,6 +160,7 @@ public class NotificationService extends AbsService implements INotificationServ
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			LOGGER.error(e.toString());
 		}
 	}
 }
