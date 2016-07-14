@@ -3,6 +3,8 @@ package com.clinic.clinic.api.bizlogic.service.impl;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.json.simple.JSONArray;
@@ -29,6 +31,7 @@ import com.notnoop.apns.ApnsService;
 
 @ApplicationService
 public class NotificationService extends AbsService implements INotificationService {
+	private static Executor EXEC = Executors.newSingleThreadExecutor();
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationService.class);
 	
@@ -89,11 +92,15 @@ public class NotificationService extends AbsService implements INotificationServ
 	
 	private void sendNotification(final String app, final Integer receiver, final String content, final Integer type, final String params) {
 		List<DeviceEntity> devices = deviceRepo.getDevicesOfUser(receiver, app);
-		List<DeviceEntity> gcmDevices = devices.stream().filter(d -> {return "GCM".equals(d.getType());}).collect(Collectors.toList());
-		List<DeviceEntity> apnsDevices = devices.stream().filter(d -> {return "APNS".equals(d.getType());}).collect(Collectors.toList());
+		final List<DeviceEntity> gcmDevices = devices.stream().filter(d -> {return "GCM".equals(d.getType());}).collect(Collectors.toList());
+		final List<DeviceEntity> apnsDevices = devices.stream().filter(d -> {return "APNS".equals(d.getType());}).collect(Collectors.toList());
 		
-		this.sendGCMNotification(gcmDevices, content, type, params);
-		this.sendAPNSNotification(apnsDevices, app, content, type, params);
+		EXEC.execute(() -> {
+			this.sendGCMNotification(gcmDevices, content, type, params);
+		});
+		EXEC.execute(() -> {
+			this.sendAPNSNotification(apnsDevices, app, content, type, params);
+		});
  	}
 	
 	private void sendGCMNotification(List<DeviceEntity> devices, String content, Integer type, String params) {

@@ -237,19 +237,10 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		appBookingRepo.save(appBooking);
 		
 		// send notification
-		AccountEntity bookerEnt = appBooking.getBooker();
-		AccountEntity medicarEnt = appBooking.getMedicar();
 		LocalDateTime time = Utils.toDateTime(appBooking.getDate(), appBooking.getTime());
-		StringBuilder content = new StringBuilder();
-		content.append("<b>Bác sĩ ");
-		medicarEnt.getFullName(content);
-		content.append("</b> đã từ chối cuộc hẹn bạn đặt <b>vào lúc ");
-		content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
-		content.append(" ngày ");
-		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
-		content.append("</b>");
-		notifServ.sendMessage(INotificationService.USER_APP, null, bookerEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_REJECTED,
-				content.toString(), appBooking.getId(), medicar);
+		StringBuilder actorBuilder = new StringBuilder();
+		actorBuilder.append("Bác sĩ ");
+		this.sendRejectAppointmentNotification(actorBuilder.toString(), appBooking, appBooking.getBooker().getId(), time);
 	}
 
 	@Override
@@ -282,21 +273,11 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		AccountEntity cancellerEnt = (canceller == medicarEnt.getId()) ? medicarEnt : bookerEnt;
 		AccountEntity cancelleeEnt = (canceller != medicarEnt.getId()) ? medicarEnt : bookerEnt;
 		
-		StringBuilder content = new StringBuilder();
-		content.append("<b>").append(title).append(" ");
-		cancellerEnt.getFullName(content);
-		content.append("</b> đã hủy cuộc hẹn lúc <b>");
-		content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
-		content.append(" ngày ");
-		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
-		content.append("</b>");
-		if (!StringUtils.isEmpty(reason)) {
-			content.append(". Lý do: ");
-			content.append(reason);
-		}
+		StringBuilder actorName = new StringBuilder();
+		actorName.append(title).append(" ");
+		cancellerEnt.getFullName(actorName);
 		final String app = (canceller == medicarEnt.getId()) ? INotificationService.USER_APP : INotificationService.DOCTOR_APP;
-		notifServ.sendMessage(app, null, cancelleeEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
-				content.toString(), canceller, cancelleeEnt.getId());
+		this.sendCancelAppointmentNotification(app, actorName.toString(), canceller, cancelleeEnt.getId(), time, reason);
 	}
 
 	@Override
@@ -407,15 +388,47 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		
 		if (!lateBooking.isEmpty()) {
 			for (AppointmentBookingEntity ent : lateBooking) {
+				LocalDateTime bookingTime = Utils.toDateTime(ent.getDate(), ent.getTime());
 				if (ent.getStatus() == AppointmentBookingEntity.STATUS_WAITING) {
 					ent.setStatus(AppointmentBookingEntity.STATUS_REJECTED);
+					this.sendRejectAppointmentNotification("Hệ thống", ent, ent.getBooker().getId(), bookingTime);
 				}
 				else {
 					ent.setStatus(AppointmentBookingEntity.STATUS_CANCELLED);
+					this.sendCancelAppointmentNotification(INotificationService.USER_APP, "Hệ thống", null, ent.getBooker().getId(), bookingTime, "Quá thời gian.");
+					this.sendCancelAppointmentNotification(INotificationService.DOCTOR_APP, "Hệ thống", null, ent.getMedicar().getId(), bookingTime, "Quá thời gian.");
 				}
 			}
 			
 			appBookingRepo.save(lateBooking);
 		}
+	}
+	
+	private void sendRejectAppointmentNotification(String title, AppointmentBookingEntity booking, Integer receiver, LocalDateTime time) {
+		StringBuilder content = new StringBuilder();
+		content.append("<b>").append(title);
+		content.append("</b> đã từ chối cuộc hẹn bạn đặt <b>vào lúc ");
+		content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
+		content.append(" ngày ");
+		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
+		content.append("</b>");
+		notifServ.sendMessage(INotificationService.USER_APP, booking.getMedicar().getId(), receiver, NotificationEntity.TYPE_APPOINTMENT_REJECTED,
+				content.toString(), booking.getId(), booking.getMedicar().getId());
+	}
+	
+	private void sendCancelAppointmentNotification(String app, String title, Integer canceller, Integer receiver, LocalDateTime time, String reason) {
+		StringBuilder content = new StringBuilder();
+		content.append("<b>").append(title);
+		content.append("</b> đã hủy cuộc hẹn lúc <b>");
+		content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
+		content.append(" ngày ");
+		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
+		content.append("</b>");
+		if (!StringUtils.isEmpty(reason)) {
+			content.append(". Lý do: ");
+			content.append(reason);
+		}
+		notifServ.sendMessage(app, canceller, receiver, NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
+				content.toString(), canceller, receiver);
 	}
 }
