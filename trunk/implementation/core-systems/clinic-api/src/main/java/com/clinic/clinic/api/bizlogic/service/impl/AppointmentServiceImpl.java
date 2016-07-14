@@ -294,7 +294,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 			content.append(". Lý do: ");
 			content.append(reason);
 		}
-		final String app = (canceller == medicarEnt.getId()) ? INotificationService.DOCTOR_APP : INotificationService.USER_APP;
+		final String app = (canceller == medicarEnt.getId()) ? INotificationService.USER_APP : INotificationService.DOCTOR_APP;
 		notifServ.sendMessage(app, null, cancelleeEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
 				content.toString(), canceller, cancelleeEnt.getId());
 	}

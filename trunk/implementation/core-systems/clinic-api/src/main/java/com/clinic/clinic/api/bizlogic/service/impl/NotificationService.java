@@ -150,6 +150,7 @@ public class NotificationService extends AbsService implements INotificationServ
 				    .build();
 			
 			String payload = APNS.newPayload().alertBody(plainContent)
+					.sound("default")
 					.customField("type", type)
 					.customField("params", params)
 					.build();
