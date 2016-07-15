@@ -412,7 +412,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		content.append(" ngày ");
 		content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
 		content.append("</b>");
-		notifServ.sendMessage(INotificationService.USER_APP, booking.getMedicar().getId(), receiver, NotificationEntity.TYPE_APPOINTMENT_REJECTED,
+		notifServ.sendMessage(INotificationService.USER_APP, null, receiver, NotificationEntity.TYPE_APPOINTMENT_REJECTED,
 				content.toString(), booking.getId(), booking.getMedicar().getId());
 	}
 	
@@ -428,7 +428,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 			content.append(". Lý do: ");
 			content.append(reason);
 		}
-		notifServ.sendMessage(app, canceller, receiver, NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
+		notifServ.sendMessage(app, null, receiver, NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
 				content.toString(), canceller, receiver);
 	}
 }
