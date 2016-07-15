@@ -392,8 +392,10 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 				if (ent.getStatus() == AppointmentBookingEntity.STATUS_WAITING) {
 					ent.setStatus(AppointmentBookingEntity.STATUS_REJECTED);
 					this.sendRejectAppointmentNotification("Hệ thống", ent, ent.getBooker().getId(), bookingTime);
+					this.sendCancelAppointmentNotification(INotificationService.DOCTOR_APP, "Hệ thống", null, ent.getMedicar().getId(), bookingTime, "Quá thời gian.");
 				}
 				else {
+					
 					ent.setStatus(AppointmentBookingEntity.STATUS_CANCELLED);
 					this.sendCancelAppointmentNotification(INotificationService.USER_APP, "Hệ thống", null, ent.getBooker().getId(), bookingTime, "Quá thời gian.");
 					this.sendCancelAppointmentNotification(INotificationService.DOCTOR_APP, "Hệ thống", null, ent.getMedicar().getId(), bookingTime, "Quá thời gian.");
