@@ -102,6 +102,9 @@ public class AccountEntity extends TraceEntity {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "partient")
 	private List<RateTraceEntity> rateTraces = new ArrayList<RateTraceEntity>();
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
+	private MedicarProfileEntity medicarProfile;
 	
 	//fk:account table and role table
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,targetEntity=RoleEntity.class)
@@ -376,5 +379,12 @@ public class AccountEntity extends TraceEntity {
     public void setRoles(List<RoleEntity> roles) {
         this.roles = roles;
     }
-    
+
+	public MedicarProfileEntity getMedicarProfile() {
+		return medicarProfile;
+	}
+
+	public void setMedicarProfile(MedicarProfileEntity medicarProfile) {
+		this.medicarProfile = medicarProfile;
+	}
 }

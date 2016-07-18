@@ -117,13 +117,17 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", plcAddr.longtitude"
                     + ", plcAddr.latitude"
                     + ", e.avatar"
-                    + ", rate.mark FROM " + AccountEntity.class.getName() + " e ");
+                    + ", rate.mark "
+                    + ", medicarProfile.clinicPrice "
+                    + ", medicarProfile.patientHomePrice ");
+            summaryQuerySql.append("FROM " + AccountEntity.class.getName() + " e ");
             summaryQuerySql.append("JOIN e.address address ");
             summaryQuerySql.append("JOIN e.place plc ");
             summaryQuerySql.append("JOIN plc.address plcAddr ");
             summaryQuerySql.append("JOIN e.subcategory subCate ");
             summaryQuerySql.append("JOIN subCate.category cate ");
             summaryQuerySql.append("JOIN cate.major major ");
+            summaryQuerySql.append("JOIN e.medicarProfile medicarProfile ");
             summaryQuerySql.append("LEFT JOIN e.rate rate ");
             
             summaryQuerySql.append("WHERE 1 = 1 ");
@@ -178,8 +182,6 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setSubcategory((String)object[5]);
                 acct.setCategory((String)object[6]);
                 acct.setMajor((String)object[7]);
-                acct.setCostHome(200000.0);
-                acct.setCostClinic(200000.0);
                 acct.setAddressHome((String)object[8]);
                 acct.setHomeLongtitude((Double)object[9]);
                 acct.setHomeLatitude((Double)object[10]);
@@ -189,6 +191,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setAvatar((String)object[14]);
                 acct.setName(acct.getFirstName(), acct.getMidleName(), acct.getLastName());
                 acct.setMark(object[15] == null ? 0 : Double.parseDouble(object[15].toString()));
+                acct.setCostClinic((Double) object[16]);
+                acct.setCostHome((Double) object[17]);
                 resultDto.add(acct);
             }
             
@@ -239,6 +243,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", e.image_url"
                     + ", GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) * 1000 as distance "
                     + ", coalesce(rate.mark, 0) as mark_medicar "
+                    + ", mp.clinic_price as clinic_price "
+                    + ", mp.patient_home_price as patient_home_price "
                     + "FROM account e ");
             summaryQuerySql.append("JOIN address address ON e.address_id = address.id ");
             summaryQuerySql.append("LEFT JOIN place plc ON e.place_id = plc.id  ");
@@ -246,6 +252,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("JOIN subcategory subCate ON e.subcategory_id = subCate.id ");
             summaryQuerySql.append("JOIN category cate ON cate.id = subCate.category_id ");
             summaryQuerySql.append("JOIN major ON major.id = cate.major_id ");
+            summaryQuerySql.append("JOIN medicar_profile mp ON mp.account_id = e.id ");
             summaryQuerySql.append("LEFT JOIN rate rate ON rate.medicar_id = e.id ");
 
             
@@ -309,8 +316,6 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setSubcategory((String)object[5]);
                 acct.setCategory((String)object[6]);
                 acct.setMajor((String)object[7]);
-                acct.setCostHome(200000.0);
-                acct.setCostClinic(200000.0);
                 acct.setAddressHome((String)object[8]);
                 acct.setHomeLongtitude((Double)object[9]);
                 acct.setHomeLatitude((Double)object[10]);
@@ -321,6 +326,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setDistance(Double.parseDouble(object[15].toString()));
                 acct.setName(acct.getFirstName(), acct.getMidleName(), acct.getLastName());
                 acct.setMark(object[16] == null ? 0 : Double.parseDouble(object[16].toString()));
+                acct.setCostClinic((Double) object[17]);
+                acct.setCostHome((Double) object[18]);
                 resultDto.add(acct);
             }
             
