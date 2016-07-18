@@ -191,8 +191,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setAvatar((String)object[14]);
                 acct.setName(acct.getFirstName(), acct.getMidleName(), acct.getLastName());
                 acct.setMark(object[15] == null ? 0 : Double.parseDouble(object[15].toString()));
-                acct.setCostClinic((Double) object[16]);
-                acct.setCostHome((Double) object[17]);
+                acct.setCostClinic(((Number) object[16]).doubleValue());
+                acct.setCostHome(((Number) object[17]).doubleValue());
                 resultDto.add(acct);
             }
             
@@ -326,8 +326,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setDistance(Double.parseDouble(object[15].toString()));
                 acct.setName(acct.getFirstName(), acct.getMidleName(), acct.getLastName());
                 acct.setMark(object[16] == null ? 0 : Double.parseDouble(object[16].toString()));
-                acct.setCostClinic((Double) object[17]);
-                acct.setCostHome((Double) object[18]);
+                acct.setCostClinic(((Number) object[17]).doubleValue());
+                acct.setCostHome(((Number) object[18]).doubleValue());
                 resultDto.add(acct);
             }
             
