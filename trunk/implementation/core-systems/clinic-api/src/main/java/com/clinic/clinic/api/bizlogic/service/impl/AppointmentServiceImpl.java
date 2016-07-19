@@ -19,6 +19,7 @@ import com.clinic.clinic.api.persistence.entity.AccountBlockTimeEntity;
 import com.clinic.clinic.api.persistence.entity.AccountEntity;
 import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
+import com.clinic.clinic.api.persistence.entity.MedicarProfileEntity;
 import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.entity.TimingsEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
@@ -86,12 +87,11 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 					medicar.getSubcategory().getId(), dto.getSubCategory());
 		}
 		
-//		MedicarProfileEntity medicarProfile = medicarProfileRepo.getByAccountId(dto.getMedicar());
-//		if (medicarProfile == null) {
-//			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_MEDICAR_PROFILE,
-//					"Medicar profile not validated!");
-//		}
-
+		MedicarProfileEntity medicarProfile = medicarProfileRepo.getByAccountId(dto.getMedicar());
+		if (medicarProfile == null) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_MEDICAR_PROFILE,
+					"Medicar profile not validated!");
+		}
 
 		this.autoCancelWaitingAppointment(dto.getMedicar());
 		
@@ -134,7 +134,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 //		}
 		
 		AddressEntity address = (dto.isAtHome()) ? (accRepo.findOne(booker).getAddress()) : (medicar.getAddress());
-		int cost = 200000; // (dto.isAtHome() == false) ? medicarProfile.getClinicPrice() : medicarProfile.getPatientHomePrice();
+		int cost = (dto.isAtHome() == false) ? medicarProfile.getClinicPrice() : medicarProfile.getPatientHomePrice();
 		
 		AppointmentBookingEntity entity = new AppointmentBookingEntity();
 		entity.setBooker(accRepo.getReference(AccountEntity.class, booker));

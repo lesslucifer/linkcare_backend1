@@ -23,8 +23,10 @@
  *=============================================================================*/
 package com.clinic.clinic.api.persistence.repository.impl;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -106,7 +108,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", e.lastName"
                     + ", e.midleName"
                     + ", e.firstName"
-                    + ", e.experience"
+                    + ", medicarProfile.graduatedYear"
                     + ", subCate.name"
                     + ", cate.name"
                     + ", major.name"
@@ -172,13 +174,15 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             @SuppressWarnings("unchecked")
             List<Object[]> result = query.getResultList();
             
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             for (Object[] object : result) {
                 AccountCustomDto acct = new AccountCustomDto();
                 acct.setId((Integer)object[0]);
                 acct.setLastName((String) object[1]);
                 acct.setMidleName((String) object[2]);
                 acct.setFirstName((String) object[3]);
-                acct.setExperience((Double)object[4]);
+                int graduatedYear = object[4] == null ? currentYear : ((Number)object[4]).intValue();
+                acct.setExperience(Math.max(1.0, currentYear - graduatedYear));
                 acct.setSubcategory((String)object[5]);
                 acct.setCategory((String)object[6]);
                 acct.setMajor((String)object[7]);
@@ -230,7 +234,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", e.last_name"
                     + ", e.midle_name"
                     + ", e.first_name"
-                    + ", e.experience"
+                    + ", mp.graduated_year"
                     + ", subCate.name as subcateName"
                     + ", cate.name as cateName"
                     + ", major.name as majorName"
@@ -306,13 +310,18 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             @SuppressWarnings("unchecked")
             List<Object[]> result = query.getResultList();
             
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             for (Object[] object : result) {
                 AccountCustomDto acct = new AccountCustomDto();
                 acct.setId((Integer)object[0]);
                 acct.setLastName((String) object[1]);
                 acct.setMidleName((String) object[2]);
                 acct.setFirstName((String) object[3]);
-                acct.setExperience((Double)object[4]);
+                Calendar graduatedYear = Calendar.getInstance();
+                if (object[4] != null) {
+                	graduatedYear.setTime((Date) object[4]);
+                }
+                acct.setExperience(Math.max(1.0, currentYear - graduatedYear.get(Calendar.YEAR)));
                 acct.setSubcategory((String)object[5]);
                 acct.setCategory((String)object[6]);
                 acct.setMajor((String)object[7]);
