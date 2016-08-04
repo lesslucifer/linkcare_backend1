@@ -31,7 +31,7 @@ import com.notnoop.apns.ApnsService;
 
 @ApplicationService
 public class NotificationService extends AbsService implements INotificationService {
-	private static Executor EXEC = Executors.newSingleThreadExecutor();
+	private static Executor EXEC = Executors.newCachedThreadPool();
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationService.class);
 	
