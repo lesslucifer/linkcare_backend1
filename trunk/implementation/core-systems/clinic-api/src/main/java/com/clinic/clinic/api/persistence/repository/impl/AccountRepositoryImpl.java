@@ -152,8 +152,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 summaryQuerySql.append("AND major.id=:major ");
             }
 
-            summaryQuerySql.append("AND medicarProfile.expiredTime <= :now ");
-            summaryQuerySql.append("AND medicarProfile.overloadedAppointments > :maxOverloadAppointments ");
+            summaryQuerySql.append("AND NOT( medicarProfile.expiredTime <= :now ");
+            summaryQuerySql.append("AND medicarProfile.overloadedAppointments > :maxOverloadAppointments) ");
             
             query = entityManager.createQuery(summaryQuerySql.toString());
             // set parameter
@@ -292,8 +292,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 summaryQuerySql.append("AND GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) <= 100 ");
             }
 
-            summaryQuerySql.append("AND mp.expired_time <= :now ");
-            summaryQuerySql.append("AND mp.overloaded_appointments > :maxOverloadAppointments ");
+            summaryQuerySql.append("AND NOT (mp.expired_time <= :now ");
+            summaryQuerySql.append("AND mp.overloaded_appointments > :maxOverloadAppointments) ");
             
             query = entityManager.createNativeQuery(summaryQuerySql.toString());
             // set parameter
