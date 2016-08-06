@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clinic.clinic.api.bizlogic.service.IMedicarProfileService;
+import com.clinic.clinic.api.persistence.entity.MedicarProfileEntity;
+import com.clinic.clinic.api.translator.impl.MedicarProfileTranslatorImpl;
 import com.clinic.clinic.api.ws.AbsRestApi;
 import com.clinic.clinic.common.consts.IDbConstants;
 import com.clinic.clinic.common.consts.IRestApiUrlMaps;
@@ -82,5 +84,20 @@ public class MedicarProfileRestApi extends AbsRestApi {
 		
 		medicarProfileServ.updateMedicarProfile(accountId, dto);
 		return Utils.mkMap();
+	}
+	
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_PROFILE_EXTEND, method = RequestMethod.PUT, produces = {
+    "application/json" })
+	public Object extendMedicarProfile(@RequestHeader("sess") String session,
+			@PathVariable("account_id") Integer accountId,
+    		HttpServletResponse response) {
+		validate(accountId);
+		
+		Integer requester = auth().authSession(session);
+		auth().authRight(requester, IDbConstants.RIGHT_UPDATE_MEDICAR_PROFILE);
+		auth().authRight(accountId, IDbConstants.RIGHT_HAS_MEDICAR_PROFILE);
+		
+		final MedicarProfileEntity entity = medicarProfileServ.extendMedicarProfile(accountId);
+		return MedicarProfileTranslatorImpl.INST.getDto(entity);
 	}
 }

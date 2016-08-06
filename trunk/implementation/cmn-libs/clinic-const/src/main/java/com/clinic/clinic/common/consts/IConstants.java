@@ -58,4 +58,6 @@ public interface IConstants {
     
     static final Integer ACCOUNT_ACTIVED_FLAG = 1;
     static final Integer ACCOUNT_UNACTIVED_FLAG = 1;
+    
+    static final int MAX_OVERLOAD_APPOINTMENTS = 5;
 }

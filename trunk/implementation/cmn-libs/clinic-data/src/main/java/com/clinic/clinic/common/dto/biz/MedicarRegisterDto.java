@@ -18,7 +18,11 @@ public class MedicarRegisterDto implements Serializable {
 	
 	private PlaceRegisterDto clinic;
 	
+	@NotNull
 	private Integer subcategory;
+	
+	@NotNull
+	private String referrer;
 	
 	public UserRegisterDto getUserProfile() {
 		return userProfile;
@@ -43,5 +47,11 @@ public class MedicarRegisterDto implements Serializable {
 	}
 	public void setClinic(PlaceRegisterDto clinic) {
 		this.clinic = clinic;
+	}
+	public String getReferrer() {
+		return referrer;
+	}
+	public void setReferrer(String referrer) {
+		this.referrer = referrer;
 	}
 }

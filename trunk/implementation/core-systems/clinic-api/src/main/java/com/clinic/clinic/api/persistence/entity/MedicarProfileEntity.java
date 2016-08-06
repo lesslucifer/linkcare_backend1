@@ -54,6 +54,15 @@ public class MedicarProfileEntity extends TraceEntity {
 	
 	@Column(name = "patient_home_price")
 	private int patientHomePrice;
+	
+	@Column(name = "expired_time")
+	private Long expiredTime;
+
+	@Column(name = "overloaded_appointments")
+	private Integer overloadedAppointments;
+	
+	@Column(name = "referrer")
+	private String referrer;
 
 	public AccountEntity getAccount() {
 		return account;
@@ -149,5 +158,29 @@ public class MedicarProfileEntity extends TraceEntity {
 
 	public void setPatientHomePrice(int patientHomePrice) {
 		this.patientHomePrice = patientHomePrice;
+	}
+
+	public Long getExpiredTime() {
+		return expiredTime;
+	}
+
+	public void setExpiredTime(Long expiredTime) {
+		this.expiredTime = expiredTime;
+	}
+
+	public Integer getOverloadedAppointments() {
+		return overloadedAppointments;
+	}
+
+	public void setOverloadedAppointments(Integer overloadedAppointments) {
+		this.overloadedAppointments = overloadedAppointments;
+	}
+
+	public String getReferrer() {
+		return referrer;
+	}
+
+	public void setReferrer(String referrer) {
+		this.referrer = referrer;
 	}
 }

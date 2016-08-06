@@ -94,6 +94,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
+        final long now = System.currentTimeMillis();
         List<AccountCustomDto> resultDto = new ArrayList<AccountCustomDto>();
         Page<AccountCustomDto> retVal = null;
         try {
@@ -150,6 +151,10 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             if(accountFilterDto.getMajor() != null) {
                 summaryQuerySql.append("AND major.id=:major ");
             }
+
+            summaryQuerySql.append("AND medicarProfile.expiredTime <= :now ");
+            summaryQuerySql.append("AND medicarProfile.overloadedAppointments > :maxOverloadAppointments ");
+            
             query = entityManager.createQuery(summaryQuerySql.toString());
             // set parameter
             if(nameWords.size() > 0) {
@@ -168,6 +173,10 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             if(accountFilterDto.getMajor() != null) {
                 query.setParameter("major", accountFilterDto.getMajor());
             }
+            
+            query.setParameter("now", now);
+            query.setParameter("maxOverloadAppointments", IConstants.MAX_OVERLOAD_APPOINTMENTS);
+            
             query.setFirstResult(range.getOffset());
             query.setMaxResults(range.getPageSize());
             
@@ -220,6 +229,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
         }
+        final long now = System.currentTimeMillis();
         List<AccountCustomDto> resultDto = new ArrayList<AccountCustomDto>();
         Page<AccountCustomDto> retVal = null;
         try {
@@ -281,6 +291,10 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             if(accountFilterDto.getLatitude() != null && accountFilterDto.getLongtitude() != null) {
                 summaryQuerySql.append("AND GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) <= 100 ");
             }
+
+            summaryQuerySql.append("AND medicar_profile.expired_time <= :now ");
+            summaryQuerySql.append("AND medicar_profile.overloaded_appointments > :maxOverloadAppointments ");
+            
             query = entityManager.createNativeQuery(summaryQuerySql.toString());
             // set parameter
             if(nameWords.size() > 0) {
@@ -303,6 +317,9 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 query.setParameter("latitude", accountFilterDto.getLatitude());
                 query.setParameter("longtitude", accountFilterDto.getLongtitude());
             }
+            
+            query.setParameter("now", now);
+            query.setParameter("maxOverloadAppointments", IConstants.MAX_OVERLOAD_APPOINTMENTS);
             
             query.setFirstResult(range.getOffset());
             query.setMaxResults(range.getPageSize());

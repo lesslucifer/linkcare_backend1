@@ -59,7 +59,7 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 	}
 
 	@Override
-	public void updateMedicarProfile(Integer accountId, MedicarProfileDto dto) {
+	public MedicarProfileEntity updateMedicarProfile(Integer accountId, MedicarProfileDto dto) {
 		MedicarProfileEntity entity = medicarProfileRepo.getByAccountId(accountId);
 		
 		if (entity == null) {
@@ -68,7 +68,7 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 		}
 		
 		MedicarProfileTranslatorImpl.INST.dtoToEntity(dto, entity);
-		medicarProfileRepo.save(entity);
+		return medicarProfileRepo.save(entity);
 	}
 	
 	@Override
@@ -92,7 +92,11 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 		acc.getRoles().add(role);
 		accRepo.save(acc);
 		
-		this.updateMedicarProfile(acc.getId(), dto.getMedicarProfile());
+		MedicarProfileEntity medicarProfile = this.updateMedicarProfile(acc.getId(), dto.getMedicarProfile());
+		medicarProfile.setExpiredTime(System.currentTimeMillis());
+		medicarProfile.setOverloadedAppointments(0);
+		medicarProfile.setReferrer(dto.getReferrer());
+		medicarProfileRepo.save(medicarProfile);
 		
 		PlaceRegisterDto clinic = dto.getClinic();
 		if (clinic != null) {
@@ -114,5 +118,21 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 			acc.setPlace(place);
 			accRepo.save(acc);
 		}
+	}
+
+	@Override
+	public MedicarProfileEntity extendMedicarProfile(Integer accountId) {
+		MedicarProfileEntity medicarProfile = medicarProfileRepo.getByAccountId(accountId);
+		if (medicarProfile == null) {
+			throwBizlogicException(IBizErrorCode.OBJECT_NOT_FOUND, String.format("Medicar %d not found", accountId));
+		}
+		
+		final long now = System.currentTimeMillis();
+		final long expiredTime = medicarProfile.getExpiredTime() == null ? 0 : medicarProfile.getExpiredTime();
+		final long dueTime = Math.max(now, expiredTime);
+		final long newExpiredTime = dueTime + 365 * 24 * 60 * 60 * 1000; // 1 year
+		medicarProfile.setExpiredTime(newExpiredTime);
+		medicarProfile.setOverloadedAppointments(0);
+		return medicarProfileRepo.save(medicarProfile);
 	}
 }

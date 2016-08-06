@@ -1,7 +1,7 @@
 package com.clinic.clinic.common.dto.biz;
 
-import com.clinic.clinic.common.dto.TraceDto;
 
+import com.clinic.clinic.common.dto.TraceDto;
 import net.sf.oval.constraint.NotNull;
 
 public class MedicarProfileDto extends TraceDto {
@@ -32,6 +32,12 @@ public class MedicarProfileDto extends TraceDto {
 	private String workingPlace = null;
 
 	private String study = null;
+
+	private Long expiredTime;
+
+	private Integer overloadedAppointments;
+	
+	private String referrer;
 
 	@NotNull
 	private int clinicPrice = 0;
@@ -125,5 +131,29 @@ public class MedicarProfileDto extends TraceDto {
 
 	public void setPatientHomePrice(int patientHomePrice) {
 		this.patientHomePrice = patientHomePrice;
+	}
+
+	public Long getExpiredTime() {
+		return expiredTime;
+	}
+
+	public void setExpiredTime(Long expiredTime) {
+		this.expiredTime = expiredTime;
+	}
+
+	public Integer getOverloadedAppointments() {
+		return overloadedAppointments;
+	}
+
+	public void setOverloadedAppointments(Integer overloadedAppointments) {
+		this.overloadedAppointments = overloadedAppointments;
+	}
+
+	public String getReferrer() {
+		return referrer;
+	}
+
+	public void setReferrer(String referrer) {
+		this.referrer = referrer;
 	}
 }

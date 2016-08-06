@@ -12,11 +12,13 @@ import com.clinic.clinic.api.bizlogic.annotation.ApplicationService;
 import com.clinic.clinic.api.bizlogic.service.INotificationService;
 import com.clinic.clinic.api.bizlogic.service.IPrescriptionService;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
+import com.clinic.clinic.api.persistence.entity.MedicarProfileEntity;
 import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.entity.PrescriptionDoctorNoteEntity;
 import com.clinic.clinic.api.persistence.entity.PrescriptionEntity;
 import com.clinic.clinic.api.persistence.entity.PrescriptionMedicineEntity;
 import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
+import com.clinic.clinic.api.persistence.repository.IMedicarProfileRepository;
 import com.clinic.clinic.api.persistence.repository.IPrescriptionDoctorNoteRepository;
 import com.clinic.clinic.api.persistence.repository.IPrescriptionMedicineRepository;
 import com.clinic.clinic.api.persistence.repository.IPrescriptionRepository;
@@ -41,6 +43,9 @@ public class PrescriptionServiceImpl extends AbsService implements IPrescription
 	
 	@Autowired
 	IAppointmentBookingRepository appBookingRepo;
+	
+	@Autowired
+	IMedicarProfileRepository medicarProfileRepo;
 	
 	@Autowired
 	INotificationService notifServ;
@@ -114,6 +119,14 @@ public class PrescriptionServiceImpl extends AbsService implements IPrescription
 		sb.append("</b>. Xin vui lòng nhấn vào đây để xem toa thuốc và đánh giá bác sĩ.");
 		notifServ.sendMessage(INotificationService.USER_APP, null, booking.getBooker().getId(), NotificationEntity.TYPE_APPOINTMENT_FINISHED,
 				sb.toString(), booking.getId(), entity.getId(), medicar);
+		
+		final MedicarProfileEntity medicarProfile = medicarProfileRepo.getByAccountId(booking.getMedicar().getId());
+		final long now = System.currentTimeMillis();
+		if (medicarProfile.getExpiredTime() == null || medicarProfile.getExpiredTime() <= now) {
+			final int nOverloaded = medicarProfile.getOverloadedAppointments() == null ? 0 : medicarProfile.getOverloadedAppointments();
+			medicarProfile.setOverloadedAppointments(nOverloaded + 1);
+			medicarProfileRepo.save(medicarProfile);
+		}
 
 		// all done, save entity
 		return PrescriptionTranslatorImpl.INST.getDto(entity);
