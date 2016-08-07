@@ -153,7 +153,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             }
 
             summaryQuerySql.append("AND NOT( medicarProfile.expiredTime <= :now ");
-            summaryQuerySql.append("AND medicarProfile.overloadedAppointments > :maxOverloadAppointments) ");
+            summaryQuerySql.append("AND medicarProfile.overloadedAppointments > :maxOverloadAppointments)  ");
             
             query = entityManager.createQuery(summaryQuerySql.toString());
             // set parameter

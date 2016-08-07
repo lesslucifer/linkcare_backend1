@@ -8,6 +8,8 @@ public class AccountTranslatorImpl extends AbstractTranslatorImpl<AccountDto, Ac
         implements
             ITranslator<AccountDto, AccountEntity> {
 
+	public static final AccountTranslatorImpl INST = new AccountTranslatorImpl();
+
 	public AccountTranslatorImpl() {
 		super(AccountDto.class, AccountEntity.class);
 		// TODO Auto-generated constructor stub

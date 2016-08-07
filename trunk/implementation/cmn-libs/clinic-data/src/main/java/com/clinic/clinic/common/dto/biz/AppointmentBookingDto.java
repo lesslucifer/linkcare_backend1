@@ -11,9 +11,9 @@ public final class AppointmentBookingDto extends TraceDto {
 	private static final long serialVersionUID = 7956521828569668258L;
 	
 	private TraceDto booker;
-	private TraceDto medicar;
+	private AccountDto medicar;
 	private boolean isAtHome;
-	private AddressDto address;
+	private String address;
 	private LocalDate date;
 	private int time;
 	private int duration;
@@ -28,11 +28,11 @@ public final class AppointmentBookingDto extends TraceDto {
 		this.booker = booker;
 	}
 	
-	public TraceDto getMedicar() {
+	public AccountDto getMedicar() {
 		return medicar;
 	}
 	
-	public void setMedicar(TraceDto medicar) {
+	public void setMedicar(AccountDto medicar) {
 		this.medicar = medicar;
 	}
 	
@@ -44,11 +44,11 @@ public final class AppointmentBookingDto extends TraceDto {
 		this.isAtHome = isAtHome;
 	}
 	
-	public AddressDto getAddress() {
+	public String getAddress() {
 		return address;
 	}
 	
-	public void setAddress(AddressDto address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 	
