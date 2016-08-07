@@ -37,8 +37,16 @@ public class SubcategoryTranslatorImpl extends AbstractTranslatorImpl<Subcategor
         implements
             ITranslator<SubcategoryDto, SubcategoryEntity> {
 
+	public static final SubcategoryTranslatorImpl INST = new SubcategoryTranslatorImpl();
 	
 	public SubcategoryTranslatorImpl() {
 		super(SubcategoryDto.class, SubcategoryEntity.class);
+	}
+
+	@Override
+	public void entityToDto(SubcategoryEntity ent, SubcategoryDto dto) {
+		// TODO Auto-generated method stub
+		super.entityToDto(ent, dto);
+		dto.setCategory(ent.getCategory().getId());
 	}
 }

@@ -18,6 +18,7 @@ public final class AppointmentBookingDto extends TraceDto {
 	private int time;
 	private int duration;
 	private int status;
+	private int cost;
 	private AppointmentPatientDto patient;
 
 	public TraceDto getBooker() {
@@ -90,5 +91,13 @@ public final class AppointmentBookingDto extends TraceDto {
 	
 	public void setPatient(AppointmentPatientDto patient) {
 		this.patient = patient;
+	}
+
+	public int getCost() {
+		return cost;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
 	}
 }

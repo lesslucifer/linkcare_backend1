@@ -41,6 +41,16 @@ public class SubcategoryDto extends NameCodeDescDto {
      */
     private static final long serialVersionUID = -818112078097765800L;
     
+    private int category;
+
+	public int getCategory() {
+		return category;
+	}
+
+	public void setCategory(int category) {
+		this.category = category;
+	}
+    
 //    private List<AccountDto> accounts = new ArrayList<AccountDto>();
 //
 //    public List<AccountDto> getAccounts() {

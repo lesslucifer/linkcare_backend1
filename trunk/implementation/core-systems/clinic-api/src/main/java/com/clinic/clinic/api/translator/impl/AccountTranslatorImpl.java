@@ -14,4 +14,13 @@ public class AccountTranslatorImpl extends AbstractTranslatorImpl<AccountDto, Ac
 		super(AccountDto.class, AccountEntity.class);
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	public void entityToDto(AccountEntity ent, AccountDto dto) {
+		// TODO Auto-generated method stub
+		super.entityToDto(ent, dto);
+		dto.setSubcategory(SubcategoryTranslatorImpl.INST.getDto(ent.getSubcategory()));
+	}
+	
+	
 }
