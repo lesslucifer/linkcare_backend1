@@ -74,10 +74,6 @@ public class AccountDto extends TraceDto implements Serializable {
 
 	private String website;
 
-	private String hashedPassword;
-
-	private Boolean needChangePWD;
-
 	private Integer activeFlag;
 
 	private Long beginActiveTime;
@@ -212,22 +208,6 @@ public class AccountDto extends TraceDto implements Serializable {
 
 	public void setWebsite(String website) {
 		this.website = website;
-	}
-
-	public String getHashedPassword() {
-		return hashedPassword;
-	}
-
-	public void setHashedPassword(String hashedPassword) {
-		this.hashedPassword = hashedPassword;
-	}
-
-	public Boolean getNeedChangePWD() {
-		return needChangePWD;
-	}
-
-	public void setNeedChangePWD(Boolean needChangePWD) {
-		this.needChangePWD = needChangePWD;
 	}
 
 	public Integer getActiveFlag() {
