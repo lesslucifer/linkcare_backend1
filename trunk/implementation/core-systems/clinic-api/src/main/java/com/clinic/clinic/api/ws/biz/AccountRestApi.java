@@ -1,5 +1,5 @@
 /**==============================================================================
- * CLINIC JSC (www.clinic.vn) Proprietary.
+  * CLINIC JSC (www.clinic.vn) Proprietary.
  * Copyright 2016 CLINIC JSC.
  * UNPUBLISHED WORK
  * ALL RIGHTS RESERVED

@@ -50,7 +50,6 @@ public class UserRegisterDto {
 	@NotNull
     private Integer gender;
 
-	@NotNull
     private String birthday;
 
     private String idCard;
@@ -63,13 +62,10 @@ public class UserRegisterDto {
 	@NotNull
     private String password;
 
-	@NotNull
     private String address;
 
-	@NotNull
     private Double longtitude;
 	
-	@NotNull
     private Double latitude;
     
     public String getLoginName() {

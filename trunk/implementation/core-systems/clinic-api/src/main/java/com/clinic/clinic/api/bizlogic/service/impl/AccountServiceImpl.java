@@ -263,14 +263,13 @@ public class AccountServiceImpl extends AbsService implements IAccountService {
                     accountEnt.setMidleName(userRegister.getMidleName());
                     accountEnt.setGender(userRegister.getGender());
                     // Todo Convert Birthday
-                    if(null == userRegister.getBirthday()) {
-                        throwBizlogicException(500, IBizErrorCode.BIRTHDAY_NULL, "Birthday is not null");
+                    if(null != userRegister.getBirthday()) {
+                        Long birthdayInLong = this.parsesDatetime(userRegister.getBirthday());
+                        if(birthdayInLong == null) {
+                            throwBizlogicException(500, IBizErrorCode.BIRTHDAY_WRONG, "Birthday error format", "dd-MM-yyyy");
+                        }
+                        accountEnt.setBirthday(birthdayInLong);
                     }
-                    Long birthdayInLong = this.parsesDatetime(userRegister.getBirthday());
-                    if(birthdayInLong == null) {
-                        throwBizlogicException(500, IBizErrorCode.BIRTHDAY_WRONG, "Birthday error format", "dd-MM-yyyy");
-                    }
-                    accountEnt.setBirthday(birthdayInLong);
                     accountEnt.setIdCard(userRegister.getIdCard());
                     if(null != userRegister.getPassport() && !userRegister.getPassport().isEmpty()) {
                         accountEnt.setPassport(userRegister.getPassport());
