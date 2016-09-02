@@ -83,9 +83,18 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 			throwBizlogicException(IBizErrorCode.OBJECT_NOT_FOUND, String.format("Role %s are invalid", type));
 		}
 		
-		AccountEntity acc = accServ.userRegister(dto.getUserProfile());
+		AccountEntity acc = null;
+		try {
+			acc = accServ.userRegister(dto.getUserProfile());
+		}
+		catch (Exception ex) {
+			// ignore this
+		}
 		if (acc == null) {
-			throwBizlogicException("Cannot create user");
+			acc = accRepo.findAccountByIdCard(dto.getUserProfile().getIdCard());
+			if (acc == null) {
+				throwBizlogicException("Cannot create user");
+			}
 		}
 		
 		acc.setSubcategory(subcate);
