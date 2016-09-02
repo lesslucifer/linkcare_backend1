@@ -83,35 +83,24 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 			throwBizlogicException(IBizErrorCode.OBJECT_NOT_FOUND, String.format("Role %s are invalid", type));
 		}
 		
-		AccountEntity acc = null;
-		try {
+		AccountEntity acc = accRepo.findAccountByIdCard(dto.getUserProfile().getIdCard());
+		if (acc == null) {
 			acc = accServ.userRegister(dto.getUserProfile());
 		}
-		catch (Exception ex) {
-			// ignore this
-		}
-		
+
 		if (acc == null) {
-			acc = accRepo.findAccountByIdCard(dto.getUserProfile().getIdCard());
-			if (acc == null) {
-				throwBizlogicException("Cannot create user");
-			}
+			throwBizlogicException("Cannot create user");
 		}
 		
 		acc.setSubcategory(subcate);
 		acc.getRoles().add(role);
 		accRepo.save(acc);
 		
-//		try {
-//			MedicarProfileEntity medicarProfile = this.updateMedicarProfile(acc.getId(), dto.getMedicarProfile());
-//			medicarProfile.setExpiredTime(System.currentTimeMillis());
-//			medicarProfile.setOverloadedAppointments(0);
-//			medicarProfile.setReferrer(dto.getReferrer());
-//			medicarProfileRepo.save(medicarProfile);
-//		}
-//		catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
+		MedicarProfileEntity medicarProfile = this.updateMedicarProfile(acc.getId(), dto.getMedicarProfile());
+		medicarProfile.setExpiredTime(System.currentTimeMillis());
+		medicarProfile.setOverloadedAppointments(0);
+		medicarProfile.setReferrer(dto.getReferrer());
+		medicarProfileRepo.save(medicarProfile);
 		
 		PlaceRegisterDto clinic = dto.getClinic();
 		if (clinic != null) {

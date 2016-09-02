@@ -50,7 +50,16 @@ public class MedicarProfileRestApi extends AbsRestApi {
 		Integer requester = auth().authSession(session);
 		auth().authRight(requester, IDbConstants.RIGHT_UPDATE_MEDICAR_PROFILE);
 		
-		medicarProfileServ.registerMedicar("NURSE_ROLE", body);
+		try {
+			medicarProfileServ.registerMedicar("NURSE_ROLE", body);
+		}
+		catch (Exception ex) {
+			Throwable thr = ex;
+			while (thr != null) {
+				thr.printStackTrace();
+				thr = thr.getCause();
+			}
+		}
 		
 		return Utils.mkMap();
 	}
