@@ -774,22 +774,27 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
     }
     
     protected <S extends T> S doSaveWithIdEntity(final S entity) {
-        if (!entityManager.contains(entity)) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("DEbug save persist in abs repository");
-            }
-            // persist object - add to entity manager
-            entityManager.persist(entity);
+    	try {
+            if (!entityManager.contains(entity)) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("DEbug save persist in abs repository");
+                }
+                // persist object - add to entity manager
+                entityManager.persist(entity);
 
-            // flush em - save to DB
-            entityManager.flush();
-        } else {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("DEbug save merge in abs repository");
+                // flush em - save to DB
+                entityManager.flush();
+            } else {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("DEbug save merge in abs repository");
+                }
+                entityManager.merge(entity);
+                entityManager.flush();
             }
-            entityManager.merge(entity);
-            entityManager.flush();
-        }
+    	}
+    	catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
         return entity;
     }
     protected <S extends T> List<S> doSave(final Iterable<S> entities) {
