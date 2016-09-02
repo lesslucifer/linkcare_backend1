@@ -230,7 +230,12 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
      */
     @Override
     public <S extends T> S save(final S entity) {
-        return doSave(entity);
+    	try {
+            return doSave(entity);
+    	}
+    	catch (Exception ex) {
+    		console.log(ex);
+    	}
     }
     
     /*
