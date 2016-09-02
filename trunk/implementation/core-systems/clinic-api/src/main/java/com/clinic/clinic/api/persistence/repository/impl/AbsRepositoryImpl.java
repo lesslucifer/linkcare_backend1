@@ -234,8 +234,10 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
             return doSave(entity);
     	}
     	catch (Exception ex) {
-    		console.log(ex);
+    		ex.printStackTrace();
     	}
+    	
+    	return entity;
     }
     
     /*
