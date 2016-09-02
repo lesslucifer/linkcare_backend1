@@ -90,6 +90,7 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 		catch (Exception ex) {
 			// ignore this
 		}
+		
 		if (acc == null) {
 			acc = accRepo.findAccountByIdCard(dto.getUserProfile().getIdCard());
 			if (acc == null) {
