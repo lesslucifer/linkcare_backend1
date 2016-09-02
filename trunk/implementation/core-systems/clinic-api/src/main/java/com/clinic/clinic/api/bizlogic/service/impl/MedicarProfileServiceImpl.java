@@ -101,8 +101,8 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 		acc.getRoles().add(role);
 		accRepo.save(acc);
 		
-		MedicarProfileEntity medicarProfile = this.updateMedicarProfile(acc.getId(), dto.getMedicarProfile());
 		try {
+			MedicarProfileEntity medicarProfile = this.updateMedicarProfile(acc.getId(), dto.getMedicarProfile());
 			medicarProfile.setExpiredTime(System.currentTimeMillis());
 			medicarProfile.setOverloadedAppointments(0);
 			medicarProfile.setReferrer(dto.getReferrer());
