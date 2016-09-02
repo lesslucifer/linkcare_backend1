@@ -751,25 +751,30 @@ public class AbsRepositoryImpl<T /*extends IdEntity*/, ID extends Serializable> 
     }
     
     protected <S extends T> S doSave(final S entity) {
-    	if (entity != null && entity instanceof TraceEntity) {
-            ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
-    	}
-		if (!entityManager.contains(entity)) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("DEbug save persist in abs repository");
-            }
-			// persist object - add to entity manager
-			entityManager.persist(entity);
+    	try {
+        	if (entity != null && entity instanceof TraceEntity) {
+                ((TraceEntity) entity).setLastUpdated(System.currentTimeMillis());
+        	}
+    		if (!entityManager.contains(entity)) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("DEbug save persist in abs repository");
+                }
+    			// persist object - add to entity manager
+    			entityManager.persist(entity);
 
-			// flush em - save to DB
-			entityManager.flush();
-		} else {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("DEbug save merge in abs repository");
-            }
-			entityManager.merge(entity);
-			entityManager.flush();
-		}
+    			// flush em - save to DB
+    			entityManager.flush();
+    		} else {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("DEbug save merge in abs repository");
+                }
+    			entityManager.merge(entity);
+    			entityManager.flush();
+    		}
+    	}
+    	catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
         return entity;
     }
     
