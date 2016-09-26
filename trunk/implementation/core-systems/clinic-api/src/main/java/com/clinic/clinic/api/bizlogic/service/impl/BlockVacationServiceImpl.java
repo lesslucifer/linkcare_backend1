@@ -18,6 +18,7 @@ import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
+import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.api.translator.impl.AccountBlockTimeTranslatorImpl;
 import com.clinic.clinic.common.consts.IBizErrorCode;
 import com.clinic.clinic.common.dto.biz.AccountBlockTimeDto;
@@ -38,6 +39,17 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 	
 	@Autowired
 	INotificationService notifServ;
+	
+	@Autowired
+	private IRoleRepository roleRepo;
+	
+	public String medicarTitle(Integer medicarId) {
+		if (roleRepo.isHasRole(medicarId, "NURSE_ROLE")) {
+			return "Điều dưỡng";
+		}
+		
+		return "Bác sĩ";
+	}
 	
 	@Override
 	public List<AccountBlockTimeDto> getBlockVacations(Integer accountId, LocalDateTime start, LocalDateTime end) {
@@ -99,8 +111,10 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						AccountEntity bookerEnt = appointment.getBooker();
 						AccountEntity medicarEnt = appointment.getMedicar();
 						LocalDateTime time = Utils.toDateTime(appointment.getDate(), appointment.getTime());
+						String title = BlockVacationServiceImpl.this.medicarTitle(medicarEnt.getId());
+						
 						StringBuilder content = new StringBuilder();
-						content.append("<b>Bác sĩ ");
+						content.append("<b>").append(title).append(" ");
 						medicarEnt.getFullName(content);
 						content.append("</b> đã từ chối cuộc hẹn bạn đặt <b>vào lúc ");
 						content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
@@ -120,7 +134,7 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						AccountEntity bookerEnt = appointment.getBooker();
 						AccountEntity medicarEnt = appointment.getMedicar();
 						LocalDateTime time = Utils.toDateTime(appointment.getDate(), appointment.getTime());
-						String title = "Bác sĩ";
+						String title = BlockVacationServiceImpl.this.medicarTitle(medicarEnt.getId());
 						AccountEntity cancellerEnt = medicarEnt;
 						AccountEntity cancelleeEnt = bookerEnt;
 						
@@ -131,7 +145,7 @@ public class BlockVacationServiceImpl extends AbsService implements IBlockVacati
 						content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
 						content.append(" ngày ");
 						content.append(time.format(DateTimeFormatters.DATE_FORMATTER));
-						content.append("</b>. Lý do: Bác sĩ có việc bận.");
+						content.append("</b>. Lý do: ").append(title).append(" có việc bận.");
 						notifServ.sendMessage(INotificationService.USER_APP, null, cancelleeEnt.getId(), NotificationEntity.TYPE_APPOINTMENT_CANCELLED,
 								content.toString(), appointment.getId(), appointment.getMedicar().getId(), appointment.getBooker().getId());
 					});

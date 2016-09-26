@@ -25,6 +25,8 @@ package com.clinic.clinic.api.persistence.repository.impl;
 
 import java.util.List;
 
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -35,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
+import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
 import com.clinic.clinic.api.persistence.entity.RoleEntity;
 import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.common.consts.IDbConstants;
@@ -69,5 +72,20 @@ public class RoleRepositoryImpl extends AbsRepositoryImpl<RoleEntity, Integer> i
             }
         };
         return findAll(spec);
+    }
+    
+    public boolean isHasRole(Integer userId, String roleCode) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("SELECT `role_id` FROM `account_role` AS ar ");
+		sb.append("INNER JOIN `role` AS r ON r.id = ar.role_id ");
+		sb.append("WHERE r.user_id = :user_id and r.code = :role_code ");
+
+		Query q = getEntityManager().createNativeQuery(sb.toString());
+		q.setParameter("user_id", userId);
+		q.setParameter("role_code", roleCode);
+
+		List<Object[]> result = q.getResultList();
+		
+		return result != null && !result.isEmpty();
     }
 }

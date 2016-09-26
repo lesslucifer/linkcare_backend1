@@ -22,6 +22,7 @@ import com.clinic.clinic.api.persistence.repository.IMedicarProfileRepository;
 import com.clinic.clinic.api.persistence.repository.IPrescriptionDoctorNoteRepository;
 import com.clinic.clinic.api.persistence.repository.IPrescriptionMedicineRepository;
 import com.clinic.clinic.api.persistence.repository.IPrescriptionRepository;
+import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.api.translator.impl.PrescriptionDoctorNoteTranslatorImpl;
 import com.clinic.clinic.api.translator.impl.PrescriptionMedicineTranslatorImpl;
 import com.clinic.clinic.api.translator.impl.PrescriptionTranslatorImpl;
@@ -49,6 +50,18 @@ public class PrescriptionServiceImpl extends AbsService implements IPrescription
 	
 	@Autowired
 	INotificationService notifServ;
+	
+	@Autowired
+	private IRoleRepository roleRepo;
+	
+	public String medicarTitle(Integer medicarId) {
+		if (roleRepo.isHasRole(medicarId, "NURSE_ROLE")) {
+			return "Điều dưỡng";
+		}
+		
+		return "Bác sĩ";
+	}
+	
 	
 	@Override
 	public List<PrescriptionDto> getPrescriptions(Integer requester, List<Integer> ids) {
@@ -112,11 +125,13 @@ public class PrescriptionServiceImpl extends AbsService implements IPrescription
 		medicines = medicineRepo.save(medicines);
 		entity.setMedicines(medicines);
 		
+		String title = this.medicarTitle(medicar);
+		
 		// send notification to patient
 		final StringBuilder sb = new StringBuilder();
-		sb.append("Bạn vừa khám xong với bác sĩ <b>");
+		sb.append("Bạn vừa khám xong với ").append(title.toLowerCase()).append(" <b>");
 		booking.getMedicar().getFullName(sb);
-		sb.append("</b>. Xin vui lòng nhấn vào đây để xem toa thuốc và đánh giá bác sĩ.");
+		sb.append("</b>. Xin vui lòng nhấn vào đây để xem toa thuốc và đánh giá ").append(title.toLowerCase()).append(".");
 		notifServ.sendMessage(INotificationService.USER_APP, null, booking.getBooker().getId(), NotificationEntity.TYPE_APPOINTMENT_FINISHED,
 				sb.toString(), booking.getId(), entity.getId(), medicar);
 		

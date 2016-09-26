@@ -39,4 +39,5 @@ import com.clinic.clinic.api.persistence.entity.RoleEntity;
 public interface IRoleRepository extends IRepository<RoleEntity, Integer> {
 
     List<RoleEntity> findRoleByAccountId(final Integer accountId);
+    boolean isHasRole(Integer userId, String roleCode);
 }

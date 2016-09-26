@@ -21,12 +21,14 @@ import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
 import com.clinic.clinic.api.persistence.entity.MedicarProfileEntity;
 import com.clinic.clinic.api.persistence.entity.NotificationEntity;
+import com.clinic.clinic.api.persistence.entity.RoleEntity;
 import com.clinic.clinic.api.persistence.entity.TimingsEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
 import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepository;
 import com.clinic.clinic.api.persistence.repository.IAppointmentPatientRepository;
 import com.clinic.clinic.api.persistence.repository.IMedicarProfileRepository;
+import com.clinic.clinic.api.persistence.repository.IRoleRepository;
 import com.clinic.clinic.api.persistence.repository.ITimingsRepository;
 import com.clinic.clinic.api.translator.impl.AppointmentBookingTranslator;
 import com.clinic.clinic.api.translator.impl.TraceTranslatorImpl;
@@ -60,6 +62,17 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	
 	@Autowired
 	private INotificationService notifServ;
+	
+	@Autowired
+	private IRoleRepository roleRepo;
+	
+	public String medicarTitle(Integer medicarId) {
+		if (roleRepo.isHasRole(medicarId, "NURSE_ROLE")) {
+			return "Điều dưỡng";
+		}
+		
+		return "Bác sĩ";
+	}
 	
 	@Override
 	public List<AppointmentBookingDto> getAppointments(int requester, List<Integer> appointmentIds) {
@@ -203,7 +216,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		AccountEntity bookerEnt = appBooking.getBooker();
 		AccountEntity medicarEnt = appBooking.getMedicar();
 		StringBuilder content = new StringBuilder();
-		content.append("<b>Bác sĩ ");
+		content.append("<b>").append(this.medicarTitle(medicarEnt.getId())).append(" ");
 		medicarEnt.getFullName(content);
 		content.append("</b> đã chấp nhận cuộc hẹn bạn đặt <b>vào lúc ");
 		content.append(time.format(DateTimeFormatters.HOUR_MINUTE_FORMATTER));
@@ -238,8 +251,9 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		
 		// send notification
 		LocalDateTime time = Utils.toDateTime(appBooking.getDate(), appBooking.getTime());
+		String title = this.medicarTitle(appBooking.getMedicar().getId());
 		StringBuilder actorBuilder = new StringBuilder();
-		actorBuilder.append("Bác sĩ ");
+		actorBuilder.append(title).append(" ");
 		this.sendRejectAppointmentNotification(actorBuilder.toString(), appBooking, appBooking.getBooker().getId(), time);
 	}
 
@@ -269,7 +283,8 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		AccountEntity bookerEnt = appBooking.getBooker();
 		AccountEntity medicarEnt = appBooking.getMedicar();
 		LocalDateTime time = Utils.toDateTime(appBooking.getDate(), appBooking.getTime());
-		String title = (canceller == medicarEnt.getId()) ? "Bác sĩ" : "Bệnh nhân";
+		String medTitle = this.medicarTitle(medicarEnt.getId());
+		String title = (canceller == medicarEnt.getId()) ? medTitle : "Bệnh nhân";
 		AccountEntity cancellerEnt = (canceller == medicarEnt.getId()) ? medicarEnt : bookerEnt;
 		AccountEntity cancelleeEnt = (canceller != medicarEnt.getId()) ? medicarEnt : bookerEnt;
 		
