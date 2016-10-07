@@ -78,7 +78,7 @@ public class RoleRepositoryImpl extends AbsRepositoryImpl<RoleEntity, Integer> i
 		final StringBuilder sb = new StringBuilder();
 		sb.append("SELECT `role_id` FROM `account_role` AS ar ");
 		sb.append("INNER JOIN `role` AS r ON r.id = ar.role_id ");
-		sb.append("WHERE r.user_id = :user_id and r.code = :role_code ");
+		sb.append("WHERE r.account_id = :user_id and r.code = :role_code ");
 
 		Query q = getEntityManager().createNativeQuery(sb.toString());
 		q.setParameter("user_id", userId);
