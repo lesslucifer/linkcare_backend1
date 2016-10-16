@@ -128,7 +128,7 @@ public class AccountRestApi extends AbsRestApi {
     public Page<AccountCustomDto> filterAccount(@RequestBody AccountFilterDto accountfilterDto,
             @RequestParam(value = IRestApiConstants.SORTING_PARAM_NAME_SORT, required = IDbConstants.FALSE) String sortExp,
             @RequestParam(value = IRestApiConstants.PAGING_PARAM_NAME_PAGE, required = IDbConstants.FALSE, defaultValue = "0") Integer viewPageNo,
-            @RequestParam(value = IRestApiConstants.PAGING_PARAM_NAME_LIMIT, required = IDbConstants.FALSE, defaultValue = "10") Integer maxRecPerPage,
+            @RequestParam(value = IRestApiConstants.PAGING_PARAM_NAME_LIMIT, required = IDbConstants.FALSE, defaultValue = "50") Integer maxRecPerPage,
             HttpServletResponse response) {
         if(LOGGER.isDebugEnabled()) {
             LOGGER.debug(IConstants.BEGIN_METHOD);
