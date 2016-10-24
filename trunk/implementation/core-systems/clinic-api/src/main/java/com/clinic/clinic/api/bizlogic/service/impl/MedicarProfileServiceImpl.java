@@ -92,7 +92,7 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 			throwBizlogicException("Cannot create user");
 		}
 		
-		acc.setSubcategory(subcate);
+		acc.getSubcategories().add(subcate);
 		acc.getRoles().add(role);
 		accRepo.save(acc);
 		

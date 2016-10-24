@@ -75,9 +75,17 @@ public class AccountEntity extends TraceEntity {
 	@Column(name="device_token", nullable = true, length = 256)
 	private String deviceToken;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "subcategory_id", nullable = true)
-	private SubcategoryEntity subcategory;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "subcategory_id", nullable = true)
+//	private SubcategoryEntity subcategory;
+	
+	//fk:account table and role table
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity=SubcategoryEntity.class)
+    @JoinTable(name = "account_subcategory", catalog = "cliniccore_db",
+    joinColumns = { @JoinColumn(name = "account_id", nullable = false, updatable = false) }, 
+    inverseJoinColumns = { @JoinColumn(name = "subcategory_id",nullable = false, updatable = false) })
+    @JsonIgnore
+    private List<SubcategoryEntity> subcategories = new ArrayList<SubcategoryEntity>();  
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "place_id", nullable = true)
@@ -292,12 +300,12 @@ public class AccountEntity extends TraceEntity {
 		this.deviceToken = deviceToken;
 	}
 
-	public SubcategoryEntity getSubcategory() {
-        return subcategory;
+	public List<SubcategoryEntity> getSubcategories() {
+        return subcategories;
     }
 
-    public void setSubcategory(SubcategoryEntity subcategory) {
-        this.subcategory = subcategory;
+    public void setSubcategories(List<SubcategoryEntity> subcategories) {
+        this.subcategories = subcategories;
     }
 
     public PlaceEntity getPlace() {

@@ -19,7 +19,7 @@ public class AccountTranslatorImpl extends AbstractTranslatorImpl<AccountDto, Ac
 	public void entityToDto(AccountEntity ent, AccountDto dto) {
 		// TODO Auto-generated method stub
 		super.entityToDto(ent, dto);
-		dto.setSubcategory(SubcategoryTranslatorImpl.INST.getDto(ent.getSubcategory()));
+		dto.setSubcategory(SubcategoryTranslatorImpl.INST.getDtoList(ent.getSubcategories()));
 	}
 	
 	

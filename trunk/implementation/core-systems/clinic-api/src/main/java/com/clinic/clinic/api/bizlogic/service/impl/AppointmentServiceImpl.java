@@ -22,6 +22,7 @@ import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
 import com.clinic.clinic.api.persistence.entity.MedicarProfileEntity;
 import com.clinic.clinic.api.persistence.entity.NotificationEntity;
 import com.clinic.clinic.api.persistence.entity.RoleEntity;
+import com.clinic.clinic.api.persistence.entity.SubcategoryEntity;
 import com.clinic.clinic.api.persistence.entity.TimingsEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
 import com.clinic.clinic.api.persistence.repository.IAccountRepository;
@@ -29,6 +30,7 @@ import com.clinic.clinic.api.persistence.repository.IAppointmentBookingRepositor
 import com.clinic.clinic.api.persistence.repository.IAppointmentPatientRepository;
 import com.clinic.clinic.api.persistence.repository.IMedicarProfileRepository;
 import com.clinic.clinic.api.persistence.repository.IRoleRepository;
+import com.clinic.clinic.api.persistence.repository.ISubcategoryRepository;
 import com.clinic.clinic.api.persistence.repository.ITimingsRepository;
 import com.clinic.clinic.api.translator.impl.AppointmentBookingTranslator;
 import com.clinic.clinic.api.translator.impl.TraceTranslatorImpl;
@@ -48,6 +50,9 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 	
 	@Autowired
 	private ITimingsRepository timingsRepo;
+	
+	@Autowired 
+	ISubcategoryRepository subcategoryRepo;
 	
 	@Autowired
 	private IAccountBlockTimeRepository accBlockTimeRepo;
@@ -95,9 +100,14 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Medicar not found!", dto.getMedicar());
 		}
 		
-		if (medicar.getSubcategory().getId() != dto.getSubCategory()) {
+		final SubcategoryEntity subcategory = subcategoryRepo.getOne(dto.getSubCategory());
+		if (subcategory == null) {
+			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_SUB_CATEGORY_NOT_FOUND, "Subcategory not found", dto.getSubCategory());
+		}
+		
+		if (medicar.getSubcategories().contains(subcategory)) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_SUB_CATEGORY_MISMATCH, "Medicar sub category mismatch!",
-					medicar.getSubcategory().getId(), dto.getSubCategory());
+					medicar.getId(), dto.getSubCategory());
 		}
 		
 		MedicarProfileEntity medicarProfile = medicarProfileRepo.getByAccountId(dto.getMedicar());
@@ -119,7 +129,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		}
 		
 		int appointmentStartTime = dto.getTime();
-		int duration = dto.isAtHome() ? medicar.getSubcategory().getPatientHomeDur() : medicar.getSubcategory().getClinicDur();
+		int duration = dto.isAtHome() ? subcategory.getPatientHomeDur() : subcategory.getClinicDur();
 		int appointmentEndTime = appointmentStartTime + duration;
 		
 		if (appointmentEndTime > timings.getEndTime()) {

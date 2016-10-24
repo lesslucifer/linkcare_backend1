@@ -52,9 +52,6 @@ public class SubcategoryEntity extends NameCodeDescEntity {
      */
     private static final long serialVersionUID = 5295985330516462105L;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subcategory")
-    private List<AccountEntity> accounts = new ArrayList<AccountEntity>();
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
@@ -64,14 +61,6 @@ public class SubcategoryEntity extends NameCodeDescEntity {
     
     @Column(name = "patient_home_dur")
     private int patientHomeDur;
-
-    public List<AccountEntity> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<AccountEntity> accounts) {
-        this.accounts = accounts;
-    }
 
     public CategoryEntity getCategory() {
         return category;

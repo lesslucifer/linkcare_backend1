@@ -127,7 +127,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("JOIN e.address address ");
             summaryQuerySql.append("JOIN e.place plc ");
             summaryQuerySql.append("JOIN plc.address plcAddr ");
-            summaryQuerySql.append("JOIN e.subcategory subCate ");
+            summaryQuerySql.append("JOIN e.subcategories subCate ");
             summaryQuerySql.append("JOIN subCate.category cate ");
             summaryQuerySql.append("JOIN cate.major major ");
             summaryQuerySql.append("JOIN e.medicarProfile medicarProfile ");
@@ -263,7 +263,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("JOIN address address ON e.address_id = address.id ");
             summaryQuerySql.append("LEFT JOIN place plc ON e.place_id = plc.id  ");
             summaryQuerySql.append("LEFT JOIN address plcAddr ON plc.address_id = plcAddr.id ");
-            summaryQuerySql.append("JOIN subcategory subCate ON e.subcategory_id = subCate.id ");
+            summaryQuerySql.append("JOIN account_subcategory accSubCate ON e.id = accSubCate.account_id ");
+            summaryQuerySql.append("JOIN subcategory subCate ON accSubCate.subcategory_id = subCate.id ");
             summaryQuerySql.append("JOIN category cate ON cate.id = subCate.category_id ");
             summaryQuerySql.append("JOIN major ON major.id = cate.major_id ");
             summaryQuerySql.append("JOIN medicar_profile mp ON mp.account_id = e.id ");

@@ -82,7 +82,7 @@ public class AccountDto extends TraceDto implements Serializable {
 
 	private AddressDto address;
 
-	private SubcategoryDto subcategory;
+	private List<SubcategoryDto> subcategories;
 	
 	private PlaceDto place;
 	
@@ -242,12 +242,12 @@ public class AccountDto extends TraceDto implements Serializable {
 		this.address = address;
 	}
 	
-    public SubcategoryDto getSubcategory() {
-        return subcategory;
+    public List<SubcategoryDto> getSubcategories() {
+        return subcategories;
     }
 
-    public void setSubcategory(SubcategoryDto subcategory) {
-        this.subcategory = subcategory;
+    public void setSubcategory(List<SubcategoryDto> subcategories) {
+        this.subcategories = subcategories;
     }
 
     public PlaceDto getPlace() {
