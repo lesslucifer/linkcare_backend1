@@ -295,6 +295,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("AND NOT (mp.expired_time <= :now ");
             summaryQuerySql.append("AND mp.overloaded_appointments > :maxOverloadAppointments) ");
             
+            summaryQuerySql.append("ORDER BY distance ASC ");
+            
             query = entityManager.createNativeQuery(summaryQuerySql.toString());
             // set parameter
             if(nameWords.size() > 0) {
