@@ -29,9 +29,9 @@ public class AppointmentBookingRequestDto {
 		this.medicar = medicar;
 	}
 	
-	public boolean isAtHome() {
-		return atHome;
-	}
+//	public boolean isAtHome() {
+//		return atHome;
+//	}
 	
 	public void setAtHome(boolean atHome) {
 		this.atHome = atHome;

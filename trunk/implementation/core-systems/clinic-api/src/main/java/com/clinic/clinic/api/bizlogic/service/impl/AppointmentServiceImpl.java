@@ -21,7 +21,6 @@ import com.clinic.clinic.api.persistence.entity.AddressEntity;
 import com.clinic.clinic.api.persistence.entity.AppointmentBookingEntity;
 import com.clinic.clinic.api.persistence.entity.MedicarProfileEntity;
 import com.clinic.clinic.api.persistence.entity.NotificationEntity;
-import com.clinic.clinic.api.persistence.entity.RoleEntity;
 import com.clinic.clinic.api.persistence.entity.SubcategoryEntity;
 import com.clinic.clinic.api.persistence.entity.TimingsEntity;
 import com.clinic.clinic.api.persistence.repository.IAccountBlockTimeRepository;
@@ -105,7 +104,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_SUB_CATEGORY_NOT_FOUND, "Subcategory not found", dto.getSubCategory());
 		}
 		
-		if (medicar.getSubcategories().contains(subcategory)) {
+		if (!medicar.getSubcategories().contains(subcategory)) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_MEDICAR_SUB_CATEGORY_MISMATCH, "Medicar sub category mismatch!",
 					medicar.getId(), dto.getSubCategory());
 		}
@@ -122,6 +121,11 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		if (timings == null) {
 			throwBizlogicException(HttpStatus.NOT_FOUND, IBizErrorCode.OBJECT_NOT_FOUND, "Timings not found!", dto.getMedicar(), dto.getTime());
 		}
+		
+		boolean isTimingsAtHome = timings.getType() == 1;
+//		if (isTimingsAtHome != dto.isAtHome()) {
+//			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TYPE, "Invalid appointment type, not match with timings", dto.isAtHome());
+//		}
 
 		if (((dto.getTime() - timings.getBeginTime()) % IConstants.SLOT_TIME) != 0) {
 			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME,
@@ -129,7 +133,7 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 		}
 		
 		int appointmentStartTime = dto.getTime();
-		int duration = dto.isAtHome() ? subcategory.getPatientHomeDur() : subcategory.getClinicDur();
+		int duration = isTimingsAtHome ? subcategory.getPatientHomeDur() : subcategory.getClinicDur();
 		int appointmentEndTime = appointmentStartTime + duration;
 		
 		if (appointmentEndTime > timings.getEndTime()) {
@@ -156,13 +160,13 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 //					"Patient already booked a recent appointment!");
 //		}
 		
-		AddressEntity address = (dto.isAtHome()) ? (accRepo.findOne(booker).getAddress()) : (medicar.getAddress());
-		int cost = (dto.isAtHome() == false) ? medicarProfile.getClinicPrice() : medicarProfile.getPatientHomePrice();
+		AddressEntity address = isTimingsAtHome ? (accRepo.findOne(booker).getAddress()) : (medicar.getAddress());
+		int cost = (isTimingsAtHome == false) ? medicarProfile.getClinicPrice() : medicarProfile.getPatientHomePrice();
 		
 		AppointmentBookingEntity entity = new AppointmentBookingEntity();
 		entity.setBooker(accRepo.getReference(AccountEntity.class, booker));
 		entity.setMedicar(accRepo.getReference(AccountEntity.class, dto.getMedicar()));
-		entity.setAtHome(dto.isAtHome());
+		entity.setAtHome(isTimingsAtHome);
 		entity.setAddress(address);
 		entity.setDate(dto.getDate());
 		entity.setTime(appointmentStartTime);
@@ -330,12 +334,12 @@ public class AppointmentServiceImpl extends AbsService implements IAppointmentSe
 //					appBooking);
 		}
 
-		int timeInMinutes = now.getHour() * 60 + now.getMinute();
-		final int acceptedDelay = 30;
-		if (timeInMinutes > appBooking.getEnd() + acceptedDelay) {
-			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Invalid appointment time, out of time",
-					now, timeInMinutes, appBooking.getTime(), appBooking.getEnd());
-		}
+//		int timeInMinutes = now.getHour() * 60 + now.getMinute();
+//		final int acceptedDelay = 30;
+//		if (timeInMinutes > appBooking.getEnd() + acceptedDelay) {
+//			throwBizlogicException(HttpStatus.BAD_REQUEST, IBizErrorCode.APPOINTMENT_INVALID_TIME, "Invalid appointment time, out of time",
+//					now, timeInMinutes, appBooking.getTime(), appBooking.getEnd());
+//		}
 		
 		// make sure there's no unfinished appointment
 		Integer processingAppointment = appBookingRepo.getProcessingAppointment(medicar);

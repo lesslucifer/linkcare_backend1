@@ -290,7 +290,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 summaryQuerySql.append("AND major.id=:major ");
             }
             if(accountFilterDto.getLatitude() != null && accountFilterDto.getLongtitude() != null) {
-                summaryQuerySql.append("AND GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) <= 100 ");
+                summaryQuerySql.append("AND GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) <= 10 ");
             }
 
             summaryQuerySql.append("AND NOT (mp.expired_time <= :now ");
