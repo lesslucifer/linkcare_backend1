@@ -84,6 +84,16 @@ public class AccountDto extends TraceDto implements Serializable {
 
 	private List<SubcategoryDto> subcategories;
 	
+	private SubcategoryDto subcategory;
+	
+	public SubcategoryDto getSubcategory() {
+		return subcategory;
+	}
+
+	public void setSubcategory(SubcategoryDto subcategory) {
+		this.subcategory = subcategory;
+	}
+
 	private PlaceDto place;
 	
 	private List<AccountDto> patients = new ArrayList<AccountDto>();
@@ -246,7 +256,7 @@ public class AccountDto extends TraceDto implements Serializable {
         return subcategories;
     }
 
-    public void setSubcategory(List<SubcategoryDto> subcategories) {
+    public void setSubcategories(List<SubcategoryDto> subcategories) {
         this.subcategories = subcategories;
     }
 
