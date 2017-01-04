@@ -122,7 +122,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                     + ", e.avatar"
                     + ", rate.mark "
                     + ", medicarProfile.clinicPrice "
-                    + ", medicarProfile.patientHomePrice ");
+                    + ", medicarProfile.patientHomePrice "
+                    + ", GeoDistDiff('km', :latitude, :longtitude, plcAddr.latitude, plcAddr.longtitude) * 1000 as distance ");
             summaryQuerySql.append("FROM " + AccountEntity.class.getName() + " e ");
             summaryQuerySql.append("JOIN e.address address ");
             summaryQuerySql.append("JOIN e.place plc ");
@@ -206,6 +207,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setMark(object[15] == null ? 0 : Double.parseDouble(object[15].toString()));
                 acct.setCostClinic(((Number) object[16]).doubleValue());
                 acct.setCostHome(((Number) object[17]).doubleValue());
+                acct.setDistance(((Number) object[18]).doubleValue());
                 resultDto.add(acct);
             }
             
