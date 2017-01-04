@@ -174,6 +174,10 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             if(accountFilterDto.getMajor() != null) {
                 query.setParameter("major", accountFilterDto.getMajor());
             }
+            if(accountFilterDto.getLatitude() != null && accountFilterDto.getLongtitude() != null) {
+                query.setParameter("latitude", accountFilterDto.getLatitude());
+                query.setParameter("longtitude", accountFilterDto.getLongtitude());
+            }
             
             query.setParameter("now", now);
             query.setParameter("maxOverloadAppointments", IConstants.MAX_OVERLOAD_APPOINTMENTS);
@@ -207,7 +211,9 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 acct.setMark(object[15] == null ? 0 : Double.parseDouble(object[15].toString()));
                 acct.setCostClinic(((Number) object[16]).doubleValue());
                 acct.setCostHome(((Number) object[17]).doubleValue());
-                acct.setDistance(((Number) object[18]).doubleValue());
+                if (object[18] != null) {
+                    acct.setDistance(((Number) object[18]).doubleValue());
+                }
                 resultDto.add(acct);
             }
             
