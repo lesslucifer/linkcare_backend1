@@ -59,7 +59,7 @@ public class TimingsRestApi extends AbsRestApi {
     		@PathVariable("targetId") Integer targetId,
     		@RequestParam("date") String date,
     		HttpServletResponse response) {
-		auth().authSession(session);
+//		auth().authSession(session);
 
 		return timingsServ.getTimingDaySlots(targetId, date, 30, i -> true, 1);
     }
@@ -71,7 +71,7 @@ public class TimingsRestApi extends AbsRestApi {
     		@PathVariable("type") Integer type,
     		@RequestParam("date") String date,
     		HttpServletResponse response) {
-		auth().authSession(session);
+//		auth().authSession(session);
 
 		int dur = (type == 0) ? 1 : 3;
 		return timingsServ.getTimingDaySlots(targetId, date, 30, i -> i == type, dur);
