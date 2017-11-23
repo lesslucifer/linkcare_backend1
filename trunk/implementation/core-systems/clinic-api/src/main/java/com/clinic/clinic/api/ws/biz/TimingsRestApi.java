@@ -55,7 +55,7 @@ public class TimingsRestApi extends AbsRestApi {
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_TIMINGS_SLOT, method = RequestMethod.GET, produces = {
     "application/json" })
-    public List<TimingsDayDto> getTimingsSlot(@RequestHeader("sess") String session,
+    public List<TimingsDayDto> getTimingsSlot(
     		@PathVariable("targetId") Integer targetId,
     		@RequestParam("date") String date,
     		HttpServletResponse response) {
@@ -66,7 +66,7 @@ public class TimingsRestApi extends AbsRestApi {
 
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_BIZ_TIMINGS_SLOT_TYPE, method = RequestMethod.GET, produces = {
     "application/json" })
-    public List<TimingsDayDto> getTimingsSlotByType(@RequestHeader("sess") String session,
+    public List<TimingsDayDto> getTimingsSlotByType(
     		@PathVariable("targetId") Integer targetId,
     		@PathVariable("type") Integer type,
     		@RequestParam("date") String date,

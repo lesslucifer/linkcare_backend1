@@ -67,12 +67,20 @@ public class MedicarProfileRestApi extends AbsRestApi {
 	
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_MEDICAR_PROFILE_SINGLE, method = RequestMethod.GET, produces = {
     "application/json" })
-	public Object getMedicarProfile(@RequestHeader("sess") String session,
+	public Object getMedicarProfile(@RequestHeader(name = "sess", required = false) String session,
 			@PathVariable("account_id") String _accountId,
     		HttpServletResponse response) {
-		Integer requester = auth().authSession(session);
 		
-		Integer accountId = "me".equals(_accountId) ? requester : Integer.parseInt(_accountId);
+		Integer accountId = -1;
+		
+		if ("me".equals(_accountId)) {
+			Integer requester = auth().authSession(session);
+			accountId = requester;
+		}
+		else {
+			accountId = Integer.parseInt(_accountId);
+		}
+		
 		auth().authRight(accountId, IDbConstants.RIGHT_HAS_MEDICAR_PROFILE);
 		
 		return medicarProfileServ.getMedicarProfile(accountId);

@@ -40,6 +40,12 @@ public class NotificationRestApi extends AbsRestApi {
 		return notifServ.getNotifications(accountId);
 	}
 	
+	@RequestMapping(value = IRestApiUrlMaps.REST_API_NOTIFICATIONS, method = RequestMethod.POST, produces = {
+    "application/json" })
+	public void testNotification(HttpServletResponse response) {
+		notifServ.sendMessage("LINKCARE", null, 61, 0, "Test msg", "");
+	}
+	
 	@RequestMapping(value = IRestApiUrlMaps.REST_API_NOTIFICATIONS_SINGLE, method = RequestMethod.GET, produces = {
     "application/json" })
 	public Object getAccountNotificationsById(@RequestHeader("sess") String session,
@@ -82,20 +88,20 @@ public class NotificationRestApi extends AbsRestApi {
 	@Autowired
 	IAccountRepository accRepo;
 	
-	@RequestMapping(value = IRestApiUrlMaps.REST_API_NOTIFICATIONS, method = RequestMethod.POST, produces = {
-    "application/json" })
-	public Object sendNotification(@RequestHeader("sess") String session,
-			@RequestBody NotificationDto dto,
-    		HttpServletResponse response) {
-		
-		validate(dto);
-		Integer accountId = auth().authSession(session);
-		
-		AccountEntity receiver = accRepo.findAccountByLoginName(dto.receiver_login_name);
-		if (receiver != null) {
-			notifServ.sendMessage(dto.app, accountId, receiver.getId(), NotificationEntity.TYPE_MSG, dto.content);
-		}
-		
-		return Utils.mkMap();
-	}
+//	@RequestMapping(value = IRestApiUrlMaps.REST_API_NOTIFICATIONS, method = RequestMethod.POST, produces = {
+//    "application/json" })
+//	public Object sendNotification(@RequestHeader("sess") String session,
+//			@RequestBody NotificationDto dto,
+//    		HttpServletResponse response) {
+//		
+//		validate(dto);
+//		Integer accountId = auth().authSession(session);
+//		
+//		AccountEntity receiver = accRepo.findAccountByLoginName(dto.receiver_login_name);
+//		if (receiver != null) {
+//			notifServ.sendMessage(dto.app, accountId, receiver.getId(), NotificationEntity.TYPE_MSG, dto.content);
+//		}
+//		
+//		return Utils.mkMap();
+//	}
 }

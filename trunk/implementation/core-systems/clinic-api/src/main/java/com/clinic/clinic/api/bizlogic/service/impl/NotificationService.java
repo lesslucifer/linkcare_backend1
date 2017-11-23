@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,19 @@ import com.clinic.clinic.api.persistence.repository.IDeviceRepository;
 import com.clinic.clinic.api.persistence.repository.INotificationRepository;
 import com.clinic.clinic.api.translator.impl.NotificationTranslatorImpl;
 import com.clinic.clinic.common.dto.biz.NotificationDto;
+import com.clinic.clinic.common.utils.Utils;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.MulticastResult;
 import com.google.android.gcm.server.Sender;
 import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsService;
 
+import redis.clients.jedis.Jedis;
+
 @ApplicationService
 public class NotificationService extends AbsService implements INotificationService {
 	private static Executor EXEC = Executors.newCachedThreadPool();
+	private static Jedis jedis;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationService.class);
 	
@@ -46,6 +51,12 @@ public class NotificationService extends AbsService implements INotificationServ
 	
 	@Autowired
 	IAccountRepository accRepo;
+	
+	public NotificationService() {
+		super();
+		
+		jedis = new Jedis();
+	}
 	
 	@Override
 	public List<Integer> getNotifications(Integer accountId) {
@@ -70,7 +81,7 @@ public class NotificationService extends AbsService implements INotificationServ
 			notifRepo.save(entity);
 			
 			// try to send notification
-			this.sendNotification(app, receiverEnt.getId(), content, type, jsonParams);
+			this.sendNotification(app, sender, receiverEnt.getId(), content, type, jsonParams);
 		}
 	}
 	
@@ -90,16 +101,17 @@ public class NotificationService extends AbsService implements INotificationServ
 		notifRepo.save(notifEnts);
 	}
 	
-	private void sendNotification(final String app, final Integer receiver, final String content, final Integer type, final String params) {
-		List<DeviceEntity> devices = deviceRepo.getDevicesOfUser(receiver, app);
-		final List<DeviceEntity> gcmDevices = devices.stream().filter(d -> {return "GCM".equals(d.getType());}).collect(Collectors.toList());
-		final List<DeviceEntity> apnsDevices = devices.stream().filter(d -> {return "APNS".equals(d.getType());}).collect(Collectors.toList());
-		
+	private void sendNotification(final String app, final Integer sender, final Integer receiver, final String content, final Integer type, final String params) {
 		EXEC.execute(() -> {
-			this.sendGCMNotification(gcmDevices, content, type, params);
-		});
-		EXEC.execute(() -> {
-			this.sendAPNSNotification(apnsDevices, app, content, type, params);
+			String data = JSONObject.toJSONString(Utils.mkMap(
+				"app", app,
+				"receiver", receiver,
+				"sender", sender,
+				"content", content,
+				"type", type,
+				"params", params
+			));
+			jedis.lpush("lc:q:notif", data);
 		});
  	}
 	
