@@ -138,8 +138,8 @@ public class PrescriptionServiceImpl extends AbsService implements IPrescription
 		final MedicarProfileEntity medicarProfile = medicarProfileRepo.getByAccountId(booking.getMedicar().getId());
 		final long now = System.currentTimeMillis();
 		if (medicarProfile.getExpiredTime() == null || medicarProfile.getExpiredTime() <= now) {
-			final int nOverloaded = medicarProfile.getOverloadedAppointments() == null ? 0 : medicarProfile.getOverloadedAppointments();
-			medicarProfile.setOverloadedAppointments(nOverloaded + 1);
+			final int nOverloaded = medicarProfile.getFreeAppointments() == null ? 0 : medicarProfile.getFreeAppointments();
+			medicarProfile.setFreeAppointments(nOverloaded + 1);
 			medicarProfileRepo.save(medicarProfile);
 		}
 

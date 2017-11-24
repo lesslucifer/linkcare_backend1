@@ -132,6 +132,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("JOIN subCate.category cate ");
             summaryQuerySql.append("JOIN cate.major major ");
             summaryQuerySql.append("JOIN e.medicarProfile medicarProfile ");
+            summaryQuerySql.append("JOIN e.balance balance ");
             summaryQuerySql.append("LEFT JOIN e.rate rate ");
             
             summaryQuerySql.append("WHERE 1 = 1 ");
@@ -153,8 +154,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 summaryQuerySql.append("AND major.id=:major ");
             }
 
-            summaryQuerySql.append("AND NOT( medicarProfile.expiredTime <= :now ");
-            summaryQuerySql.append("AND medicarProfile.overloadedAppointments > :maxOverloadAppointments)  ");
+            summaryQuerySql.append("AND NOT( (balance = null OR balance.balance <= 0) ");
+            summaryQuerySql.append("AND medicarProfile.freeAppointments <= 0)  ");
             
             query = entityManager.createQuery(summaryQuerySql.toString());
             // set parameter
@@ -179,8 +180,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 query.setParameter("longtitude", accountFilterDto.getLongtitude());
             }
             
-            query.setParameter("now", now);
-            query.setParameter("maxOverloadAppointments", IConstants.MAX_OVERLOAD_APPOINTMENTS);
+//            query.setParameter("now", now);
+//            query.setParameter("maxOverloadAppointments", IConstants.MAX_OVERLOAD_APPOINTMENTS);
             
             query.setFirstResult(range.getOffset());
             query.setMaxResults(range.getPageSize());
@@ -276,6 +277,7 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
             summaryQuerySql.append("JOIN category cate ON cate.id = subCate.category_id ");
             summaryQuerySql.append("JOIN major ON major.id = cate.major_id ");
             summaryQuerySql.append("JOIN medicar_profile mp ON mp.account_id = e.id ");
+            summaryQuerySql.append("LEFT JOIN balance bl ON bl.id = e.id ");
             summaryQuerySql.append("LEFT JOIN rate rate ON rate.medicar_id = e.id ");
 
             
@@ -301,8 +303,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 summaryQuerySql.append("AND GeoDistDiff('km', :latitude, :longtitude, address.latitude, address.longtitude) <= 100 ");
             }
 
-            summaryQuerySql.append("AND NOT (mp.expired_time <= :now ");
-            summaryQuerySql.append("AND mp.overloaded_appointments > :maxOverloadAppointments) ");
+            summaryQuerySql.append("AND NOT (coalesce(bl.balance, 0) <= 0 ");
+            summaryQuerySql.append("AND mp.free_appointments <= 0) ");
             
             summaryQuerySql.append("ORDER BY distance ASC ");
             
@@ -329,8 +331,8 @@ public class AccountRepositoryImpl extends AbsRepositoryImpl<AccountEntity, Inte
                 query.setParameter("longtitude", accountFilterDto.getLongtitude());
             }
             
-            query.setParameter("now", now);
-            query.setParameter("maxOverloadAppointments", IConstants.MAX_OVERLOAD_APPOINTMENTS);
+//            query.setParameter("now", now);
+//            query.setParameter("maxOverloadAppointments", IConstants.MAX_OVERLOAD_APPOINTMENTS);
             
             query.setFirstResult(range.getOffset());
             query.setMaxResults(range.getPageSize());

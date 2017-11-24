@@ -98,7 +98,7 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 		
 		MedicarProfileEntity medicarProfile = this.updateMedicarProfile(acc.getId(), dto.getMedicarProfile());
 		medicarProfile.setExpiredTime(System.currentTimeMillis());
-		medicarProfile.setOverloadedAppointments(0);
+		medicarProfile.setFreeAppointments(0);
 		medicarProfile.setReferrer(dto.getReferrer());
 		medicarProfileRepo.save(medicarProfile);
 		
@@ -136,7 +136,7 @@ public class MedicarProfileServiceImpl extends AbsService implements IMedicarPro
 		final long dueTime = Math.max(now, expiredTime);
 		final long newExpiredTime = dueTime + 365 * 24 * 60 * 60 * 1000; // 1 year
 		medicarProfile.setExpiredTime(newExpiredTime);
-		medicarProfile.setOverloadedAppointments(0);
+		medicarProfile.setFreeAppointments(0);
 		return medicarProfileRepo.save(medicarProfile);
 	}
 }

@@ -113,6 +113,9 @@ public class AccountEntity extends TraceEntity {
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
 	private MedicarProfileEntity medicarProfile;
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
+	private BalanceEntity balance;
 	
 	//fk:account table and role table
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,targetEntity=RoleEntity.class)

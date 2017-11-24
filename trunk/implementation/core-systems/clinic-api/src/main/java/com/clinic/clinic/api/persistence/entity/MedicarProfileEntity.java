@@ -58,8 +58,8 @@ public class MedicarProfileEntity extends TraceEntity {
 	@Column(name = "expired_time")
 	private Long expiredTime;
 
-	@Column(name = "overloaded_appointments")
-	private Integer overloadedAppointments;
+	@Column(name = "free_appointments")
+	private Integer freeAppointments;
 	
 	@Column(name = "referrer")
 	private String referrer;
@@ -168,12 +168,12 @@ public class MedicarProfileEntity extends TraceEntity {
 		this.expiredTime = expiredTime;
 	}
 
-	public Integer getOverloadedAppointments() {
-		return overloadedAppointments;
+	public Integer getFreeAppointments() {
+		return freeAppointments;
 	}
 
-	public void setOverloadedAppointments(Integer overloadedAppointments) {
-		this.overloadedAppointments = overloadedAppointments;
+	public void setFreeAppointments(Integer overloadedAppointments) {
+		this.freeAppointments = overloadedAppointments;
 	}
 
 	public String getReferrer() {
