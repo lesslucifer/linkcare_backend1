@@ -46,7 +46,7 @@
 		<spring.security.version>4.0.2.RELEASE</spring.security.version>
 
 		<!-- #### Jackson JSON version #### -->
-		<jackson.version>2.5.0</jackson.version>
+		<jackson.version>2.10.2</jackson.version>
 
 		<!-- #### Connection pool & JDBC dependencies version #### -->
 		<hibernate.version>4.3.11.Final</hibernate.version>
