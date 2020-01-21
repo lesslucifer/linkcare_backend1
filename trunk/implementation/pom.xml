@@ -42,7 +42,7 @@
 		<!-- #### Spring dependencies version #### -->
 		<org.springframework.version>4.2.0.RELEASE</org.springframework.version>
 		<spring.data.version>1.8.2.RELEASE</spring.data.version>
-		<spring.data.commons.version>1.10.2.RELEASE</spring.data.commons.version>
+		<spring.data.commons.version>1.13.13.RELEASE</spring.data.commons.version>
 		<spring.security.version>4.0.2.RELEASE</spring.security.version>
 
 		<!-- #### Jackson JSON version #### -->
