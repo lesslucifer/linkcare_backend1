@@ -72,17 +72,7 @@ public class NotificationService extends AbsService implements INotificationServ
 		
 		AccountEntity receiverEnt = accRepo.getOne(receiver);
 		String jsonParams = JSONArray.toJSONString(Arrays.asList(params));
-		if (receiverEnt != null) {
-			entity.setOwner(receiverEnt);
-			entity.setType(type);
-			entity.setContent(content);
-			entity.setParams(jsonParams);
-			entity.setTime(LocalDateTime.now());
-			notifRepo.save(entity);
-			
-			// try to send notification
-			this.sendNotification(app, sender, receiverEnt.getId(), content, type, jsonParams);
-		}
+		this.sendNotification(app, sender, receiverEnt.getId(), content, type, jsonParams);
 	}
 	
 	@Override
