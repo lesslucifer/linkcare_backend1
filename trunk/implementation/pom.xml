@@ -51,7 +51,7 @@
 		<!-- #### Connection pool & JDBC dependencies version #### -->
 		<hibernate.version>4.3.11.Final</hibernate.version>
 		<c3p0.version>0.9.5.1</c3p0.version>
-		<mysql-connector.version>5.1.32</mysql-connector.version>
+		<mysql-connector.version>8.0.16</mysql-connector.version>
 
 		<!-- #### Layout template dependencies version #### -->
 		<thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
