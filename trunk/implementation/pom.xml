@@ -61,7 +61,7 @@
 		<javax.servlet.version>3.1.0</javax.servlet.version>
 
 		<!-- #### Test dependencies version #### -->
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 
 		<!-- #### apache libraries dependencies version #### -->
 		<apache.commons.io.version>2.4</apache.commons.io.version>
